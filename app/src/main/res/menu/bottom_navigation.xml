@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_breath"
+        android:icon="@drawable/ic_radio_button_unchecked_black_24dp"
+        android:title="Breath"/>
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/nav_journal"
+        android:icon="@drawable/ic_border_color_black_24dp"
+        android:title="Journal"/>
+
+    <item
+        android:id="@+id/nav_goals"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:title="Goals"/>
+
+</menu>

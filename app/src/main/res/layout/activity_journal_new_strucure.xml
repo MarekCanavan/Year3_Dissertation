@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JournalNewStructure">
+
+    <Button
+        android:id="@+id/bt_new_percentage"
+        android:layout_width="338dp"
+        android:layout_height="51dp"
+        android:onClick="newPercentageOnClick"
+        android:text="New Percentage "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.187" />
+
+    <Button
+        android:id="@+id/bt_new_column"
+        android:layout_width="338dp"
+        android:layout_height="51dp"
+        android:onClick="newColumnOnClick"
+        android:text="New Column"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07" />
+
+    <LinearLayout
+        android:id="@+id/ll_field_generation"
+        android:layout_width="400dp"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.624"></LinearLayout>
+
+    <Button
+        android:id="@+id/bt_save_structure"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:onClick="saveStructureOnClick"
+        android:text="Save Structure "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.935" />
+</androidx.constraintlayout.widget.ConstraintLayout>
