@@ -35,6 +35,7 @@ public class JournalNewStructure extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         db_write = dbHelper.getWritableDatabase();
         db_read = dbHelper.getReadableDatabase();
+        
         tableID = 0;
 
         fieldGeneration = (LinearLayout) findViewById(R.id.ll_field_generation);
