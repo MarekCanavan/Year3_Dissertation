@@ -14,16 +14,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
 
 
+        /*Table Name/id Number
+         * Column Name
+         * Type of column - edit text, number, rating  */
+        db.execSQL("CREATE TABLE JournalNames (" +
+                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "journalName VARCHAR(128) NOT NULL);"
+        );
 
         /*Table Name/id Number
         * Column Name
         * Type of column - edit text, number, rating  */
-        db.execSQL("CREATE TABLE Journals (" +
+        db.execSQL("CREATE TABLE JournalStructure (" +
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "columnName VARCHAR(128) NOT NULL," +
                 "columnType VARCHAR(128) NOT NULL," +
-                "tableID INTEGER);"
+                "tableID INTEGER," +
+                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES JournalNames (_id)" +
+                "ON DELETE CASCADE);"
         );
+
 
         /*Entry id
         * Table ID FOREIGN KEY
@@ -37,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "columnType VARCHAR(128) NOT NULL," +
                 "entryData VARCHAR(128) NOT NULL," +
                 "tableID INTEGER," +
-                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES Journals (tableID)" +
+                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES JournalNames (tableID)" +
                 "ON DELETE CASCADE);"
         );
     }

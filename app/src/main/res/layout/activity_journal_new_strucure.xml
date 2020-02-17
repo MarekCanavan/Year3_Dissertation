@@ -14,9 +14,10 @@
         android:text="New Percentage "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.187" />
+        app:layout_constraintVertical_bias="0.297" />
 
     <Button
         android:id="@+id/bt_new_column"
@@ -29,17 +30,19 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintVertical_bias="0.211" />
 
     <LinearLayout
         android:id="@+id/ll_field_generation"
         android:layout_width="400dp"
         android:layout_height="350dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.624"></LinearLayout>
+        app:layout_constraintVertical_bias="0.695"></LinearLayout>
 
     <Button
         android:id="@+id/bt_save_structure"
@@ -52,4 +55,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
+    <EditText
+        android:id="@+id/et_name_of_journal"
+        android:layout_width="338dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:hint="Name of Journal"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.086" />
 </androidx.constraintlayout.widget.ConstraintLayout>
