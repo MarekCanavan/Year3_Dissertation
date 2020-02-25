@@ -35,7 +35,7 @@ public class JournalNewStructure extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         db_write = dbHelper.getWritableDatabase();
         db_read = dbHelper.getReadableDatabase();
-        
+
         tableID = 0;
 
         fieldGeneration = (LinearLayout) findViewById(R.id.ll_field_generation);
@@ -98,7 +98,6 @@ public class JournalNewStructure extends AppCompatActivity {
     public void saveStructureOnClick(View v){
 
         //Insert the Journal Name into JournalNames
-
         EditText et_name_of_journal = (EditText) findViewById(R.id.et_name_of_journal);
         String name_of_journal = et_name_of_journal.getText().toString();
         ContentValues jn_values = new ContentValues();
@@ -111,18 +110,15 @@ public class JournalNewStructure extends AppCompatActivity {
         //Query the Journal database to findout the highest value in it
         //This will be the value we have just inserted
         //Save the value to then store with the JournalStructure
-        Log.d("Diss", "test 2" );
 
         String selectQuery = "SELECT MAX(_id) as _id FROM JournalNames";
         Cursor cursor = db_write.rawQuery(selectQuery, null);
-
         cursor.moveToFirst();
 
         Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
 
         tableID = cursor.getInt(0);
 
-        //cursor.moveToNext();
 
         //Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
 

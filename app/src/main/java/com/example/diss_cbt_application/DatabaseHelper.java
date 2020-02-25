@@ -35,21 +35,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
 
+        db.execSQL("CREATE TABLE SEntry (" +
+                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "entryName VARCHAR(128) NOT NULL," +
+                "tableID INTEGER," +
+                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES JournalNames (tableID)" +
+                "ON DELETE CASCADE);"
+        );
+
         /*Entry id
         * Table ID FOREIGN KEY
         * Column Name
         * Type
         * Date */
-        db.execSQL("CREATE TABLE SingleEntry (" +
+        db.execSQL("CREATE TABLE SEntryData (" +
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                "entryName VARCHAR(128) NOT NULL," + //Each entry will have a title
                 "columnName VARCHAR(128) NOT NULL," +
                 "columnType VARCHAR(128) NOT NULL," +
                 "entryData VARCHAR(128) NOT NULL," +
                 "tableID INTEGER," +
-                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES JournalNames (tableID)" +
+                "entryTime LONG," +
+                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES SEntry (_id)" +
                 "ON DELETE CASCADE);"
         );
+
+
     }
 
     /*On upgrade will be called if the verison number, is incremeneted from the previous version*/

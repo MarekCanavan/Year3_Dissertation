@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:id="@+id/parent_layout">
+
+
+    //Give Layout id because its what you use to attach the on click listener
+    <TextView
+        android:id="@+id/tv_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dummy Text"
+        android:textSize="25dp"/>
+
+</RelativeLayout>
