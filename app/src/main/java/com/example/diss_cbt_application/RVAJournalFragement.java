@@ -2,6 +2,7 @@ package com.example.diss_cbt_application;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,16 +27,18 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private ArrayList<String> mJournalNames = new ArrayList<>();
     private ArrayList<String> mEntryTimes = new ArrayList<>();
     private ArrayList<Integer> mIDs = new ArrayList<>();
+    private ArrayList<Integer> mJournalColour = new ArrayList<>();
     private Context mContext;
 
 
     public RVAJournalFragement(ArrayList<Integer> mIDs, ArrayList<String> mEntryNames, ArrayList<String> mJournalNames,
-                               ArrayList<String> mEntryTimes, Context mContext) {
+                               ArrayList<String> mEntryTimes, ArrayList<Integer> mJournalColour,  Context mContext) {
         this.mIDs = mIDs;
         this.mEntryNames = mEntryNames;
         this.mJournalNames = mJournalNames;
         this.mEntryTimes = mEntryTimes;
         this.mContext = mContext;
+        this.mJournalColour = mJournalColour;
 
     }
 
@@ -56,24 +59,36 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         Log.d(TAG, "onBindViewHolder called");
 
         holder.entryName.setText(mEntryNames.get(position));
+        holder.entryName.setTextSize(19);
+        holder.entryName.setTextColor(Color.BLACK);
 
         holder.journalName.setText(mJournalNames.get(position));
+        holder.journalName.setTextSize(15);
+        holder.journalName.setTextColor(mJournalColour.get(position));
 
         holder.time.setText(mEntryTimes.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mEntryNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Log.d("Diss", "Value of if: " + mIDs.get(position));
-                Intent i_complete_journal = new Intent(mContext, JournalCompleteEntryActivity.class);
+                Log.d("Diss", "Value of id: " + mIDs.get(position));
+                //Log.d("Diss", "Value of entryName: " + mEntryNames.get(position));
+                //Log.d("Diss", "Value of journalName: " +  mJournalNames.get(position));
 
-                Bundle recipeBundle = new Bundle();
-                recipeBundle.putInt("_id", mIDs.get(position));
-                i_complete_journal.putExtras(recipeBundle);
+                Intent i_entry = new Intent(mContext, JournalEntryData.class);
 
-                mContext.startActivity(i_complete_journal);*/
+                Bundle entryBundle = new Bundle();
+                entryBundle.putInt(JournalContract._ID, mIDs.get(position));
+                entryBundle.putString(JournalContract.ENTRY_NAME, mEntryNames.get(position));
+                entryBundle.putString(JournalContract.JOURNAL_NAME, mJournalNames.get(position));
+                entryBundle.putString("time", mEntryTimes.get(position));
+                i_entry.putExtras(entryBundle);
+
+                Log.d("Diss", "Value of _id before sending: " + mIDs.get(position));
+
+                mContext.startActivity(i_entry);
 
             }
         });

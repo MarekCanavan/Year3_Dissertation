@@ -2,9 +2,12 @@ package com.example.diss_cbt_application;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +19,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+
 public class JournalNewStructure extends AppCompatActivity {
 
     private Button newColumn, newPercentage;
@@ -25,6 +30,9 @@ public class JournalNewStructure extends AppCompatActivity {
     private SQLiteDatabase db_write, db_read;
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     List<String> columnTypes =new ArrayList<String>();
+
+    TextView testTextView ;
+    int mDefualtColour;
 
 
     @Override
@@ -46,6 +54,8 @@ public class JournalNewStructure extends AppCompatActivity {
     public void newColumnOnClick(View v){
 
         EditText newColumn = new EditText(JournalNewStructure.this);
+        //newColumn.setBackgroundColor(Color.WHITE);
+        newColumn.setGravity(0);
         allEds.add(newColumn);
 
         TextView text = new TextView(JournalNewStructure.this);
@@ -58,7 +68,7 @@ public class JournalNewStructure extends AppCompatActivity {
 
         newColumn.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+                200));
 
 
         newColumn.setId(Counter);
@@ -95,6 +105,29 @@ public class JournalNewStructure extends AppCompatActivity {
         fieldGeneration.addView(newPercentage);
     }
 
+    public void changeColourOnClick(View v){
+        testTextView = findViewById(R.id.tv_test_text);
+        openColorPicker();
+    }
+
+    public void openColorPicker(){
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, 0, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+
+                mDefualtColour = color;
+                testTextView.setTextColor(mDefualtColour);
+            }
+        });
+
+        colorPicker.show();
+    }
+
     public void saveStructureOnClick(View v){
 
         //Insert the Journal Name into JournalNames
@@ -103,9 +136,12 @@ public class JournalNewStructure extends AppCompatActivity {
         ContentValues jn_values = new ContentValues();
 
         Log.d("Diss", name_of_journal);
-        jn_values.put("journalName", name_of_journal);
+        jn_values.put(JournalContract.JOURNAL_NAME, name_of_journal);
+        jn_values.put(JournalContract.JOURNAL_COLOUR, mDefualtColour);
+        jn_values.put(JournalContract.ARCHIVED, 0);
 
-        db_write.insert("JournalNames", null, jn_values);
+
+        db_write.insert(JournalContract.JOURNAL_NAMES, null, jn_values);
 
         //Query the Journal database to findout the highest value in it
         //This will be the value we have just inserted
@@ -128,17 +164,21 @@ public class JournalNewStructure extends AppCompatActivity {
         for(int i=0; i < allEds.size(); i++){
 
             ContentValues js_values = new ContentValues();
-            js_values.put("columnName",allEds.get(i).getText().toString());
-            js_values.put("columnType",columnTypes.get(i));
-            js_values.put("tableID", tableID);
+            js_values.put(JournalContract.COLUMN_NAME, allEds.get(i).getText().toString());
+            js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i));
+            js_values.put(JournalContract.TABLE_ID, tableID);
 
-            db_write.insert("JournalStructure", null, js_values);
+            db_write.insert(JournalContract.JOURNAL_STRUCTURE, null, js_values);
 
             strings[i] = allEds.get(i).getText().toString();
             Log.d("Diss","" + columnTypes.get(i));
             Log.d("Diss", "" + allEds.get(i).getText().toString());
 
         }
+
+        Intent returnIntent = new Intent();
+        setResult(2,returnIntent);
+        finish();
 
     }
 

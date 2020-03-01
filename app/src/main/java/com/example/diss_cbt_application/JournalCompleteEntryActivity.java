@@ -2,9 +2,13 @@ package com.example.diss_cbt_application;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +16,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 
 
-    int  journalID, columnCounter;
-    String journalIDString;
+    int  journalID, columnCounter, journalColour;
+    String journalIDString, journalNameString;
     int entryID;
     private LinearLayout fieldReGeneration;
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
@@ -41,6 +50,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         Bundle journalBundle = getIntent().getExtras();
         journalID = journalBundle.getInt("_id");
+        journalNameString = journalBundle.getString("mJournalNames");
+
+        journalColour = journalBundle.getInt(JournalContract.JOURNAL_COLOUR);
 
         fieldReGeneration = (LinearLayout) findViewById(R.id.ll_field_regeneration);
         fieldReGeneration.setOrientation(LinearLayout.VERTICAL);
@@ -58,9 +70,13 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         journalIDString = Integer.toString(journalID);
 
         Log.d("Diss", "Value of journalIDString: " + journalIDString);
+
         String selectQuery = "SELECT * FROM JournalStructure WHERE tableID = " + journalIDString;
+
         Log.d("Diss", selectQuery);
+
         Cursor cursor = db_write.rawQuery(selectQuery, null);
+
         Log.d("Diss", "Cursor: " + cursor );
         if(cursor.moveToFirst()) {
             do {
@@ -70,8 +86,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 /*Take values from the cursor and store in variables for manipulation*/
                 int _id = cursor.getInt(0);
                 String columnName = cursor.getString(1);
-                String columnType = cursor.getString(1);
-                int tableID = cursor.getInt(0);
+                String columnType = cursor.getString(2);//This was 1
+                int tableID = cursor.getInt(3);//This was 0
 
 
                 //Name of the Entry Field
@@ -82,14 +98,18 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 columnText.setText(columnName);
+                columnText.setPadding(0,20,0,20);
+                columnText.setTextSize(20);
+                columnText.setTextColor(Color.BLACK);
 
 
                 //EditText Field for the entry data
                 EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
+                newColumn.setGravity(0);
 
                 newColumn.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                        200));
 
                 //Adding variables to array for later persistance
                 allEds.add(newColumn);
@@ -128,15 +148,27 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         EditText ed_entry_name = (EditText) findViewById(R.id.et_name_of_entry);
         String st_entry_name = ed_entry_name.getText().toString();
+
+        //Getting current date to save in database
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM HH:mm", Locale.getDefault());
+        String date = dateFormat.format(new java.util.Date());
+
+
+        Log.d("Diss", "Value of Journal Colour Before Complete Entry: " + journalColour);
+
+        /*Saving data to SEntry table*/
         ContentValues se_values = new ContentValues();
-        se_values.put("entryName", st_entry_name);
-        se_values.put("tableID", journalID); //tableID
+        se_values.put(JournalContract.ENTRY_NAME, st_entry_name);
+        se_values.put(JournalContract.ENTRY_DATE_TIME, date);
+        se_values.put(JournalContract.ENTRY_JOURNAL_TYPE, journalNameString);
+        se_values.put(JournalContract.JOURNAL_COLOUR, journalColour);
+        se_values.put(JournalContract.TABLE_ID, journalID); //tableID
 
-        db_write.insert("SEntry", null, se_values);
+        db_write.insert(JournalContract.SENTRY, null, se_values);
 
 
 
-        String selectQuery = "SELECT MAX(_id) as _id FROM SEntry";
+        String selectQuery = "SELECT MAX(" + JournalContract._ID + ") as _id FROM SEntry";
         Cursor cursor = db_write.rawQuery(selectQuery, null);
         cursor.moveToFirst();
 
@@ -151,16 +183,16 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             //Set values to be persisted
             ContentValues js_values = new ContentValues();
 
-            js_values.put("columnName", columnNames.get(i)); //columnName
-            js_values.put("columnType", columnTypes.get(i)); //columnType
-            js_values.put("entryData", allEds.get(i).getText().toString()); //entryData
-            js_values.put("tableID", entryID); //entryID
-            js_values.put("entryTime", System.currentTimeMillis()); //entryID
+            js_values.put(JournalContract.COLUMN_NAME, columnNames.get(i)); //columnName
+            js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i)); //columnType
+            js_values.put(JournalContract.ENTRY_DATA, allEds.get(i).getText().toString()); //entryData
+            js_values.put(JournalContract.ENTRY_ID, entryID); //mainEntryID
+            js_values.put(JournalContract.ENTRY_TIME, System.currentTimeMillis()); //mainEntryID
 
             Log.d("Diss", "Start time: " + System.currentTimeMillis());
 
             //insert into database
-            db_write.insert("SEntryData", null, js_values);
+            db_write.insert(JournalContract.SENTRY_DATA,  null, js_values);
 
 
             //strings[i] = allEds.get(i).getText().toString();
@@ -169,6 +201,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         }
 
+        finish();
 
     }
 }

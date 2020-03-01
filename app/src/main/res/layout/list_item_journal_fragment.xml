@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="80dp"
     android:padding="15dp"
-    android:id="@+id/parent_layout">
-
+    android:id="@+id/parent_layout"
+    android:background="@color/cardview_light_background">
 
     //Give Layout id because its what you use to attach the on click listener
 

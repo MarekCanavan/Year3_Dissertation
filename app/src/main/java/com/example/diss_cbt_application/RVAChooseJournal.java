@@ -20,15 +20,18 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
 
     private static final String TAG = "RVAChooseJournal";
 
-    private ArrayList<String> mImageNames = new ArrayList<>();
+    private ArrayList<String> mJournalNames = new ArrayList<>();
     private ArrayList<Integer> mIDs = new ArrayList<>();
+    private ArrayList<Integer> mJournalColours = new ArrayList<>();
     private Context mContext;
 
 
-    public RVAChooseJournal(ArrayList<Integer> mIDs, ArrayList<String> mImageNames, Context mContext) {
+    public RVAChooseJournal(ArrayList<Integer> mIDs, ArrayList<String> mJournalNames,ArrayList<Integer> mJournalColours, Context mContext) {
         this.mIDs = mIDs;
-        this.mImageNames = mImageNames;
+        this.mJournalNames = mJournalNames;
         this.mContext = mContext;
+        this.mJournalColours = mJournalColours;
+
     }
 
     @NonNull
@@ -47,19 +50,22 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
 
-        holder.entryName.setText(mImageNames.get(position));
+        holder.entryName.setText(mJournalNames.get(position));
+        holder.entryName.setTextColor(mJournalColours.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mJournalNames.get(position), Toast.LENGTH_SHORT).show();
 
                 Log.d("Diss", "Value of if: " + mIDs.get(position));
                 Intent i_complete_journal = new Intent(mContext, JournalCompleteEntryActivity.class);
 
-                Bundle recipeBundle = new Bundle();
-                recipeBundle.putInt("_id", mIDs.get(position));
-                i_complete_journal.putExtras(recipeBundle);
+                Bundle journalBundle = new Bundle();
+                journalBundle.putInt(JournalContract._ID, mIDs.get(position));
+                journalBundle.putString("mJournalNames", mJournalNames.get(position));
+                journalBundle.putInt(JournalContract.JOURNAL_COLOUR, mJournalColours.get(position));
+                i_complete_journal.putExtras(journalBundle);
 
                 mContext.startActivity(i_complete_journal);
 
@@ -70,7 +76,7 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
 
     @Override
     public int getItemCount() {
-        return mImageNames.size();
+        return mJournalNames.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

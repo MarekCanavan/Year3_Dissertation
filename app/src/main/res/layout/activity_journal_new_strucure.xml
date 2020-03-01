@@ -8,29 +8,56 @@
 
     <Button
         android:id="@+id/bt_new_percentage"
-        android:layout_width="338dp"
-        android:layout_height="51dp"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
         android:onClick="newPercentageOnClick"
         android:text="New Percentage "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintVertical_bias="0.264" />
 
     <Button
         android:id="@+id/bt_new_column"
-        android:layout_width="338dp"
-        android:layout_height="51dp"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
         android:onClick="newColumnOnClick"
         android:text="New Column"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintVertical_bias="0.173" />
+
+    <Button
+        android:id="@+id/bt_choose_colour"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:onClick="changeColourOnClick"
+        android:text="Colour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.173" />
+
+
+    <TextView
+        android:id="@+id/tv_test_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Text"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.845"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.271" />
 
     <LinearLayout
         android:id="@+id/ll_field_generation"
@@ -50,6 +77,9 @@
         android:layout_height="45dp"
         android:onClick="saveStructureOnClick"
         android:text="Save Structure "
+        android:background="@color/darkBlue"
+        android:textColor="@color/white"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +95,8 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.086" />
+        app:layout_constraintVertical_bias="0.054" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, "RTDB", null, 1);
     }
 
+    /*Database tables
+    *
+    * Journals - 2 tables
+    *   - 1 is the container: name, colour, id (JournalID)
+    *   - 1 is the structure: columnName, columnType
+    *   - FK required to identify which journal each entry in the table is for
+    *
+    *
+    * Entries - 2 tables
+    *
+    *   - 1 is the container: name, journal, entryTime, journalID, mainEntryID
+    *   - 1 is the data: columnName, columnType, Data, entryTime*/
+
     public void onCreate(SQLiteDatabase db){
 
 
@@ -19,7 +32,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          * Type of column - edit text, number, rating  */
         db.execSQL("CREATE TABLE JournalNames (" +
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                "journalName VARCHAR(128) NOT NULL);"
+                "journalName VARCHAR(128) NOT NULL," +
+                "journalColour INTEGER," +
+                "archived INTEGER);"
         );
 
         /*Table Name/id Number
@@ -38,6 +53,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE SEntry (" +
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "entryName VARCHAR(128) NOT NULL," +
+                "entryDateTime VARCHAR(128) NOT NULL," +
+                "entryJournalType VARCHAR(128) NOT NULL," +
+                "journalColour INTEGER," +
                 "tableID INTEGER," +
                 "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES JournalNames (tableID)" +
                 "ON DELETE CASCADE);"
@@ -53,14 +71,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "columnName VARCHAR(128) NOT NULL," +
                 "columnType VARCHAR(128) NOT NULL," +
                 "entryData VARCHAR(128) NOT NULL," +
-                "tableID INTEGER," +
+                "entryID INTEGER," +
                 "entryTime LONG," +
-                "CONSTRAINT fk1 FOREIGN KEY (tableID) REFERENCES SEntry (_id)" +
+                "CONSTRAINT fk1 FOREIGN KEY (entryID) REFERENCES SEntry (_id)" +
                 "ON DELETE CASCADE);"
         );
 
-
     }
+
+    /*
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }*/
+
 
     /*On upgrade will be called if the verison number, is incremeneted from the previous version*/
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){

@@ -68,4 +68,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i_choose_journal);
     }
 
+    public void journalsOnClick(View v){
+        Intent i_my_journals = new Intent(MainActivity.this, JournalsMyJActivity.class);
+        startActivity(i_my_journals);
+
+    }
+
 }
