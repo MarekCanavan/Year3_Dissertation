@@ -53,7 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE SEntry (" +
                 "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "entryName VARCHAR(128) NOT NULL," +
-                "entryDateTime VARCHAR(128) NOT NULL," +
+                "entryDate INTEGER," +
+                "entryTime INTEGER," +
                 "entryJournalType VARCHAR(128) NOT NULL," +
                 "journalColour INTEGER," +
                 "tableID INTEGER," +
@@ -72,7 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "columnType VARCHAR(128) NOT NULL," +
                 "entryData VARCHAR(128) NOT NULL," +
                 "entryID INTEGER," +
-                "entryTime LONG," +
+                "entryDate INTEGER," +
+                "entryTime INTEGER," +
                 "CONSTRAINT fk1 FOREIGN KEY (entryID) REFERENCES SEntry (_id)" +
                 "ON DELETE CASCADE);"
         );

@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".JournalEntryData"
-    android:background="@color/cardview_light_background">
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/ll_field_generation_entry_data"
-        android:layout_width="330dp"
-        android:layout_height="433dp"
+        android:layout_width="379dp"
+        android:layout_height="439dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:orientation="vertical"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
@@ -27,12 +28,13 @@
         android:layout_height="wrap_content"
         android:text="Entry Name"
         android:textSize="30dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.060"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.037" />
+        app:layout_constraintVertical_bias="0.055" />
 
     <TextView
         android:id="@+id/tv_journal_name"
@@ -42,39 +44,41 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.070"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112" />
+        app:layout_constraintVertical_bias="0.125" />
 
     <Button
         android:id="@+id/bt_edit"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
+        android:background="@color/darkBlue"
         android:onClick="editButtonOnClick"
         android:text="EDIT"
+        android:textColor="@color/white"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/ll_field_generation"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.225"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
+        app:layout_constraintVertical_bias="0.920" />
 
     <Button
         android:id="@+id/bt_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="248dp"
-        android:layout_marginLeft="248dp"
+        android:background="@color/darkBlue"
         android:onClick="deleteButtonOnClick"
         android:text="DELETE"
+        android:textColor="@color/white"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/ll_field_generation"
-        app:layout_constraintHorizontal_bias="0.750"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.775"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
+        app:layout_constraintVertical_bias="0.920" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

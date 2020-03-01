@@ -31,6 +31,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
     private ArrayList<String> mEntryNames = new ArrayList<>();
     private ArrayList<String> mJournalNames = new ArrayList<>();
     private ArrayList<String> mEntryTimes = new ArrayList<>();
+    private ArrayList<String> mEntryDates = new ArrayList<>();
     private ArrayList<Integer> mJournalColour = new ArrayList<>();
 
     public JournalFragment() {
@@ -57,7 +58,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RVAJournalFragement adapter = new RVAJournalFragement(mIDs, mEntryNames, mJournalNames,mEntryTimes, mJournalColour, getContext());
+        RVAJournalFragement adapter = new RVAJournalFragement(mIDs, mEntryNames, mJournalNames,
+                mEntryTimes,mEntryDates, mJournalColour, getContext());
         recyclerView.setAdapter(adapter);
 
         return rootView;
@@ -76,7 +78,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         String[] projection = new String[]{
                 JournalContract._ID,
                 JournalContract.ENTRY_NAME,
-                JournalContract.ENTRY_DATE_TIME,
+                JournalContract.ENTRY_DATE,
+                JournalContract.ENTRY_TIME,
                 JournalContract.ENTRY_JOURNAL_TYPE,
                 JournalContract.JOURNAL_COLOUR
         };
@@ -96,9 +99,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
                 mIDs.add(c.getInt(0));
                 mEntryNames.add(c.getString(1));
-                mEntryTimes.add(c.getString(2));
-                mJournalNames.add(c.getString(3));
-                mJournalColour.add(c.getInt(4));
+                mEntryDates.add(c.getString(2));
+                mEntryTimes.add(c.getString(3));
+                mJournalNames.add(c.getString(4));
+                mJournalColour.add(c.getInt(5));
 
 
             }while(c.moveToNext());

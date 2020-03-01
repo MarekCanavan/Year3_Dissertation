@@ -26,17 +26,19 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private ArrayList<String> mEntryNames = new ArrayList<>();
     private ArrayList<String> mJournalNames = new ArrayList<>();
     private ArrayList<String> mEntryTimes = new ArrayList<>();
+    private ArrayList<String> mEntryDates = new ArrayList<>();
     private ArrayList<Integer> mIDs = new ArrayList<>();
     private ArrayList<Integer> mJournalColour = new ArrayList<>();
     private Context mContext;
 
 
     public RVAJournalFragement(ArrayList<Integer> mIDs, ArrayList<String> mEntryNames, ArrayList<String> mJournalNames,
-                               ArrayList<String> mEntryTimes, ArrayList<Integer> mJournalColour,  Context mContext) {
+                               ArrayList<String> mEntryTimes, ArrayList<String> mEntryDates, ArrayList<Integer> mJournalColour,  Context mContext) {
         this.mIDs = mIDs;
         this.mEntryNames = mEntryNames;
         this.mJournalNames = mJournalNames;
         this.mEntryTimes = mEntryTimes;
+        this.mEntryDates = mEntryDates;
         this.mContext = mContext;
         this.mJournalColour = mJournalColour;
 
@@ -67,6 +69,7 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         holder.journalName.setTextColor(mJournalColour.get(position));
 
         holder.time.setText(mEntryTimes.get(position));
+        holder.date.setText(mEntryDates.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +86,9 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
                 entryBundle.putInt(JournalContract._ID, mIDs.get(position));
                 entryBundle.putString(JournalContract.ENTRY_NAME, mEntryNames.get(position));
                 entryBundle.putString(JournalContract.JOURNAL_NAME, mJournalNames.get(position));
-                entryBundle.putString("time", mEntryTimes.get(position));
+                entryBundle.putString(JournalContract.ENTRY_DATE, mEntryDates.get(position));
+                entryBundle.putString(JournalContract.ENTRY_TIME, mEntryTimes.get(position));
+                entryBundle.putInt(JournalContract.JOURNAL_COLOUR, mJournalColour.get(position));
                 i_entry.putExtras(entryBundle);
 
                 Log.d("Diss", "Value of _id before sending: " + mIDs.get(position));
@@ -102,7 +107,7 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView entryName, journalName, time;
+        TextView entryName, journalName, time, date;
         ConstraintLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -111,6 +116,7 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
             entryName = itemView.findViewById(R.id.tv_entry_name);
             journalName = itemView.findViewById(R.id.tv_journal_name);
             time = itemView.findViewById(R.id.tv_time);
+            date = itemView.findViewById(R.id.tv_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
         }

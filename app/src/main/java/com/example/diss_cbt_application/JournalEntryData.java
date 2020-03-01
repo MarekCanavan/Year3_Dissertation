@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class JournalEntryData extends AppCompatActivity {
     private static String st_Text_View = "TextView";
     private static String st_Edit_View = "EditView";
     int mainEntryID = 0;
+    int mJournalColour;
 
     private LinearLayout fieldReGeneration;
 
@@ -58,7 +60,8 @@ public class JournalEntryData extends AppCompatActivity {
         mainEntryID = entryBundle.getInt("_id");
         String mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
         String mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
-        String mEntryTime = entryBundle.getString("time");
+        String mEntryTime = entryBundle.getString(JournalContract.ENTRY_TIME);
+        mJournalColour = entryBundle.getInt(JournalContract.JOURNAL_COLOUR);
 
         Log.d("Diss", "Value of id from bundle: " + mainEntryID);
 
@@ -70,6 +73,7 @@ public class JournalEntryData extends AppCompatActivity {
 
         tv_entry_name.setText(mEntryName);
         tv_journal_name.setText(mJournalName);
+        tv_journal_name.setTextColor(mJournalColour);
 
         createEntryData(mainEntryID, st_Text_View);
     }
@@ -127,7 +131,7 @@ public class JournalEntryData extends AppCompatActivity {
                     TextView entryData_ = new TextView(JournalEntryData.this);
 
                     entryData_.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT));
 
                     entryData_.setText(entryData);
@@ -140,8 +144,8 @@ public class JournalEntryData extends AppCompatActivity {
                     EditText entryDataView = new EditText(JournalEntryData.this);
 
                     entryDataView.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            300));
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT));
 
                     entryDataView.setText(entryData);
 

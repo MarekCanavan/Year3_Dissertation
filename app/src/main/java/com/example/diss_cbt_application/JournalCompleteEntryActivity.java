@@ -150,16 +150,24 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         String st_entry_name = ed_entry_name.getText().toString();
 
         //Getting current date to save in database
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM HH:mm", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
         String date = dateFormat.format(new java.util.Date());
 
+        //Getting current time to save in database
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String time = timeFormat.format(new java.util.Date());
+
+
+        Log.d("Diss", "Value of other date format: " + date);
+        Log.d("Diss", "Value of other time format: " + time);
 
         Log.d("Diss", "Value of Journal Colour Before Complete Entry: " + journalColour);
 
         /*Saving data to SEntry table*/
         ContentValues se_values = new ContentValues();
         se_values.put(JournalContract.ENTRY_NAME, st_entry_name);
-        se_values.put(JournalContract.ENTRY_DATE_TIME, date);
+        se_values.put(JournalContract.ENTRY_DATE, date);
+        se_values.put(JournalContract.ENTRY_TIME, time);
         se_values.put(JournalContract.ENTRY_JOURNAL_TYPE, journalNameString);
         se_values.put(JournalContract.JOURNAL_COLOUR, journalColour);
         se_values.put(JournalContract.TABLE_ID, journalID); //tableID
@@ -187,7 +195,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i)); //columnType
             js_values.put(JournalContract.ENTRY_DATA, allEds.get(i).getText().toString()); //entryData
             js_values.put(JournalContract.ENTRY_ID, entryID); //mainEntryID
-            js_values.put(JournalContract.ENTRY_TIME, System.currentTimeMillis()); //mainEntryID
+            js_values.put(JournalContract.ENTRY_TIME, time);
+            js_values.put(JournalContract.ENTRY_DATE, date);
 
             Log.d("Diss", "Start time: " + System.currentTimeMillis());
 

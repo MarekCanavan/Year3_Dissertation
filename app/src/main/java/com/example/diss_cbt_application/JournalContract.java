@@ -40,6 +40,7 @@ public class JournalContract {
     public static final String ENTRY_DATA = "entryData";
     public static final String ENTRY_ID = "entryID";
     public static final String ENTRY_TIME = "entryTime";
+    public static final String ENTRY_DATE = "entryDate";
 
 
 }
