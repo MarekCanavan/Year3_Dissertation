@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -29,12 +30,15 @@ public class JournalEntryData extends AppCompatActivity {
     int mainEntryID = 0;
     int mJournalColour;
 
-    private LinearLayout fieldReGeneration;
+    int epointer = 20;
+    String textLog = "Test22";
+
 
     List<String> columnNames =new ArrayList<String>();
     List<String> entryDataList =new ArrayList<String>();
     List<String> columnTypes =new ArrayList<String>();
     ArrayList<EditText> allEds = new ArrayList<EditText>();
+    ArrayList<TextView> allTvs = new ArrayList<TextView>();
     List<Integer> uniqueEntryIDs = new ArrayList<Integer>();
 
     boolean edit = true;
@@ -51,9 +55,6 @@ public class JournalEntryData extends AppCompatActivity {
         db_write.execSQL("PRAGMA foreign_keys=ON");
         db_read = dbHelper.getReadableDatabase();
 
-        fieldReGeneration = (LinearLayout) findViewById(R.id.ll_field_generation_entry_data);
-        fieldReGeneration.setOrientation(LinearLayout.VERTICAL);
-
 
         /*Unpacking the bundle and placing values in varaibles*/
         Bundle entryBundle = getIntent().getExtras();;
@@ -65,8 +66,7 @@ public class JournalEntryData extends AppCompatActivity {
 
         Log.d("Diss", "Value of id from bundle: " + mainEntryID);
 
-        //Log.d("Diss", "Value of mEntryName: " + entryBundle.getString("entryName"));
-        //Log.d("Diss", "Value of mJournalName: " + entryBundle.getString("journalName"));
+
         /*Getting reference to the textViews*/
         tv_entry_name = findViewById(R.id.tv_entry_name);
         tv_journal_name = findViewById(R.id.tv_journal_name);
@@ -83,7 +83,13 @@ public class JournalEntryData extends AppCompatActivity {
     * Doing it this way save copying a lot of the same good*/
     public void createEntryData(int entryID, String dataRepresentation ){
 
+        ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.ll_field_generation_entry_data);
         fieldReGeneration.removeAllViews();
+        LinearLayout scroll = new LinearLayout(this);
+        scroll.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration.addView(scroll);
+
+        TextView[] tv=new TextView[epointer]; // Going to add some text views
 
         String entryIDString = Integer.toString(entryID);
 
@@ -111,19 +117,12 @@ public class JournalEntryData extends AppCompatActivity {
 
 
                 //Name of the Entry Field
-                TextView columnText = new TextView(JournalEntryData.this);
-
-                columnText.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
-
+                TextView columnText = new TextView(this);
                 columnText.setText(columnName);
                 columnText.setTextSize(25);
                 columnText.setTextColor(Color.parseColor("#000000"));
 
-
-                //Add the new columns just created to the layout
-                fieldReGeneration.addView(columnText);
+                scroll.addView(columnText);
 
 
                 if(dataRepresentation == st_Text_View){
@@ -137,7 +136,7 @@ public class JournalEntryData extends AppCompatActivity {
                     entryData_.setText(entryData);
 
                     //Add the new columns just created to the layout
-                    fieldReGeneration.addView(entryData_);
+                    scroll.addView(entryData_);
                 }
                 else if(dataRepresentation == st_Edit_View){
                     //Text Field for the entry data
@@ -152,7 +151,7 @@ public class JournalEntryData extends AppCompatActivity {
                     allEds.add(entryDataView);
 
                     //Add the new columns just created to the layout
-                    fieldReGeneration.addView(entryDataView);
+                    scroll.addView(entryDataView);
                 }
 
 

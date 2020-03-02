@@ -7,7 +7,7 @@
     tools:context=".JournalEntryData"
     android:background="@color/white">
 
-    <LinearLayout
+    <ScrollView
         android:id="@+id/ll_field_generation_entry_data"
         android:layout_width="379dp"
         android:layout_height="439dp"
@@ -20,7 +20,7 @@
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543"></LinearLayout>
+        app:layout_constraintVertical_bias="0.543"></ScrollView>
 
     <TextView
         android:id="@+id/tv_entry_name"
