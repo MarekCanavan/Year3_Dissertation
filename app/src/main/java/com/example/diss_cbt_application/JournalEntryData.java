@@ -30,9 +30,6 @@ public class JournalEntryData extends AppCompatActivity {
     int mainEntryID = 0;
     int mJournalColour;
 
-    int epointer = 20;
-    String textLog = "Test22";
-
 
     List<String> columnNames =new ArrayList<String>();
     List<String> entryDataList =new ArrayList<String>();
@@ -83,13 +80,16 @@ public class JournalEntryData extends AppCompatActivity {
     * Doing it this way save copying a lot of the same good*/
     public void createEntryData(int entryID, String dataRepresentation ){
 
-        ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.ll_field_generation_entry_data);
+        /*Very important code
+        * Defines the ScrollView and removes views
+        * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
+        * Set the Orientation Vertical and add to the scrollView*/
+        ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation_entry_data);
         fieldReGeneration.removeAllViews();
         LinearLayout scroll = new LinearLayout(this);
         scroll.setOrientation(LinearLayout.VERTICAL);
         fieldReGeneration.addView(scroll);
 
-        TextView[] tv=new TextView[epointer]; // Going to add some text views
 
         String entryIDString = Integer.toString(entryID);
 
@@ -122,7 +122,7 @@ public class JournalEntryData extends AppCompatActivity {
                 columnText.setTextSize(25);
                 columnText.setTextColor(Color.parseColor("#000000"));
 
-                scroll.addView(columnText);
+                scroll.addView(columnText);//Add to LinearLayout on ScrollView
 
 
                 if(dataRepresentation == st_Text_View){
@@ -135,8 +135,7 @@ public class JournalEntryData extends AppCompatActivity {
 
                     entryData_.setText(entryData);
 
-                    //Add the new columns just created to the layout
-                    scroll.addView(entryData_);
+                    scroll.addView(entryData_);//Add to LinearLayout on ScrollView
                 }
                 else if(dataRepresentation == st_Edit_View){
                     //Text Field for the entry data
@@ -150,8 +149,7 @@ public class JournalEntryData extends AppCompatActivity {
 
                     allEds.add(entryDataView);
 
-                    //Add the new columns just created to the layout
-                    scroll.addView(entryDataView);
+                    scroll.addView(entryDataView);//Add to LinearLayout on ScrollView
                 }
 
 

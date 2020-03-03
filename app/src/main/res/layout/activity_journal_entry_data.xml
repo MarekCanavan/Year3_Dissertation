@@ -8,7 +8,7 @@
     android:background="@color/white">
 
     <ScrollView
-        android:id="@+id/ll_field_generation_entry_data"
+        android:id="@+id/sv_field_generation_entry_data"
         android:layout_width="379dp"
         android:layout_height="439dp"
         android:layout_marginStart="4dp"

@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".JournalNewStructure">
 
+
+    <EditText
+        android:id="@+id/et_name_of_journal"
+        android:layout_width="338dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:hint="Name of Journal"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054" />
+
     <Button
         android:id="@+id/bt_new_percentage"
         android:layout_width="175dp"
@@ -59,17 +74,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.271" />
 
-    <LinearLayout
-        android:id="@+id/ll_field_generation"
-        android:layout_width="400dp"
-        android:layout_height="350dp"
+    <ScrollView
+        android:id="@+id/sv_field_generation"
+        android:layout_width="350dp"
+        android:layout_height="360dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.695"></LinearLayout>
+        app:layout_constraintVertical_bias="0.735"></ScrollView>
 
     <Button
         android:id="@+id/bt_save_structure"
@@ -86,17 +103,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
 
-    <EditText
-        android:id="@+id/et_name_of_journal"
-        android:layout_width="338dp"
-        android:layout_height="51dp"
-        android:ems="10"
-        android:hint="Name of Journal"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
 </androidx.constraintlayout.widget.ConstraintLayout>

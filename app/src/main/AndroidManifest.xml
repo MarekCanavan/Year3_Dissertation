@@ -11,8 +11,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".JournalsMyJActivity"></activity>
         <activity android:name=".JournalEntryData" />
-        <activity android:name=".JournalCompleteEntryActivity" />
-        <activity android:name=".JournalNewStructure" />
+        <activity android:name=".JournalCompleteEntryActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".JournalNewStructure"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".JournalChooseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

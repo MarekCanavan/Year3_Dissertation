@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.sql.Date;
@@ -30,7 +31,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     int  journalID, columnCounter, journalColour;
     String journalIDString, journalNameString;
     int entryID;
-    private LinearLayout fieldReGeneration;
+    private ScrollView fieldReGeneration;
+    LinearLayout scroll;
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_write, db_read;
     ArrayList<EditText> allEds = new ArrayList<EditText>();
@@ -54,8 +56,11 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         journalColour = journalBundle.getInt(JournalContract.JOURNAL_COLOUR);
 
-        fieldReGeneration = (LinearLayout) findViewById(R.id.ll_field_regeneration);
-        fieldReGeneration.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_regeneration);
+        fieldReGeneration.removeAllViews();
+        scroll = new LinearLayout(this);
+        scroll.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration.addView(scroll);
 
         columnCounter = 0;
 
@@ -118,8 +123,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
 
                 //Add the new columns just created to the layout
-                fieldReGeneration.addView(columnText);
-                fieldReGeneration.addView(newColumn);
+                scroll.addView(columnText);
+                scroll.addView(newColumn);
 
 
                 /*Logs of Cursor Values*/

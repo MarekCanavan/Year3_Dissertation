@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class JournalNewStructure extends AppCompatActivity {
 
     private Button newColumn, newPercentage;
-    private LinearLayout fieldGeneration;
+    private ScrollView fieldReGeneration;
+    LinearLayout scroll;
     int Counter, tableID;
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_write, db_read;
@@ -46,37 +48,48 @@ public class JournalNewStructure extends AppCompatActivity {
 
         tableID = 0;
 
-        fieldGeneration = (LinearLayout) findViewById(R.id.ll_field_generation);
-        fieldGeneration.setOrientation(LinearLayout.VERTICAL);
+
+        /*Very important code
+         * Defines the ScrollView and removes views
+         * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
+         * Set the Orientation Vertical and add to the scrollView*/
+        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation);
+        fieldReGeneration.removeAllViews();
+        scroll = new LinearLayout(this);
+        scroll.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration.addView(scroll);
+
         Counter = 0;
     }
 
     public void newColumnOnClick(View v){
 
-        EditText newColumn = new EditText(JournalNewStructure.this);
-        //newColumn.setBackgroundColor(Color.WHITE);
+        EditText newColumn = new EditText(this);
         newColumn.setGravity(0);
+
         allEds.add(newColumn);
 
-        TextView text = new TextView(JournalNewStructure.this);
+        TextView text = new TextView(this);
 
         text.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         text.setText("Enter a name for wordy column");
+        text.setTextSize(17);
+        text.setTextColor(Color.BLACK);
 
         newColumn.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                200));
+                LinearLayout.LayoutParams.WRAP_CONTENT));
 
 
         newColumn.setId(Counter);
         columnTypes.add("column");
         Counter++;
 
-        fieldGeneration.addView((text));
-        fieldGeneration.addView(newColumn);
+        scroll.addView((text));
+        scroll.addView(newColumn);
 
     }
 
@@ -92,6 +105,8 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         text.setText("Enter a name for percentage column");
+        text.setTextSize(17);
+        text.setTextColor(Color.BLACK);
 
         newPercentage.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -101,8 +116,8 @@ public class JournalNewStructure extends AppCompatActivity {
         columnTypes.add("percentage");
         Counter++;
 
-        fieldGeneration.addView((text));
-        fieldGeneration.addView(newPercentage);
+        scroll.addView((text));
+        scroll.addView(newPercentage);
     }
 
     public void changeColourOnClick(View v){
