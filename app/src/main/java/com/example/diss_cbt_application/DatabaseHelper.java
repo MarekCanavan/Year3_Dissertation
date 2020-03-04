@@ -79,6 +79,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "ON DELETE CASCADE);"
         );
 
+
+
+        /*Goals Database, Fields Required
+        * _id
+        * gTitle
+        * gDescription
+        * gDate
+        * gTime
+        * markedComplete*/
+        db.execSQL("CREATE TABLE " + GContract.G_TABLE + " (" +
+                GContract._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                GContract.G_TITLE + " VARCHAR(128) NOT NULL," +
+                GContract.G_DESCRIPTION + " VARCHAR(128) NOT NULL," +
+                GContract.G_DATE + " VARCHAR(128) NOT NULL," +
+                GContract.G_TIME + " VARCHAR(128) NOT NULL," +
+                GContract.G_MARKED_COMPLETE + " INTEGER);"
+        );
+
+
     }
 
     /*

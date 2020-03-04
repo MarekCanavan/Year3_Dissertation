@@ -28,13 +28,15 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 
 
+    /*Database Definitions for the Activity*/
+    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
+    private SQLiteDatabase db_write, db_read;
+
     int  journalID, columnCounter, journalColour;
     String journalIDString, journalNameString;
     int entryID;
     private ScrollView fieldReGeneration;
     LinearLayout scroll;
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_write, db_read;
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     List<String> columnTypes =new ArrayList<String>();
     List<String> columnNames = new ArrayList<String>();

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -14,8 +16,12 @@ import java.util.Calendar;
 
 public class GNewGoal extends AppCompatActivity {
 
-    private int mYear, mMonth, mDay, mHour, mMinute;
-    EditText et_goal_date, et_goal_time;
+    private int mYear, mMonth, mDay, mHour, mMinute, mMarkedComplete;
+    EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
+
+    /*Database Definitions for the Activity*/
+    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
+    private SQLiteDatabase db_write, db_read;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +30,14 @@ public class GNewGoal extends AppCompatActivity {
 
         et_goal_date = (EditText) findViewById(R.id.et_goal_date);
         et_goal_time = (EditText) findViewById(R.id.et_goal_time);
+        et_description_of_goal = findViewById(R.id.et_description_of_goal);
+        et_title_of_goal = findViewById(R.id.et_title_of_goal);
+
+        dbHelper = new DatabaseHelper(this);
+        db_write = dbHelper.getWritableDatabase();
+        db_read = dbHelper.getReadableDatabase();
+
+        mMarkedComplete = 0;//Initially every goal is marked incomplete
 
     }
 
@@ -50,6 +64,7 @@ public class GNewGoal extends AppCompatActivity {
 
     }
 
+    /**Function allows the user to choose the time they want their reminder to go off */
     public void chooseTimeOnClick(View v){
 
         // Get Current Time
@@ -73,6 +88,20 @@ public class GNewGoal extends AppCompatActivity {
     }
 
     public void saveGoalOnClick(View v){
+
+
+        /*Saving data to SEntry table*/
+        ContentValues gt_values = new ContentValues();
+
+        gt_values.put(GContract.G_TITLE, et_title_of_goal.getText().toString() );
+        gt_values.put(GContract.G_DESCRIPTION, et_description_of_goal.getText().toString() );
+        gt_values.put(GContract.G_DATE, et_goal_date.getText().toString());
+        gt_values.put(GContract.G_TIME, et_goal_time.getText().toString());
+        gt_values.put(GContract.G_MARKED_COMPLETE, mMarkedComplete);
+
+        db_write.insert(GContract.G_TABLE, null, gt_values);
+
+
         finish();
     }
 }
