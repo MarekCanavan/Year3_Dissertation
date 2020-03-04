@@ -9,12 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".JournalsMyJActivity"></activity>
+        <activity android:name=".GNewGoal"></activity>
+        <activity android:name=".JournalsMyJActivity" />
         <activity android:name=".JournalEntryData" />
-        <activity android:name=".JournalCompleteEntryActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".JournalNewStructure"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".JournalCompleteEntryActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".JournalNewStructure"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".JournalChooseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

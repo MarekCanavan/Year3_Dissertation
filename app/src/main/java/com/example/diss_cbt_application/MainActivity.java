@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
         Intent i_my_journals = new Intent(MainActivity.this, JournalsMyJActivity.class);
         startActivity(i_my_journals);
 
+    }
+
+    /**When the user clicks on the '+' button on the Goals Fragment this function is called
+     * It sends an intent to the 'GNewGoals' Activity where the user can define a new goal
+     *
+     * @param v - the function is parsed the view */
+    public void newGoalOnClick(View v){
+
+        /*Define the intent that will be sent from the MainActivity to the New Goal Page*/
+        Intent i_new_goal = new Intent(MainActivity.this, GNewGoal.class);
+        startActivity(i_new_goal);
     }
 
 }

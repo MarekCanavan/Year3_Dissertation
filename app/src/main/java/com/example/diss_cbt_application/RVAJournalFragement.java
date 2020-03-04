@@ -18,11 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-
+/**
+ * */
 public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragement.ViewHolder>{
 
     private static final String TAG = "RVAJournalFragement";
 
+    /*Definition of the local ArrayLists in this class, the Arraylists are set in the constructor*/
     private ArrayList<String> mEntryNames = new ArrayList<>();
     private ArrayList<String> mJournalNames = new ArrayList<>();
     private ArrayList<String> mEntryTimes = new ArrayList<>();
@@ -32,6 +34,9 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private Context mContext;
 
 
+    /**
+     * This constructor receives all of the ArrayLists as parameters and sets the local arraylists to the values parse
+     * */
     public RVAJournalFragement(ArrayList<Integer> mIDs, ArrayList<String> mEntryNames, ArrayList<String> mJournalNames,
                                ArrayList<String> mEntryTimes, ArrayList<String> mEntryDates, ArrayList<Integer> mJournalColour,  Context mContext) {
         this.mIDs = mIDs;
@@ -41,7 +46,6 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         this.mEntryDates = mEntryDates;
         this.mContext = mContext;
         this.mJournalColour = mJournalColour;
-
     }
 
     @NonNull
@@ -50,7 +54,6 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         //Responsible for inflating the view
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_journal_fragment, parent, false);
-
         ViewHolder holder = new ViewHolder(view);
 
         return holder;
@@ -100,6 +103,8 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return mEntryNames.size();
@@ -118,7 +123,6 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
             time = itemView.findViewById(R.id.tv_time);
             date = itemView.findViewById(R.id.tv_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
-
         }
     }
 }

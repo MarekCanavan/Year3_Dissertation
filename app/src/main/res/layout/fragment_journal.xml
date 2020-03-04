@@ -12,41 +12,55 @@
         android:layout_width="408dp"
         android:layout_height="460dp"
         android:background="@color/lightGray"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.306" />
+        app:layout_constraintVertical_bias="0.464" />
 
     <ImageButton
         android:id="@+id/bt_new_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="newEntryOnClick"
         android:background="@drawable/ic_addition_button_dark_blue_foreground"
+        android:onClick="newEntryOnClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.859" />
+        app:layout_constraintVertical_bias="0.916" />
 
     <Button
         android:id="@+id/bt_journals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="journalsOnClick"
-        android:text="Journals"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
         android:background="@color/darkBlue"
+        android:onClick="journalsOnClick"
+        android:textSize="12dp"
+        android:text="My Journals"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.06" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entries"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.050" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

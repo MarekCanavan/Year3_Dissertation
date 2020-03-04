@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +62,7 @@ public class JournalNewStructure extends AppCompatActivity {
 
         Counter = 0;
     }
+
 
     public void newColumnOnClick(View v){
 

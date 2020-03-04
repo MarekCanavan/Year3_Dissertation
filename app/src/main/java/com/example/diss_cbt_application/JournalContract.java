@@ -1,5 +1,9 @@
 package com.example.diss_cbt_application;
 
+/**
+ * Class holds the Strings used in database calls throughout the application
+ * This is done to make the handling of the names easier
+ * If it is necessary to change the name of a table or field in it, changing a string here is all that needs to be done*/
 public class JournalContract {
 
     /*Strings used in more than 1 table*/
@@ -9,7 +13,6 @@ public class JournalContract {
 
 
     /*String for Journal Names Table*/
-
     public static final String JOURNAL_NAMES = "JournalNames";//Table Name
 
     //Table Fields
@@ -17,7 +20,6 @@ public class JournalContract {
     public static final String ARCHIVED = "archived";
 
     /*Strings for Journal Structure Table*/
-
     public static final String JOURNAL_STRUCTURE = "JournalStructure";//Table Name
 
     //Table Fields

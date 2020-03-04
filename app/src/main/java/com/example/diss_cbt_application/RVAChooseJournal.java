@@ -1,5 +1,6 @@
 package com.example.diss_cbt_application;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     private ArrayList<Integer> mIDs = new ArrayList<>();
     private ArrayList<Integer> mJournalColours = new ArrayList<>();
     private Context mContext;
+
+    int LAUNCH_JOURNAL_CHOOSE_ACTIVITY = 1;
 
 
     public RVAChooseJournal(ArrayList<Integer> mIDs, ArrayList<String> mJournalNames,ArrayList<Integer> mJournalColours, Context mContext) {
