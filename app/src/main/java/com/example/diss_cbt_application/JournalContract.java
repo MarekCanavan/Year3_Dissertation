@@ -45,4 +45,13 @@ public class JournalContract {
     public static final String ENTRY_DATE = "entryDate";
 
 
+    /*Other Data Fields*/
+
+    /*Clearly Defining the Strings for the persistence of column types
+    * This is so they are consistent throughout and changes only need to be made here
+    * Aim of this is to reduce errors and ensure reliability of the code*/
+    public static final String COLUMN = "column"; //When inserting a column to the database
+    public static final String PERCENTAGE = "percentage"; //When inserting a percentage to the database
+
+
 }

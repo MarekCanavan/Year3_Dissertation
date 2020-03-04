@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -96,6 +97,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 String columnType = cursor.getString(2);//This was 1
                 int tableID = cursor.getInt(3);//This was 0
 
+                Log.d("Diss", "Value of Column Type: " + columnType);
 
                 //Name of the Entry Field
                 TextView columnText = new TextView(JournalCompleteEntryActivity.this);
@@ -109,24 +111,53 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 columnText.setTextSize(20);
                 columnText.setTextColor(Color.BLACK);
 
+                //Add the new columns just created to the layout
+                scroll.addView(columnText);
 
-                //EditText Field for the entry data
-                EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
-                newColumn.setGravity(0);
+                if(columnType.equals(JournalContract.COLUMN)){
 
-                newColumn.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        200));
+                    Log.d("Diss", "Value of Column Type in if: " + columnType);
+
+                    //EditText Field for the entry data
+                    EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
+                    newColumn.setGravity(0);
+
+                    newColumn.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            200));
+
+                    allEds.add(newColumn);
+                    scroll.addView(newColumn);
+                }
+                else if(columnType.equals(JournalContract.PERCENTAGE)){
+
+                    Log.d("Diss", "Value of Column Type in if else: " + columnType);
+
+
+                    //EditText Field for the entry data
+                    EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
+                    newColumn.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                    newColumn.setLayoutParams(new LinearLayout.LayoutParams(
+                            100,
+                            LinearLayout.LayoutParams.MATCH_PARENT));
+
+                    allEds.add(newColumn);
+                    scroll.addView(newColumn);
+
+                }
+                else{
+                    Log.d("Diss", "Not going in either if/else " );
+
+                }
+
 
                 //Adding variables to array for later persistance
-                allEds.add(newColumn);
                 columnTypes.add(columnType);
                 columnNames.add(columnName);
 
 
-                //Add the new columns just created to the layout
-                scroll.addView(columnText);
-                scroll.addView(newColumn);
+
 
 
                 /*Logs of Cursor Values*/

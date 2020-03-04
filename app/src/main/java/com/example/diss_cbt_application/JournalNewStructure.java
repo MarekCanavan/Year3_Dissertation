@@ -87,7 +87,7 @@ public class JournalNewStructure extends AppCompatActivity {
 
 
         newColumn.setId(Counter);
-        columnTypes.add("column");
+        columnTypes.add(JournalContract.COLUMN);
         Counter++;
 
         scroll.addView((text));
@@ -115,7 +115,7 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         newPercentage.setId(Counter);
-        columnTypes.add("percentage");
+        columnTypes.add(JournalContract.PERCENTAGE);
         Counter++;
 
         scroll.addView((text));
