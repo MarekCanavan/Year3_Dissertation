@@ -1,6 +1,5 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.JournalFeature;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;
 

@@ -12,6 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.diss_cbt_application.BreathFeature.BreathFragment;
+import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
+import com.example.diss_cbt_application.GoalsFeature.GoalObject;
+import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
+import com.example.diss_cbt_application.GoalsFeature.GoalsFragment;
+import com.example.diss_cbt_application.HomeFeature.HomeFragment;
+import com.example.diss_cbt_application.JournalFeature.JournalChooseActivity;
+import com.example.diss_cbt_application.JournalFeature.JournalFragment;
+import com.example.diss_cbt_application.JournalFeature.JournalsMyJActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 

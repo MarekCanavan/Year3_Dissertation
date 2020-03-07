@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.GoalsFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
 

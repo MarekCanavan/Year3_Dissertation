@@ -1,10 +1,9 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.JournalFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,9 +11,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
+import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.R;
+import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import java.util.ArrayList;
 
 public class JournalChooseActivity extends AppCompatActivity {
 

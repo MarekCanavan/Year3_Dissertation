@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.GoalsFeature;
 
 import android.app.Application;
 

@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.HomeFeature;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.diss_cbt_application.R;
 
 
 public class HomeFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.GoalsFeature;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +18,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.MainActivity;
+import com.example.diss_cbt_application.R;
+import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

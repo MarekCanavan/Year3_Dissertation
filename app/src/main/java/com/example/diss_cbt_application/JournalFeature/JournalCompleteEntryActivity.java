@@ -1,14 +1,11 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.JournalFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -18,13 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.sql.Date;
+import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.R;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 

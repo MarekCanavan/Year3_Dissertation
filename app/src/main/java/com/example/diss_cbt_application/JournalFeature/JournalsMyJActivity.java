@@ -1,8 +1,10 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.JournalFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.diss_cbt_application.R;
 
 public class JournalsMyJActivity extends AppCompatActivity {
 

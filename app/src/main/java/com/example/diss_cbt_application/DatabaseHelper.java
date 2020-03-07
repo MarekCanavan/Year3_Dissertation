@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.diss_cbt_application.GoalsFeature.GContract;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

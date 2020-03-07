@@ -1,9 +1,7 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.JournalFeature;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +11,13 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.R;
+import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
 
