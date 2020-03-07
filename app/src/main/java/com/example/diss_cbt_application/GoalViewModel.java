@@ -23,7 +23,7 @@ public class GoalViewModel extends AndroidViewModel {
         repository.insert(goal);
     }
 
-    public void update (GoalObject goal){
+    public static void update(GoalObject goal){
         repository.update(goal);
     }
 

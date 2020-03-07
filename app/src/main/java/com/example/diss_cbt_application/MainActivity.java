@@ -8,10 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static final int ADD_GOAL_REQUEST = 1;
+    public static final int EDIT_GOAL_REQUEST = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public void newGoalOnClick(View v){
 
         /*Define the intent that will be sent from the MainActivity to the New Goal Page*/
-        Intent i_new_goal = new Intent(MainActivity.this, GNewGoal.class);
+        Intent i_new_goal = new Intent(MainActivity.this, GNewEditGoal.class);
         startActivityForResult(i_new_goal, ADD_GOAL_REQUEST);
     }
 
@@ -94,12 +94,15 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == ADD_GOAL_REQUEST && resultCode == RESULT_OK){
+            Log.d("Diss", "Value of request code: " + requestCode);
+            Log.d("Diss", "Value of result code: " + resultCode);
 
-            String title = data.getStringExtra(GNewGoal.EXTRA_TITLE);
-            String description = data.getStringExtra(GNewGoal.EXTRA_DESCRIPTION);
-            String date = data.getStringExtra(GNewGoal.EXTRA_DATE);
-            String time = data.getStringExtra(GNewGoal.EXTRA_TIME);
-            int markedComplete = data.getIntExtra(GNewGoal.EXTRA_MC, 0);
+
+            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
+            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
+            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
+            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
+            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
 
             GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
             GoalViewModel.insert(goal);
@@ -107,7 +110,34 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Goal Saved", Toast.LENGTH_SHORT).show();
         }
+        else if(requestCode == EDIT_GOAL_REQUEST && resultCode == RESULT_OK){
+
+            int id = data.getIntExtra(GNewEditGoal.EXTRA_ID, -1);
+
+            if(id == -1){
+                Toast.makeText(this, "Goal Can't be updated", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
+            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
+            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
+            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
+            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
+
+            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
+            goal.setId(id);
+            GoalViewModel.update(goal);
+
+            Toast.makeText(this, "Goal Updated", Toast.LENGTH_SHORT).show();
+
+
+        }
         else{
+            Log.d("Diss", "Value of request code: " + requestCode);
+            Log.d("Diss", "Value of result code: " + resultCode);
+
             Toast.makeText(this, "Goal Not Saved", Toast.LENGTH_SHORT).show();
         }
     }

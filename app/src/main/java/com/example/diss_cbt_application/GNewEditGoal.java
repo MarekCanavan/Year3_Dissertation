@@ -17,11 +17,12 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class GNewGoal extends AppCompatActivity {
+public class GNewEditGoal extends AppCompatActivity {
 
     private int mYear, mMonth, mDay, mHour, mMinute, mMarkedComplete;
     EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
 
+    public static final String EXTRA_ID = "EXTRA_ID";
     public static final String EXTRA_TITLE = "EXTRA_TITLE";
     public static final String EXTRA_DESCRIPTION = "EXTRA_DESCRIPTION";
     public static final String EXTRA_DATE = "EXTRA_DATE";
@@ -48,6 +49,14 @@ public class GNewGoal extends AppCompatActivity {
 
         mMarkedComplete = 0;//Initially every goal is marked incomplete
 
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(EXTRA_ID)){
+            et_title_of_goal.setText(intent.getStringExtra(EXTRA_TITLE));
+            et_description_of_goal.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
+            et_goal_date.setText(intent.getStringExtra(EXTRA_DATE));
+            et_goal_time.setText(intent.getStringExtra(EXTRA_TIME));
+        }
     }
 
     public void chooseDateOnClick(View v){
@@ -116,6 +125,11 @@ public class GNewGoal extends AppCompatActivity {
         data.putExtra(EXTRA_DATE, date);
         data.putExtra(EXTRA_TIME, time);
         data.putExtra(EXTRA_MC, marketComplete);
+
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        if(id != -1){
+            data.putExtra(EXTRA_ID, id);
+        }
 
         setResult(RESULT_OK, data);
 

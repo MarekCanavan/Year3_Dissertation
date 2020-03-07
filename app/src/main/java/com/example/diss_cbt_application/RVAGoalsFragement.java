@@ -29,6 +29,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     private ArrayList<String> mTime = new ArrayList<>();
 
     private List<GoalObject> goals = new ArrayList<>();
+    private OnItemClickListener listener;
 
     private Context mContext;
 
@@ -58,24 +59,6 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
 
 
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, mTitle.get(position), Toast.LENGTH_SHORT).show();
-
-                Log.d("Diss", "Value of id: " + mIDs.get(position));
-                //Log.d("Diss", "Value of entryName: " + mEntryNames.get(position));
-                //Log.d("Diss", "Value of journalName: " +  mJournalNames.get(position));
-
-                //Intent i_goal = new Intent(mContext,);
-
-                //Bundle goalsBundle = new Bundle();
-
-                //mContext.startActivity();
-
-            }
-        });
-
     }
 
 
@@ -102,6 +85,24 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
             time = itemView.findViewById(R.id.tv_goal_time);
             date = itemView.findViewById(R.id.tv_goal_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){
+                        listener.onItemClick(goals.get(position));
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(GoalObject goal);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }
