@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("g53mdp", "In Home Create View");
+        Log.d("g53mdp", "In Home Create View ");
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }
