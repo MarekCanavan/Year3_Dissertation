@@ -29,7 +29,6 @@ import java.util.ArrayList;
  *      - Creating a new entry
  *      - Viewing their current Journals
  * */
-
 public class JournalFragment extends Fragment implements View.OnClickListener{
 
     /*Database variable declarations*/
@@ -64,18 +63,22 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         recyclerViewLoadData();
 
         View rootView = inflater.inflate(R.layout.fragment_journal, container, false);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_journal_fragment);
 
         /*Adds the image to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_entry);
         newEntry.setImageResource(R.mipmap.ic_addition_button_dark_blue_round);
 
 
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_journal_fragment);
+
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
         recyclerView.setHasFixedSize(true); //Needed as we know our cards will always be the same size
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         RVAJournalFragement adapter = new RVAJournalFragement(mIDs, mEntryNames, mJournalNames,
                 mEntryTimes,mEntryDates, mJournalColour, getContext()); //Parse RecyclerView arrays to populate with data
+
         recyclerView.setAdapter(adapter);
 
         return rootView;

@@ -104,7 +104,6 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     }
 
 
-
     @Override
     public int getItemCount() {
         return mEntryNames.size();
