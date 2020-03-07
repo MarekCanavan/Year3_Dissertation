@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.ViewHolder>{
 
@@ -27,22 +28,11 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     private ArrayList<String> mDate= new ArrayList<>();
     private ArrayList<String> mTime = new ArrayList<>();
 
+    private List<GoalObject> goals = new ArrayList<>();
+
     private Context mContext;
 
 
-    /**
-     * This constructor receives all of the ArrayLists as parameters and sets the local arraylists to the values parse
-     * */
-    public RVAGoalsFragement(ArrayList<Integer> mIDs, ArrayList<String> mTitle, ArrayList<String> mDate,
-                             ArrayList<String> mTime, Context mContext) {
-
-        this.mIDs = mIDs;
-        this.mTitle = mTitle;
-        this.mDate = mDate;
-        this.mTime = mTime;
-
-
-    }
 
     @NonNull
     @Override
@@ -59,9 +49,12 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
 
-        holder.gTitle.setText(mTitle.get(position));
-        holder.time.setText(mTime.get(position));
-        holder.date.setText(mDate.get(position));
+        GoalObject currentGoal = goals.get(position);
+
+
+        holder.gTitle.setText(currentGoal.getTitle());
+        holder.time.setText(currentGoal.getTime());
+        holder.date.setText(currentGoal.getDate());
 
 
 
@@ -88,8 +81,14 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
 
     @Override
     public int getItemCount() {
-        return mIDs.size();
+        return goals.size();
     }
+
+    public void setGoals(List<GoalObject> goals){
+        this.goals = goals;
+        notifyDataSetChanged();//used now for simplicity
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 

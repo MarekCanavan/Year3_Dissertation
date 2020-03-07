@@ -8,14 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GoalsFragment extends Fragment {
 
@@ -30,6 +35,8 @@ public class GoalsFragment extends Fragment {
     private ArrayList<String> mDate= new ArrayList<>();
     private ArrayList<String> mTime = new ArrayList<>();
 
+    private GoalViewModel goalViewModel;
+
     public GoalsFragment() {
         super();
     }
@@ -42,7 +49,7 @@ public class GoalsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_goals, container, false);
 
-        loadDataForRecyclerView();
+        //loadDataForRecyclerView();
 
         /*Adds the image to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_goal);
@@ -50,12 +57,25 @@ public class GoalsFragment extends Fragment {
 
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_goals_fragment);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
         recyclerView.setHasFixedSize(true); //Needed as we know our cards will always be the same size
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        RVAGoalsFragement adapter = new RVAGoalsFragement(mIDs, mTitle, mDate,
-                mTime, getContext()); //Parse RecyclerView arrays to populate with data
+
+        final RVAGoalsFragement adapter = new RVAGoalsFragement(); //Parse RecyclerView arrays to populate with data
         recyclerView.setAdapter(adapter);
+
+        /*Had major error with this line, needed to look at comments from codinginflow video */
+        goalViewModel = ViewModelProviders.of(this).get(GoalViewModel.class);
+        goalViewModel.getAllGoals().observe(this, new Observer<List<GoalObject>>() {
+            @Override
+            public void onChanged(List<GoalObject> goalObjects) {
+                Toast.makeText(getContext(), "OnChanged", Toast.LENGTH_SHORT).show();
+
+
+                adapter.setGoals(goalObjects);
+            }
+        });
+
 
 
         return rootView;

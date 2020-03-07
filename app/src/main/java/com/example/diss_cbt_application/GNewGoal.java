@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -18,6 +21,12 @@ public class GNewGoal extends AppCompatActivity {
 
     private int mYear, mMonth, mDay, mHour, mMinute, mMarkedComplete;
     EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
+
+    public static final String EXTRA_TITLE = "EXTRA_TITLE";
+    public static final String EXTRA_DESCRIPTION = "EXTRA_DESCRIPTION";
+    public static final String EXTRA_DATE = "EXTRA_DATE";
+    public static final String EXTRA_TIME = "EXTRA_TIME";
+    public static final String EXTRA_MC = "EXTRA_MC";
 
     /*Database Definitions for the Activity*/
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
@@ -89,8 +98,31 @@ public class GNewGoal extends AppCompatActivity {
 
     public void saveGoalOnClick(View v){
 
+        String title = et_title_of_goal.getText().toString();
+        String description = et_description_of_goal.getText().toString();
+        String date = et_goal_date.getText().toString();
+        String time = et_goal_time.getText().toString();
+        int marketComplete = 0;
 
-        /*Saving data to SEntry table*/
+        /*Show text if a title and descirption arent set */
+        if(title.trim().isEmpty() || description.trim().isEmpty()){
+            Toast.makeText(this, "Please insert title and description", Toast.LENGTH_SHORT ).show();
+            return;
+        }
+
+        Intent data = new Intent();
+        data.putExtra(EXTRA_TITLE, title);
+        data.putExtra(EXTRA_DESCRIPTION, description);
+        data.putExtra(EXTRA_DATE, date);
+        data.putExtra(EXTRA_TIME, time);
+        data.putExtra(EXTRA_MC, marketComplete);
+
+        setResult(RESULT_OK, data);
+
+
+
+        /*
+        /*Saving data to SEntry table
         ContentValues gt_values = new ContentValues();
 
         gt_values.put(GContract.G_TITLE, et_title_of_goal.getText().toString() );
@@ -100,7 +132,7 @@ public class GNewGoal extends AppCompatActivity {
         gt_values.put(GContract.G_MARKED_COMPLETE, mMarkedComplete);
 
         db_write.insert(GContract.G_TABLE, null, gt_values);
-
+        */
 
         finish();
     }

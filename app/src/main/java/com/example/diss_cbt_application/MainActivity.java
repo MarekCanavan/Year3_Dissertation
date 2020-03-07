@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static final int ADD_GOAL_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,29 @@ public class MainActivity extends AppCompatActivity {
 
         /*Define the intent that will be sent from the MainActivity to the New Goal Page*/
         Intent i_new_goal = new Intent(MainActivity.this, GNewGoal.class);
-        startActivity(i_new_goal);
+        startActivityForResult(i_new_goal, ADD_GOAL_REQUEST);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ADD_GOAL_REQUEST && resultCode == RESULT_OK){
+
+            String title = data.getStringExtra(GNewGoal.EXTRA_TITLE);
+            String description = data.getStringExtra(GNewGoal.EXTRA_DESCRIPTION);
+            String date = data.getStringExtra(GNewGoal.EXTRA_DATE);
+            String time = data.getStringExtra(GNewGoal.EXTRA_TIME);
+            int markedComplete = data.getIntExtra(GNewGoal.EXTRA_MC, 0);
+
+            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
+            GoalViewModel.insert(goal);
+
+
+            Toast.makeText(this, "Goal Saved", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(this, "Goal Not Saved", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
