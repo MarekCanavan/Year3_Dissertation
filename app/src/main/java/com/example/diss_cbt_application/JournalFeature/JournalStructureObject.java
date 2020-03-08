@@ -7,7 +7,14 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-/**indices are for faster searching of the table */
+/**Java class that represents the Journal Structure Table. Creates all the necessary code at compile time
+ * to create an SQLite database with these fields.
+ * The fields in this table are:
+ *      columnName - name of the column the user has defined
+ *      columnType - the type of data the column accepts e.g. normal, percentage
+ *      fk_id - this is a foreign key to the name of the journal and id of the journal this is assigned to
+ *
+ * indices are for faster searching of the table */
 @Entity(tableName = "journal_structure_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
         parentColumns = "_id", childColumns = "fk_id")},

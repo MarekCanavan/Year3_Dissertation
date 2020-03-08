@@ -7,7 +7,17 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-/**indices are for faster searching of the table */
+/**Java class that represents the Journal Single Entry Table. Creates all the necessary code at compile time
+ * to create an SQLite database with these fields.
+ * The fields in this table are:
+ *      entryName - name of the entry the user has assigned
+ *      entryDate - date the entry was made
+ *      entryTime - time the entry was made
+ *      journalType - the type of journal the entry is assigned to
+ *      journalColour - colour of the journal this entry is assigned to
+ *      fk_id - references the table the entry object is assigned to *
+ *
+ * indices are for faster searching of the table */
 @Entity(tableName = "single_entry_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
                 parentColumns = "_id", childColumns = "fk_id")},
