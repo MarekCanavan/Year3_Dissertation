@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 /**indices are for faster searching of the table */
-@Entity(tableName = "journal_structure_table", foreignKeys = {
+@Entity(tableName = "single_entry_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
-        parentColumns = "_id", childColumns = "fk_id")},
+                parentColumns = "_id", childColumns = "fk_id")},
         indices = {
                 @Index("fk_id"),
         })
-public class JournalStructureObject {
+public class JournalSingleEntryObject {
 
     //Room automatically creates these fields
 
@@ -22,15 +22,24 @@ public class JournalStructureObject {
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private int id;
 
-    private String columnName;
+    private String entryName;
 
-    private String columnType;
+    private String entryDate;
+
+    private String entryTime;
+
+    private String journalType;
+
+    private int journalColour;
 
     private int fk_id;
 
-    public JournalStructureObject(String columnName, String columnType) {
-        this.columnName = columnName;
-        this.columnType = columnType;
+    public JournalSingleEntryObject(String entryName, String entryDate, String entryTime, String journalType, int journalColour) {
+        this.entryName = entryName;
+        this.entryDate = entryDate;
+        this.entryTime = entryTime;
+        this.journalType = journalType;
+        this.journalColour = journalColour;
     }
 
     /*Room uses this to set the id on the object*/
@@ -47,12 +56,24 @@ public class JournalStructureObject {
         return id;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public String getEntryName() {
+        return entryName;
     }
 
-    public String getColumnType() {
-        return columnType;
+    public String getEntryDate() {
+        return entryDate;
+    }
+
+    public String getEntryTime() {
+        return entryTime;
+    }
+
+    public String getJournalType() {
+        return journalType;
+    }
+
+    public int getJournalColour() {
+        return journalColour;
     }
 
     public int getFk_id() {
