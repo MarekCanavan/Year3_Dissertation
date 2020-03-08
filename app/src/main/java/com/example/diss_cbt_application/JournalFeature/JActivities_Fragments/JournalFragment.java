@@ -8,20 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.GoalsFeature.GoalObject;
+import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.JournalFeature.RVAJournalFragement;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment for the Journal Page
@@ -36,6 +44,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
     /*Database variable declarations*/
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_read;
+
+    private JournalViewModel journalViewModel;
 
 
     /*The ArrayLists are need to parse the data to the RecyclerView*/
@@ -78,10 +88,20 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RVAJournalFragement adapter = new RVAJournalFragement(mIDs, mEntryNames, mJournalNames,
-                mEntryTimes,mEntryDates, mJournalColour, getContext()); //Parse RecyclerView arrays to populate with data
+        final RVAJournalFragement adapter = new RVAJournalFragement(); //Parse RecyclerView arrays to populate with data
 
-        recyclerView.setAdapter(adapter);
+        //recyclerView.setAdapter(adapter);
+
+        /*Had major error with this line, needed to look at comments from codinginflow video */
+        journalViewModel = ViewModelProviders.of(this).get(JournalViewModel.class);
+        journalViewModel.getAllJournals().observe(this, new Observer<List<JournalObject>>() {
+            @Override
+            public void onChanged(List<JournalObject> journalObjects) {
+                Toast.makeText(getContext(), "OnChanged", Toast.LENGTH_SHORT).show();
+                //adapter.setJournals(journalObjects);
+            }
+        });
+
 
         return rootView;
     }

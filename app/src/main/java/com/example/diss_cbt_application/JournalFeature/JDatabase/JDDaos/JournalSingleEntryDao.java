@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JDatabase;
+package com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,10 +7,12 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
+
 import java.util.List;
 
 @Dao
-public interface JournalSignleEntryDao {
+public interface JournalSingleEntryDao {
 
     @Insert
     void insert(JournalSingleEntryObject goal);
@@ -21,6 +23,6 @@ public interface JournalSignleEntryDao {
     @Delete
     void delete(JournalSingleEntryObject delete);
 
-    @Query("SELECT * FROM journal_table")
+    @Query("SELECT * FROM single_entry_table")
     LiveData<List<JournalSingleEntryObject>> getAllEntries();
 }

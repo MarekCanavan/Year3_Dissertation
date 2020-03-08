@@ -36,19 +36,6 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private Context mContext;
 
 
-    /**
-     * This constructor receives all of the ArrayLists as parameters and sets the local arraylists to the values parse
-     * */
-    public RVAJournalFragement(ArrayList<Integer> mIDs, ArrayList<String> mEntryNames, ArrayList<String> mJournalNames,
-                               ArrayList<String> mEntryTimes, ArrayList<String> mEntryDates, ArrayList<Integer> mJournalColour,  Context mContext) {
-        this.mIDs = mIDs;
-        this.mEntryNames = mEntryNames;
-        this.mJournalNames = mJournalNames;
-        this.mEntryTimes = mEntryTimes;
-        this.mEntryDates = mEntryDates;
-        this.mContext = mContext;
-        this.mJournalColour = mJournalColour;
-    }
 
     @NonNull
     @Override

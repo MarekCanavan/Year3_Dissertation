@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JDatabase;
+package com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -20,7 +20,7 @@ import static androidx.room.ForeignKey.CASCADE;
  * indices are for faster searching of the table */
 @Entity(tableName = "single_entry_data_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalSingleEntryObject.class,
-                parentColumns = "_id", childColumns = "fk_id")},
+                parentColumns = "id", childColumns = "fk_id")},
         indices = {
                 @Index("fk_id"),
         })
@@ -62,6 +62,15 @@ public class JournalSingleEntryDataObject {
     }
 
     /*To persist these fields room needs getter methods for all of the fields*/
+
+    public int getId() {
+        return id;
+    }
+
+    public int getFk_id() {
+        return fk_id;
+    }
+
     public String getColumnName() {
         return columnName;
     }

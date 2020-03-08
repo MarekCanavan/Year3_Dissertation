@@ -1,11 +1,11 @@
-package com.example.diss_cbt_application.JournalFeature.JDatabase;
+package com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -22,7 +22,7 @@ import static androidx.room.ForeignKey.CASCADE;
  * indices are for faster searching of the table */
 @Entity(tableName = "single_entry_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
-                parentColumns = "_id", childColumns = "fk_id")},
+                parentColumns = "id", childColumns = "fk_id")},
         indices = {
                 @Index("fk_id"),
         })

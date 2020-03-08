@@ -1,14 +1,26 @@
 package com.example.diss_cbt_application.JournalFeature.JDatabase;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalDao;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalSingleEntryDao;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalSingleEntryDataDao;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalStructureDao;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 
 @Database(entities = {JournalObject.class, JournalStructureObject.class,
         JournalSingleEntryObject.class, JournalSingleEntryDataObject.class},
-        version = 1)
+        version = 1, exportSchema = false)
 public abstract class JournalDatabase extends RoomDatabase {
 
     /*We need this variable as we need to turn this class into a singleton
@@ -20,7 +32,7 @@ public abstract class JournalDatabase extends RoomDatabase {
     * We don't need to create a body because room takes care of the code*/
     public abstract JournalDao JournalDao();
     public abstract JournalStructureDao JournalStructureDao();
-    public abstract JournalSignleEntryDao JournalSingleEntryDao();
+    public abstract JournalSingleEntryDao JournalSingleEntryDao();
     public abstract JournalSingleEntryDataDao JournalSingleEntryDataDao();
 
     /*Create Database
@@ -33,6 +45,7 @@ public abstract class JournalDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     JournalDatabase.class, "journal_database")
                     .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
                     .build();
 
         }
@@ -40,6 +53,26 @@ public abstract class JournalDatabase extends RoomDatabase {
     }
 
 
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateJournalAsyncTask(instance).execute();
+        }
+    };
 
+    private static class PopulateJournalAsyncTask extends AsyncTask<Void, Void, Void>{
 
+        private JournalDao journalDao;
+
+        private PopulateJournalAsyncTask(JournalDatabase db){
+            journalDao = db.JournalDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            journalDao.insert(new JournalObject("Marek's Journal", 0, 0));
+            return null;
+        }
+    }
 }

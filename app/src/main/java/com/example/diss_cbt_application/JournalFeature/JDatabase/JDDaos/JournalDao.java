@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JDatabase;
+package com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.diss_cbt_application.GoalsFeature.GoalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 
 import java.util.List;
 

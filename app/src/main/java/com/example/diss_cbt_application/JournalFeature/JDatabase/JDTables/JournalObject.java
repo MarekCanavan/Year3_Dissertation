@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JDatabase;
+package com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables;
 
 
 import androidx.room.Entity;
