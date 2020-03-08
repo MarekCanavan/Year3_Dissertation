@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JournalContract;
+import com.example.diss_cbt_application.JournalFeature.RVAChooseJournal;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 

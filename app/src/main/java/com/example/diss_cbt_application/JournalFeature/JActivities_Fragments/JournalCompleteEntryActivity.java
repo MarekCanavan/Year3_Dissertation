@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
 import java.text.SimpleDateFormat;

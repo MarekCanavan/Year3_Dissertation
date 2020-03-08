@@ -1,9 +1,11 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JDatabase;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalObject;
 
 import static androidx.room.ForeignKey.CASCADE;
 

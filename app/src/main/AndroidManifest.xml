@@ -10,15 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".GoalsFeature.GNewEditGoal"></activity>
-        <activity android:name=".JournalFeature.JournalsMyJActivity" />
-        <activity android:name=".JournalFeature.JournalEntryData" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.JournalsMyJActivity" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.JournalEntryData" />
         <activity
-            android:name=".JournalFeature.JournalCompleteEntryActivity"
+            android:name=".JournalFeature.JActivities_Fragments.JournalCompleteEntryActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".JournalFeature.JournalNewStructure"
+            android:name=".JournalFeature.JActivities_Fragments.JournalNewStructure"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".JournalFeature.JournalChooseActivity" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.JournalChooseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalCompleteEntryActivity;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;

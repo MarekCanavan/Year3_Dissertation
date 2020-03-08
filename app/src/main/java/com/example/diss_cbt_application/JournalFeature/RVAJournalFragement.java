@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalEntryData;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;

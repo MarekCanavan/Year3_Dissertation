@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
 

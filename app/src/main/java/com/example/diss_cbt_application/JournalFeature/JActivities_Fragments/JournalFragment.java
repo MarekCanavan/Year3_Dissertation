@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JournalContract;
+import com.example.diss_cbt_application.JournalFeature.RVAJournalFragement;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 

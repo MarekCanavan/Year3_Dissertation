@@ -18,9 +18,9 @@ import com.example.diss_cbt_application.GoalsFeature.GoalObject;
 import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
 import com.example.diss_cbt_application.GoalsFeature.GoalsFragment;
 import com.example.diss_cbt_application.HomeFeature.HomeFragment;
-import com.example.diss_cbt_application.JournalFeature.JournalChooseActivity;
-import com.example.diss_cbt_application.JournalFeature.JournalFragment;
-import com.example.diss_cbt_application.JournalFeature.JournalsMyJActivity;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalChooseActivity;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalFragment;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalsMyJActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
