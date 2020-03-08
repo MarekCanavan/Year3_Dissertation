@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 public class GoalObject {
 
     //Room automatically creates these fields
+    /*Table member variables*/
 
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private int id;
@@ -33,10 +34,13 @@ public class GoalObject {
         this.markedComplete = markedComplete;
     }
 
+    /*Room uses this to set the id on the object*/
     public void setId(int id) {
         this.id = id;
     }
 
+
+    /*To persist these fields room needs getter methods for all of the fields*/
     public int getId() {
         return id;
     }
