@@ -45,7 +45,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_read;
 
-    private JournalViewModel journalViewModel;
+
 
 
     /*The ArrayLists are need to parse the data to the RecyclerView*/
@@ -91,16 +91,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         final RVAJournalFragement adapter = new RVAJournalFragement(); //Parse RecyclerView arrays to populate with data
 
         //recyclerView.setAdapter(adapter);
-
-        /*Had major error with this line, needed to look at comments from codinginflow video */
-        journalViewModel = ViewModelProviders.of(this).get(JournalViewModel.class);
-        journalViewModel.getAllJournals().observe(this, new Observer<List<JournalObject>>() {
-            @Override
-            public void onChanged(List<JournalObject> journalObjects) {
-                Toast.makeText(getContext(), "OnChanged", Toast.LENGTH_SHORT).show();
-                //adapter.setJournals(journalObjects);
-            }
-        });
 
 
         return rootView;

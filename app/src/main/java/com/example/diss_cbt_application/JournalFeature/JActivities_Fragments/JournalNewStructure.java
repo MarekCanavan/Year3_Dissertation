@@ -17,6 +17,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
@@ -154,14 +156,20 @@ public class JournalNewStructure extends AppCompatActivity {
         String name_of_journal = et_name_of_journal.getText().toString();
         ContentValues jn_values = new ContentValues();
 
+
+        Log.d("Diss", "Value of colour: " + mDefualtColour);
         Log.d("Diss", name_of_journal);
         jn_values.put(JournalContract.JOURNAL_NAME, name_of_journal);
         jn_values.put(JournalContract.JOURNAL_COLOUR, mDefualtColour);
         jn_values.put(JournalContract.ARCHIVED, 0);
 
+        JournalObject journal = new JournalObject(name_of_journal, mDefualtColour, 0);
+        JournalViewModel.insert(journal);
+
 
         db_write.insert(JournalContract.JOURNAL_NAMES, null, jn_values);
 
+        /*
         //Query the Journal database to findout the highest value in it
         //This will be the value we have just inserted
         //Save the value to then store with the JournalStructure
@@ -193,7 +201,7 @@ public class JournalNewStructure extends AppCompatActivity {
             Log.d("Diss","" + columnTypes.get(i));
             Log.d("Diss", "" + allEds.get(i).getText().toString());
 
-        }
+        }*/
 
         Intent returnIntent = new Intent();
         setResult(2,returnIntent);

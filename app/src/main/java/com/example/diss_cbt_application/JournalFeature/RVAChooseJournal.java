@@ -15,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalCompleteEntryActivity;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.ViewHolder>{
 
@@ -28,16 +30,8 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     private ArrayList<Integer> mJournalColours = new ArrayList<>();
     private Context mContext;
 
+    private List<JournalObject> journals = new ArrayList<>();
     int LAUNCH_JOURNAL_CHOOSE_ACTIVITY = 1;
-
-
-    public RVAChooseJournal(ArrayList<Integer> mIDs, ArrayList<String> mJournalNames,ArrayList<Integer> mJournalColours, Context mContext) {
-        this.mIDs = mIDs;
-        this.mJournalNames = mJournalNames;
-        this.mContext = mContext;
-        this.mJournalColours = mJournalColours;
-
-    }
 
     @NonNull
     @Override
@@ -55,10 +49,17 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
 
-        holder.entryName.setText(mJournalNames.get(position));
-        holder.entryName.setTextColor(mJournalColours.get(position));
+        JournalObject currentJournal = journals.get(position);
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.entryName.setText(currentJournal.getJournalName());
+        holder.entryName.setTextColor(currentJournal.getJournalColour());
+
+        Log.d("Diss", "Value of Text: " + currentJournal.getJournalName());
+        Log.d("Diss", "Value of Colour: " + currentJournal.getJournalColour());
+
+
+
+        /*holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, mJournalNames.get(position), Toast.LENGTH_SHORT).show();
@@ -75,13 +76,18 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
                 mContext.startActivity(i_complete_journal);
 
             }
-        });
+        });*/
 
+    }
+
+    public void setJournals(List<JournalObject> journals){
+        this.journals = journals;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mJournalNames.size();
+        return journals.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

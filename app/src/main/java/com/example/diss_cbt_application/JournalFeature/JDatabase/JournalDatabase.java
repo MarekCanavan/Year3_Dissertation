@@ -71,7 +71,9 @@ public abstract class JournalDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            journalDao.insert(new JournalObject("Marek's Journal", 0, 0));
+            journalDao.insert(new JournalObject("Marek's Journal", -16777216, 0));
+            journalDao.insert(new JournalObject("Marek's Journal 2", -16777216, 0));
+            journalDao.insert(new JournalObject("Marek's Journal 3", -16777216, 0));
             return null;
         }
     }

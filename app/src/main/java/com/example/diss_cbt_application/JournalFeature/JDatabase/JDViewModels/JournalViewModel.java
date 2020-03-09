@@ -13,7 +13,7 @@ import java.util.List;
 
 public class JournalViewModel extends AndroidViewModel {
 
-    private JournalRepository repository;
+    private static JournalRepository repository;
     private LiveData<List<JournalObject>>  allJournals;
 
      public JournalViewModel(@NonNull Application application) {
@@ -22,7 +22,7 @@ public class JournalViewModel extends AndroidViewModel {
         allJournals = repository.getAllJournals();
     }
 
-    public void insert(JournalObject journal){
+    public static void insert(JournalObject journal){
          repository.insert(journal);
     }
 

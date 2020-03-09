@@ -49,6 +49,10 @@ public abstract class GoalDatabase extends RoomDatabase {
             goalDao.insert((new GoalObject("Title1", "dywi", "02-03-2020", "00:03", 0)));
             goalDao.insert((new GoalObject("Title2", "dywi", "02-03-2020", "00:03", 0)));
             goalDao.insert((new GoalObject("Title3", "dywi", "02-03-2020", "00:03", 0)));
+            goalDao.insert((new GoalObject("Title1", "dywi", "02-03-2020", "00:03", 0)));
+            goalDao.insert((new GoalObject("Title2", "dywi", "02-03-2020", "00:03", 0)));
+            goalDao.insert((new GoalObject("Title3", "dywi", "02-03-2020", "00:03", 0)));
+
             return null;
         }
     }
