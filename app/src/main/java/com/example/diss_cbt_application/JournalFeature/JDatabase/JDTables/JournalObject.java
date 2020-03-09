@@ -21,6 +21,7 @@ public class JournalObject {
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private int id;
 
+
     private String journalName;
 
     private int journalColour;

@@ -67,7 +67,7 @@ public class JournalChooseActivity extends AppCompatActivity {
         journalViewModel.getAllJournals().observe(this, new Observer<List<JournalObject>>() {
             @Override
             public void onChanged(List<JournalObject> journalObjects) {
-                Toast.makeText(JournalChooseActivity.this, "OnChanged", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(JournalChooseActivity.this, "OnChanged", Toast.LENGTH_SHORT).show();
                 adapter.setJournals(journalObjects);
             }
         });

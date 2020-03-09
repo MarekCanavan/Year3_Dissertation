@@ -1,6 +1,9 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -15,9 +18,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
@@ -32,7 +37,8 @@ public class JournalNewStructure extends AppCompatActivity {
     private Button newColumn, newPercentage;
     private ScrollView fieldReGeneration;
     LinearLayout scroll;
-    int Counter, tableID;
+    int Counter;
+    long tableID;
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_write, db_read;
     ArrayList<EditText> allEds = new ArrayList<EditText>();
@@ -41,6 +47,7 @@ public class JournalNewStructure extends AppCompatActivity {
     TextView testTextView ;
     int mDefualtColour;
 
+    JournalViewModel journalViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,7 @@ public class JournalNewStructure extends AppCompatActivity {
         db_write = dbHelper.getWritableDatabase();
         db_read = dbHelper.getReadableDatabase();
 
-        tableID = 0;
+        tableID = 0L;
 
 
         /*Very important code
@@ -157,17 +164,28 @@ public class JournalNewStructure extends AppCompatActivity {
         ContentValues jn_values = new ContentValues();
 
 
-        Log.d("Diss", "Value of colour: " + mDefualtColour);
-        Log.d("Diss", name_of_journal);
+        //Log.d("Diss", "Value of colour: " + mDefualtColour);
+        //Log.d("Diss", name_of_journal);
         jn_values.put(JournalContract.JOURNAL_NAME, name_of_journal);
         jn_values.put(JournalContract.JOURNAL_COLOUR, mDefualtColour);
         jn_values.put(JournalContract.ARCHIVED, 0);
 
         JournalObject journal = new JournalObject(name_of_journal, mDefualtColour, 0);
-        JournalViewModel.insert(journal);
+
+        JournalViewModel.insert(journal).observe(this,
+                new Observer<Long>() {
+                    @Override
+                    public void onChanged(Long aLong) {
+                        Toast.makeText(JournalNewStructure.this, "ID: " + aLong, Toast.LENGTH_SHORT).show();
+
+                        tableID = aLong;
+                    }
+                });
 
 
-        db_write.insert(JournalContract.JOURNAL_NAMES, null, jn_values);
+
+
+        //db_write.insert(JournalContract.JOURNAL_NAMES, null, jn_values);
 
         /*
         //Query the Journal database to findout the highest value in it

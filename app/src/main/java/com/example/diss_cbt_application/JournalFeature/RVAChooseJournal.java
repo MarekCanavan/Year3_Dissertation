@@ -38,7 +38,8 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Responsible for inflating the view
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_journal, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_journal,
+                parent, false);
 
         ViewHolder holder = new ViewHolder(view);
 
@@ -53,6 +54,7 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
 
         holder.entryName.setText(currentJournal.getJournalName());
         holder.entryName.setTextColor(currentJournal.getJournalColour());
+
 
         Log.d("Diss", "Value of Text: " + currentJournal.getJournalName());
         Log.d("Diss", "Value of Colour: " + currentJournal.getJournalColour());

@@ -2,13 +2,16 @@ package com.example.diss_cbt_application.JournalFeature.JDatabase.JDRepositories
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Delete;
 import androidx.room.Update;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalDao;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase;
 
 import java.util.List;
@@ -17,6 +20,7 @@ public class JournalRepository {
 
     private JournalDao journalDao;
     private LiveData<List<JournalObject>> allJournals;
+    public MutableLiveData<Long> dbInsertId = new MutableLiveData<>();
 
     public JournalRepository(Application application){
         JournalDatabase database = JournalDatabase.getInstance(application);
@@ -24,8 +28,10 @@ public class JournalRepository {
         allJournals = journalDao.getAllJournals();
     }
 
-    public void insert(JournalObject journal){
-        new InsertJournalAsyncTask(journalDao).execute(journal);
+    public MutableLiveData<Long> insert(JournalObject journal){
+        final MutableLiveData<Long> id = new MutableLiveData<>();
+        new InsertJournalAsyncTask(journalDao, id).execute(journal);
+        return id;
     }
 
     public void update(JournalObject journal){
@@ -40,20 +46,36 @@ public class JournalRepository {
         return allJournals;
     }
 
-    private static class InsertJournalAsyncTask extends AsyncTask<JournalObject, Void, Void> {
+
+
+    private class InsertJournalAsyncTask extends AsyncTask <JournalObject, Void, Long> {
 
         private JournalDao journalDao;
+        private MutableLiveData<Long> id;
 
-        private InsertJournalAsyncTask(JournalDao journalDao){
+        public InsertJournalAsyncTask(JournalDao journalDao, MutableLiveData<Long> id){
             this.journalDao = journalDao;
+            this.id = id;
         }
 
         @Override
-        protected Void doInBackground(JournalObject... journalObjects) {
-            journalDao.insert(journalObjects[0]);
-            return null;
+        protected Long doInBackground(JournalObject... journalObjects) {
+            long sqId = journalDao.insert(journalObjects[0]);
+            return sqId;
+        }
+
+        @Override
+        protected void onPostExecute(Long sqId){
+            id.setValue(sqId);
+            Log.d("Diss", "OnPostExecuteAsyng: " + sqId);
         }
     }
+
+    /*
+   public LiveData<Long> getDbInsertedId(){
+        Log.d("Diss", "In get DbInserted, value of dbInsertID: " + dbInsertId );
+        return dbInsertId;
+   }*/
 
     private static class UpdateJournalAsyncTask extends AsyncTask<JournalObject, Void, Void> {
 
