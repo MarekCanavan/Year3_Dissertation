@@ -22,6 +22,8 @@ import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.GoalsFeature.GoalObject;
 import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.JournalFeature.RVAJournalFragement;
@@ -47,6 +49,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
 
 
+    JournalSingleEntryViewModel journalSingleEntryViewModel;
 
     /*The ArrayLists are need to parse the data to the RecyclerView*/
     private ArrayList<Integer> mIDs = new ArrayList<>();
@@ -72,14 +75,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
 
         /*Call to function to retrieve data for the RecyclerView*/
-        recyclerViewLoadData();
+        //recyclerViewLoadData();
 
         View rootView = inflater.inflate(R.layout.fragment_journal, container, false);
 
         /*Adds the image to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_entry);
         newEntry.setImageResource(R.mipmap.ic_addition_button_dark_blue_round);
-
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_journal_fragment);
 
@@ -90,7 +92,24 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
         final RVAJournalFragement adapter = new RVAJournalFragement(); //Parse RecyclerView arrays to populate with data
 
-        //recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+
+        journalSingleEntryViewModel = ViewModelProviders.of(this)
+                .get(JournalSingleEntryViewModel.class);
+        journalSingleEntryViewModel.getAllEntries().observe(this, new Observer<List<JournalSingleEntryObject>>() {
+            @Override
+            public void onChanged(List<JournalSingleEntryObject> journalSingleEntryObjects) {
+                adapter.setEntries(journalSingleEntryObjects);
+
+                Log.d("Dissss", "In OnChange JournalFragment");
+
+                JournalSingleEntryObject journalSingleEntryObject2 = journalSingleEntryObjects.get(0);
+
+                Log.d("Dissss", "In OnChange JournalFragment Accessing data: " + journalSingleEntryObjects.get(0));
+                Log.d("Dissss", "In OnChange JournalFragment Accessing SingleEntryDatat: " + journalSingleEntryObject2.getEntryName());
+            }
+        });
+
 
 
         return rootView;

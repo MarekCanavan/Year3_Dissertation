@@ -12,13 +12,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalEntryData;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * */
@@ -35,6 +38,7 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private ArrayList<Integer> mJournalColour = new ArrayList<>();
     private Context mContext;
 
+    private List<JournalSingleEntryObject> entries = new ArrayList<>();
 
 
     @NonNull
@@ -52,17 +56,22 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
 
-        holder.entryName.setText(mEntryNames.get(position));
+        JournalSingleEntryObject currentEntry = entries.get(position);
+
+        holder.entryName.setText(currentEntry.getEntryName());
         holder.entryName.setTextSize(19);
         holder.entryName.setTextColor(Color.BLACK);
 
-        holder.journalName.setText(mJournalNames.get(position));
+        holder.journalName.setText(currentEntry.getJournalType());
         holder.journalName.setTextSize(15);
-        holder.journalName.setTextColor(mJournalColour.get(position));
+        holder.journalName.setTextColor(currentEntry.getJournalColour());
 
-        holder.time.setText(mEntryTimes.get(position));
-        holder.date.setText(mEntryDates.get(position));
+        holder.time.setText(currentEntry.getEntryTime());
+        holder.date.setText(currentEntry.getEntryDate());
 
+        Log.d("Dissss", "Value of entry Name: " + currentEntry.getEntryName());
+
+        /*
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,18 +99,24 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
             }
         });
 
+        */
     }
 
 
+    public void setEntries(List <JournalSingleEntryObject> entries){
+        this.entries = entries;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return mEntryNames.size();
+        return entries.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView entryName, journalName, time, date;
-        ConstraintLayout parentLayout;
+        CardView parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

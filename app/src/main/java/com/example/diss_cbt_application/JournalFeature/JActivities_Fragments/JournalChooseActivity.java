@@ -79,6 +79,7 @@ public class JournalChooseActivity extends AppCompatActivity {
 
                 intent.putExtra("id" , journal.getId());
                 intent.putExtra("journalName", journal.getJournalName());
+                intent.putExtra(JournalContract.JOURNAL_COLOUR, journal.getJournalColour());
 
                 startActivity(intent);
             }

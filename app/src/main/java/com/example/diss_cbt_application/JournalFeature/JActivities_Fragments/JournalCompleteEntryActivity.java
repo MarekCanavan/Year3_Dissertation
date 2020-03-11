@@ -93,7 +93,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         Bundle journalBundle = getIntent().getExtras();
         journalID = journalBundle.getLong("id");
         String journalName = journalBundle.getString("journalName");
-        journalNameString = journalBundle.getString("mJournalNames");
+        journalNameString = journalBundle.getString("journalName");
 
         Toast.makeText(this, "Name of Journal and id: " + journalName + " " + journalID , Toast.LENGTH_SHORT).show();
 
