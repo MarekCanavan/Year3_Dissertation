@@ -72,6 +72,17 @@ public class JournalChooseActivity extends AppCompatActivity {
             }
         });
 
+        adapter.setOnItemClickListener(new RVAChooseJournal.OnItemClickListener() {
+            @Override
+            public void onItemClick(JournalObject journal) {
+                Intent intent = new Intent(JournalChooseActivity.this, JournalCompleteEntryActivity.class);
+
+                intent.putExtra("id" , journal.getId());
+                intent.putExtra("journalName", journal.getJournalName());
+
+                startActivity(intent);
+            }
+        });
         //recyclerViewFunc();
     }
 

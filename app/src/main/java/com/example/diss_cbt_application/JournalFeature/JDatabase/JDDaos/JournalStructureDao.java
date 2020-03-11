@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 
 import java.util.List;
@@ -25,4 +26,7 @@ public interface JournalStructureDao {
 
     @Query("SELECT * FROM journal_structure_table")
     LiveData<List<JournalStructureObject>> getAllJournalStructures();
+
+    @Query(("SELECT * FROM journal_structure_table WHERE fk_id =:id"))
+    LiveData<List<JournalStructureObject>> getStructureWithID(Long id);
 }

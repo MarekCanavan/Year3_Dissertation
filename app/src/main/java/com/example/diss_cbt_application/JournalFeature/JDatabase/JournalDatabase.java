@@ -64,16 +64,25 @@ public abstract class JournalDatabase extends RoomDatabase {
     private static class PopulateJournalAsyncTask extends AsyncTask<Void, Void, Void>{
 
         private JournalDao journalDao;
+        private JournalStructureDao journalStructureDao;
 
         private PopulateJournalAsyncTask(JournalDatabase db){
             journalDao = db.JournalDao();
+            journalStructureDao = db.JournalStructureDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             journalDao.insert(new JournalObject("Marek's Journal", -16777216, 0));
-            journalDao.insert(new JournalObject("Marek's Journal 2", -16777216, 0));
             journalDao.insert(new JournalObject("Marek's Journal 3", -16777216, 0));
+            journalDao.insert(new JournalObject("Marek's Journal 4", -16777216, 0));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn", "Column", 1L));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn2", "Column", 1L));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn3", "Column", 1L));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn", "Column", 2L));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn2", "Column", 2L));
+            journalStructureDao.insert(new JournalStructureObject("Test Coulmn3", "Column", 2L));
+
             return null;
         }
     }

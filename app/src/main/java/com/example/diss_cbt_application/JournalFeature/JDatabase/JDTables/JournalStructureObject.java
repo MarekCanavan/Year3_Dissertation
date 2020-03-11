@@ -29,30 +29,31 @@ public class JournalStructureObject {
 
     /*Table member variables*/
     @PrimaryKey(autoGenerate = true)//id is auto incremented
-    private int id;
+    private Long id;
 
     private String columnName;
 
     private String columnType;
 
-    private int fk_id;
+    private Long fk_id;
 
-    public JournalStructureObject(String columnName, String columnType) {
+    public JournalStructureObject(String columnName, String columnType, Long fk_id) {
         this.columnName = columnName;
         this.columnType = columnType;
+        this.fk_id = fk_id;
     }
 
     /*Room uses this to set the id on the object*/
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setFk_id(int fk_id) {
+    public void setFk_id(Long fk_id) {
         this.fk_id = fk_id;
     }
 
     /*To persist these fields room needs getter methods for all of the fields*/
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -64,7 +65,7 @@ public class JournalStructureObject {
         return columnType;
     }
 
-    public int getFk_id() {
+    public Long getFk_id() {
         return fk_id;
     }
 }

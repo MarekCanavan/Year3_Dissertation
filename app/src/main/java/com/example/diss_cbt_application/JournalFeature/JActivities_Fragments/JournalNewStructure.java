@@ -23,14 +23,20 @@ import android.widget.Toast;
 import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
+
+import static java.lang.Thread.currentThread;
+import static java.lang.Thread.sleep;
 
 public class JournalNewStructure extends AppCompatActivity {
 
@@ -38,28 +44,23 @@ public class JournalNewStructure extends AppCompatActivity {
     private ScrollView fieldReGeneration;
     LinearLayout scroll;
     int Counter;
-    long tableID;
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_write, db_read;
+    Long tableID;
+
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     List<String> columnTypes =new ArrayList<String>();
 
     TextView testTextView ;
     int mDefualtColour;
+    private JournalStructureViewModel JournalStructureViewModel;
+    private JournalViewModel JournalViewModel;
 
-    JournalViewModel journalViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_new_strucure);
 
-        dbHelper = new DatabaseHelper(this);
-        db_write = dbHelper.getWritableDatabase();
-        db_read = dbHelper.getReadableDatabase();
-
         tableID = 0L;
-
 
         /*Very important code
          * Defines the ScrollView and removes views
@@ -156,74 +157,67 @@ public class JournalNewStructure extends AppCompatActivity {
         colorPicker.show();
     }
 
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+
+
     public void saveStructureOnClick(View v){
 
-        //Insert the Journal Name into JournalNames
-        EditText et_name_of_journal = (EditText) findViewById(R.id.et_name_of_journal);
-        String name_of_journal = et_name_of_journal.getText().toString();
-        ContentValues jn_values = new ContentValues();
+        doThingAThenThingB();
 
 
-        //Log.d("Diss", "Value of colour: " + mDefualtColour);
-        //Log.d("Diss", name_of_journal);
-        jn_values.put(JournalContract.JOURNAL_NAME, name_of_journal);
-        jn_values.put(JournalContract.JOURNAL_COLOUR, mDefualtColour);
-        jn_values.put(JournalContract.ARCHIVED, 0);
-
-        JournalObject journal = new JournalObject(name_of_journal, mDefualtColour, 0);
-
-        JournalViewModel.insert(journal).observe(this,
-                new Observer<Long>() {
-                    @Override
-                    public void onChanged(Long aLong) {
-                        Toast.makeText(JournalNewStructure.this, "ID: " + aLong, Toast.LENGTH_SHORT).show();
-
-                        tableID = aLong;
-                    }
-                });
+        Log.d("Diss", "Value of table id: AFTER OBSERVER " + tableID);
 
 
-
-
-        //db_write.insert(JournalContract.JOURNAL_NAMES, null, jn_values);
-
-        /*
-        //Query the Journal database to findout the highest value in it
-        //This will be the value we have just inserted
-        //Save the value to then store with the JournalStructure
-
-        String selectQuery = "SELECT MAX(_id) as _id FROM JournalNames";
-        Cursor cursor = db_write.rawQuery(selectQuery, null);
-        cursor.moveToFirst();
-
-        Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
-
-        tableID = cursor.getInt(0);
-
-
-        //Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
-
-        Log.d("Diss", "test 3" );
-        String[] strings = new String[allEds.size()];
-
-        for(int i=0; i < allEds.size(); i++){
-
-            ContentValues js_values = new ContentValues();
-            js_values.put(JournalContract.COLUMN_NAME, allEds.get(i).getText().toString());
-            js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i));
-            js_values.put(JournalContract.TABLE_ID, tableID);
-
-            db_write.insert(JournalContract.JOURNAL_STRUCTURE, null, js_values);
-
-            strings[i] = allEds.get(i).getText().toString();
-            Log.d("Diss","" + columnTypes.get(i));
-            Log.d("Diss", "" + allEds.get(i).getText().toString());
-
-        }*/
 
         Intent returnIntent = new Intent();
         setResult(2,returnIntent);
         finish();
+
+    }
+
+    private void doThingAThenThingB(){
+
+        //Insert the Journal Name into JournalNames
+        final EditText et_name_of_journal = (EditText) findViewById(R.id.et_name_of_journal);
+        final String name_of_journal = et_name_of_journal.getText().toString();
+
+
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                JournalObject journal = new JournalObject(name_of_journal, mDefualtColour, 0);
+
+                JournalViewModel = ViewModelProviders.of(JournalNewStructure.this).get(JournalViewModel.class);
+                Long id = JournalViewModel.insertNotAsync(journal);
+
+                tableID = id;
+
+                Log.d("Diss", "Value of table id in doThingAdoThingb: " + tableID);
+            }
+        });
+
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                for(int i = 0 ; i < allEds.size() ; i++){
+
+
+                    Log.d("Diss", "Value of table id in second run: " + tableID);
+                    JournalStructureObject journalStructure = new JournalStructureObject(allEds.get(i).getText().toString(),
+                            columnTypes.get(i).toString(), tableID);
+
+                    JournalStructureViewModel = ViewModelProviders.of(JournalNewStructure.this).get(JournalStructureViewModel.class);
+                    JournalStructureViewModel.insert(journalStructure);
+
+                    //Log.d("Diss","Value of Column Types: " + columnTypes.get(i));
+                    //Log.d("Diss", "Value of ED's Text: " + allEds.get(i).getText().toString());
+                    //Log.d("Diss", "Value of tableID: " + tableID);
+
+                }
+
+            }
+        });
 
     }
 

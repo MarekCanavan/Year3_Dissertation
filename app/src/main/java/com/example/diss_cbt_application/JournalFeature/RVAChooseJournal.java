@@ -32,6 +32,7 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
 
     private List<JournalObject> journals = new ArrayList<>();
     int LAUNCH_JOURNAL_CHOOSE_ACTIVITY = 1;
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -87,6 +88,14 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
         notifyDataSetChanged();
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(JournalObject journal);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
     @Override
     public int getItemCount() {
         return journals.size();
@@ -103,6 +112,15 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
             entryName = itemView.findViewById(R.id.tv_main);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null){
+                        listener.onItemClick(journals.get(position));
+                    }
+                }
+            });
         }
     }
 }

@@ -52,7 +52,6 @@ public class JournalEntryData extends AppCompatActivity {
         /*Setting references to the database*/
         dbHelper = new DatabaseHelper(this);
         db_write = dbHelper.getWritableDatabase();
-        db_write.execSQL("PRAGMA foreign_keys=ON");
         db_read = dbHelper.getReadableDatabase();
 
 

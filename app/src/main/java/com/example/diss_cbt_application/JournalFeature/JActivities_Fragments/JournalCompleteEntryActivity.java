@@ -1,6 +1,9 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,8 +17,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
@@ -31,7 +37,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_write, db_read;
 
-    int  journalID, columnCounter, journalColour;
+
+    int columnCounter, journalColour;
+    Long journalID;
     String journalIDString, journalNameString;
     int entryID;
     private ScrollView fieldReGeneration;
@@ -41,6 +49,11 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     List<String> columnNames = new ArrayList<String>();
 
 
+    private List<JournalStructureObject> journalStructuresWithIds;
+    JournalStructureViewModel journalStructureViewModel;
+    JournalStructureObject journalStructureObject;
+    JournalStructureObject journalStructureObject1;
+    JournalStructureObject journalStructureObject2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +65,36 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         db_read = dbHelper.getReadableDatabase();
 
         Bundle journalBundle = getIntent().getExtras();
-        journalID = journalBundle.getInt("_id");
+        journalID = journalBundle.getLong("id");
+        String journalName = journalBundle.getString("journalName");
         journalNameString = journalBundle.getString("mJournalNames");
 
+        Toast.makeText(this, "Name of Journal and id: " + journalName + " " + journalID , Toast.LENGTH_SHORT).show();
+
         journalColour = journalBundle.getInt(JournalContract.JOURNAL_COLOUR);
+
+        journalStructureViewModel = ViewModelProviders.of(JournalCompleteEntryActivity.this)
+                .get(JournalStructureViewModel.class);
+        journalStructureViewModel.getStructureWithID(journalID).observe(this, new Observer<List<JournalStructureObject>>() {
+            @Override
+            public void onChanged(List<JournalStructureObject> journalStructureObjects) {
+
+                Log.d("Diss", "Seeing if there is anything in the list: " +
+                        journalStructureObjects.get(0));
+
+                journalStructureObject = journalStructureObjects.get(0);
+                //journalStructureObject1 = journalStructureObjects.get(1);
+                //journalStructureObject2 = journalStructureObjects.get(2);
+
+
+                //Log.d("Diss", "Value of the ID: ");
+                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject.getColumnName());
+                //Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject1.getColumnName());
+                //Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject2.getColumnName());
+
+
+            }
+        });
 
         fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_regeneration);
         fieldReGeneration.removeAllViews();
@@ -67,13 +106,13 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         Log.d("Diss", "Value of journalID" + journalID);
 
-        createForm();
+        //createForm();
     }
 
     private void createForm(){
 
         Log.d("Diss", "In createForm");
-        journalIDString = Integer.toString(journalID);
+        //journalIDString = Integer.toString(journalID);
 
         Log.d("Diss", "Value of journalIDString: " + journalIDString);
 

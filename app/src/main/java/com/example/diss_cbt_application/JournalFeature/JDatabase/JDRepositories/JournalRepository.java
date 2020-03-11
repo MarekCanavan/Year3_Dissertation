@@ -20,7 +20,8 @@ public class JournalRepository {
 
     private JournalDao journalDao;
     private LiveData<List<JournalObject>> allJournals;
-    public MutableLiveData<Long> dbInsertId = new MutableLiveData<>();
+    public final MutableLiveData<Long> dbInsertId = new MutableLiveData<>();
+    Long id;
 
     public JournalRepository(Application application){
         JournalDatabase database = JournalDatabase.getInstance(application);
@@ -31,6 +32,11 @@ public class JournalRepository {
     public MutableLiveData<Long> insert(JournalObject journal){
         final MutableLiveData<Long> id = new MutableLiveData<>();
         new InsertJournalAsyncTask(journalDao, id).execute(journal);
+        return id;
+    }
+
+    public Long insertNotAsync(JournalObject journal){
+        id = journalDao.insert(journal);
         return id;
     }
 
@@ -71,11 +77,6 @@ public class JournalRepository {
         }
     }
 
-    /*
-   public LiveData<Long> getDbInsertedId(){
-        Log.d("Diss", "In get DbInserted, value of dbInsertID: " + dbInsertId );
-        return dbInsertId;
-   }*/
 
     private static class UpdateJournalAsyncTask extends AsyncTask<JournalObject, Void, Void> {
 

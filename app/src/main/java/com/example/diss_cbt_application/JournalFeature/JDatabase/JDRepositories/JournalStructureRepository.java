@@ -15,6 +15,37 @@ import java.util.List;
 
 public class JournalStructureRepository {
 
+    private JournalStructureDao journalStructureDao;
+    private LiveData<List<JournalStructureObject>> getStructureWithIdList;
 
+    public JournalStructureRepository(Application application){
+        JournalDatabase database = JournalDatabase.getInstance(application);
+        journalStructureDao = database.JournalStructureDao();
+    }
+
+    public void insert(JournalStructureObject journalStructure){
+        new InsertJournalStructureAsyncTask(journalStructureDao).execute(journalStructure);
+    }
+
+    public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
+        getStructureWithIdList = journalStructureDao.getStructureWithID(id);
+        return getStructureWithIdList;
+    }
+
+
+    private static class InsertJournalStructureAsyncTask extends AsyncTask<JournalStructureObject, Void, Void>{
+
+        private JournalStructureDao journalStructureDao;
+
+        public InsertJournalStructureAsyncTask(JournalStructureDao journalStructureDao) {
+            this.journalStructureDao = journalStructureDao;
+        }
+
+        @Override
+        protected Void doInBackground(JournalStructureObject... journalStructureObjects) {
+            journalStructureDao.insert(journalStructureObjects[0]);
+            return null;
+        }
+    }
 
 }

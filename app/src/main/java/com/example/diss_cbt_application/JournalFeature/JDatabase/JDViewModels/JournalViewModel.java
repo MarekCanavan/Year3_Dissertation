@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDRepositories.JournalRepository;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class JournalViewModel extends AndroidViewModel {
          return repository.insert(journal);
     }
 
+    public static Long insertNotAsync(JournalObject journal){
+        return repository.insertNotAsync(journal);
+    }
+
+
     public void update(JournalObject journal){
          repository.update(journal);
     }
@@ -39,12 +45,5 @@ public class JournalViewModel extends AndroidViewModel {
     public LiveData<List<JournalObject>> getAllJournals(){
          return allJournals;
     }
-
-    /*
-    public LiveData<Long> getDbInsertedId(){
-
-         Log.d("Disss", "In ViewModel");
-         return repository.getDbInsertedId();
-    }*/
 
 }

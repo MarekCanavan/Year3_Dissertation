@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="MyApplication">
         <activity android:name=".GoalsFeature.GNewEditGoal"></activity>
         <activity android:name=".JournalFeature.JActivities_Fragments.JournalsMyJActivity" />
         <activity android:name=".JournalFeature.JActivities_Fragments.JournalEntryData" />
