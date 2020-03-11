@@ -60,6 +60,17 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_complete_entry);
 
+        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_regeneration);
+        fieldReGeneration.removeAllViews();
+        scroll = new LinearLayout(this);
+        scroll.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration.addView(scroll);
+
+        columnCounter = 0;
+
+        Log.d("Diss", "Value of journalID" + journalID);
+
+
         dbHelper = new DatabaseHelper(this);
         db_write = dbHelper.getWritableDatabase();
         db_read = dbHelper.getReadableDatabase();
@@ -83,130 +94,98 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                         journalStructureObjects.get(0));
 
                 journalStructureObject = journalStructureObjects.get(0);
-                //journalStructureObject1 = journalStructureObjects.get(1);
-                //journalStructureObject2 = journalStructureObjects.get(2);
+                journalStructureObject1 = journalStructureObjects.get(1);
+                journalStructureObject2 = journalStructureObjects.get(2);
+
+
+                createForm(journalStructureObjects);
 
 
                 //Log.d("Diss", "Value of the ID: ");
                 Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject.getColumnName());
-                //Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject1.getColumnName());
-                //Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject2.getColumnName());
+                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject1.getColumnName());
+                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject2.getColumnName());
 
 
             }
         });
 
-        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_regeneration);
-        fieldReGeneration.removeAllViews();
-        scroll = new LinearLayout(this);
-        scroll.setOrientation(LinearLayout.VERTICAL);
-        fieldReGeneration.addView(scroll);
 
-        columnCounter = 0;
-
-        Log.d("Diss", "Value of journalID" + journalID);
-
-        //createForm();
     }
 
-    private void createForm(){
-
-        Log.d("Diss", "In createForm");
-        //journalIDString = Integer.toString(journalID);
-
-        Log.d("Diss", "Value of journalIDString: " + journalIDString);
-
-        String selectQuery = "SELECT * FROM JournalStructure WHERE tableID = " + journalIDString;
-
-        Log.d("Diss", selectQuery);
-
-        Cursor cursor = db_write.rawQuery(selectQuery, null);
-
-        Log.d("Diss", "Cursor: " + cursor );
-        if(cursor.moveToFirst()) {
-            do {
-
-                Log.d("Diss", "In cursor move ");
-
-                /*Take values from the cursor and store in variables for manipulation*/
-                int _id = cursor.getInt(0);
-                String columnName = cursor.getString(1);
-                String columnType = cursor.getString(2);//This was 1
-                int tableID = cursor.getInt(3);//This was 0
-
-                Log.d("Diss", "Value of Column Type: " + columnType);
-
-                //Name of the Entry Field
-                TextView columnText = new TextView(JournalCompleteEntryActivity.this);
-
-                columnText.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                columnText.setText(columnName);
-                columnText.setPadding(0,20,0,20);
-                columnText.setTextSize(20);
-                columnText.setTextColor(Color.BLACK);
-
-                //Add the new columns just created to the layout
-                scroll.addView(columnText);
-
-                if(columnType.equals(JournalContract.COLUMN)){
-
-                    Log.d("Diss", "Value of Column Type in if: " + columnType);
-
-                    //EditText Field for the entry data
-                    EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
-                    newColumn.setGravity(0);
-
-                    newColumn.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            200));
-
-                    allEds.add(newColumn);
-                    scroll.addView(newColumn);
-                }
-                else if(columnType.equals(JournalContract.PERCENTAGE)){
-
-                    Log.d("Diss", "Value of Column Type in if else: " + columnType);
+    private void createForm(List<JournalStructureObject> journalStructureObjects){
 
 
-                    //EditText Field for the entry data
-                    EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
-                    newColumn.setInputType(InputType.TYPE_CLASS_NUMBER);
+        for (int i = 0 ; i < journalStructureObjects.size() ; i++){
 
-                    newColumn.setLayoutParams(new LinearLayout.LayoutParams(
-                            100,
-                            LinearLayout.LayoutParams.MATCH_PARENT));
+            journalStructureObject = journalStructureObjects.get(i);
+            /*Take values from the cursor and store in variables for manipulation*/
+            Long _id = journalStructureObject.getId();
+            String columnName = journalStructureObject.getColumnName();
+            String columnType = journalStructureObject.getColumnType();
+            Long tableID = journalStructureObject.getFk_id();
 
-                    allEds.add(newColumn);
-                    scroll.addView(newColumn);
+            Log.d("Diss", "Value of Column Type: " + columnType);
 
-                }
-                else{
-                    Log.d("Diss", "Not going in either if/else " );
+            //Name of the Entry Field
+            TextView columnText = new TextView(JournalCompleteEntryActivity.this);
 
-                }
+            columnText.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            columnText.setText(columnName);
+            columnText.setPadding(0,20,0,20);
+            columnText.setTextSize(20);
+            columnText.setTextColor(Color.BLACK);
+
+            //Add the new columns just created to the layout
+            scroll.addView(columnText);
+
+            if(columnType.equals(JournalContract.COLUMN)){
+
+                Log.d("Diss", "Value of Column Type in if: " + columnType);
+
+                //EditText Field for the entry data
+                EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
+                newColumn.setGravity(0);
+
+                newColumn.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        200));
+
+                allEds.add(newColumn);
+                scroll.addView(newColumn);
+            }
+            else if(columnType.equals(JournalContract.PERCENTAGE)){
+
+                Log.d("Diss", "Value of Column Type in if else: " + columnType);
 
 
-                //Adding variables to array for later persistance
-                columnTypes.add(columnType);
-                columnNames.add(columnName);
+                //EditText Field for the entry data
+                EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
+                newColumn.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                newColumn.setLayoutParams(new LinearLayout.LayoutParams(
+                        100,
+                        LinearLayout.LayoutParams.MATCH_PARENT));
+
+                allEds.add(newColumn);
+                scroll.addView(newColumn);
+
+            }
+            else{
+                Log.d("Diss", "Not going in either if/else " );
+
+            }
 
 
+            //Adding variables to array for later persistance
+            columnTypes.add(columnType);
+            columnNames.add(columnName);
 
-
-
-                /*Logs of Cursor Values*/
-                Log.d("Diss", "Value of id: " + _id);
-                Log.d("Diss", "Value of columnName: " + columnName);
-                Log.d("Diss", "Value of columnType: " + columnType);
-                Log.d("Diss", "Value of tableID: " + tableID);
-            }while(cursor.moveToNext());
         }
-        else{
-            Log.d("Diss", "In cursor no move ");
-        }
+
     }
 
     /*Function saves entries to the SingleEntries Database*/
