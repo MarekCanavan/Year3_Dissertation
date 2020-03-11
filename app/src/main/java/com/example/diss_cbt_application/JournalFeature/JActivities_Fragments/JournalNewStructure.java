@@ -46,6 +46,9 @@ public class JournalNewStructure extends AppCompatActivity {
     int Counter;
     Long tableID;
 
+
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     List<String> columnTypes =new ArrayList<String>();
 
@@ -156,8 +159,6 @@ public class JournalNewStructure extends AppCompatActivity {
 
         colorPicker.show();
     }
-
-    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
 
     public void saveStructureOnClick(View v){

@@ -20,7 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
@@ -29,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 
@@ -41,12 +47,14 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     int columnCounter, journalColour;
     Long journalID;
     String journalIDString, journalNameString;
-    int entryID;
+    Long entryID;
     private ScrollView fieldReGeneration;
     LinearLayout scroll;
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     List<String> columnTypes =new ArrayList<String>();
     List<String> columnNames = new ArrayList<String>();
+
+    String st_entry_name, date, time;
 
 
     private List<JournalStructureObject> journalStructuresWithIds;
@@ -54,6 +62,13 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     JournalStructureObject journalStructureObject;
     JournalStructureObject journalStructureObject1;
     JournalStructureObject journalStructureObject2;
+
+
+    JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
+
+
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,15 +216,15 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         //Collecting entryName from EditText
 
         EditText ed_entry_name = (EditText) findViewById(R.id.et_name_of_entry);
-        String st_entry_name = ed_entry_name.getText().toString();
+        st_entry_name = ed_entry_name.getText().toString();
 
         //Getting current date to save in database
         SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
-        String date = dateFormat.format(new java.util.Date());
+        date = dateFormat.format(new java.util.Date());
 
         //Getting current time to save in database
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String time = timeFormat.format(new java.util.Date());
+        time = timeFormat.format(new java.util.Date());
 
 
         Log.d("Diss", "Value of other date format: " + date);
@@ -217,7 +232,47 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         Log.d("Diss", "Value of Journal Colour Before Complete Entry: " + journalColour);
 
-        /*Saving data to SEntry table*/
+
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(st_entry_name,
+                        date, time, journalNameString, journalColour, journalID);
+
+                JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalCompleteEntryActivity.this)
+                        .get(JournalSingleEntryViewModel.class);
+
+                Long id = JournalSingleEntryViewModel.InsertNotAsync(journalSingleEntryObject);
+
+                entryID = id;
+                Log.d("Diss", "Value of table id in doThingAdoThingb: " + entryID);
+            }
+        });
+
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                for(int i = 0 ; i < allEds.size() ; i++){
+
+                    JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
+                            columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
+                            date, time, entryID);
+
+                    journalSingleEntryDataViewModel = ViewModelProviders.of(JournalCompleteEntryActivity.this)
+                            .get(JournalSingleEntryDataViewModel.class);
+
+                    journalSingleEntryDataViewModel.insert(journalSingleEntryDataObject);
+
+                }
+
+
+            }
+        });
+
+        /*
+        /*Saving data to SEntry table
         ContentValues se_values = new ContentValues();
         se_values.put(JournalContract.ENTRY_NAME, st_entry_name);
         se_values.put(JournalContract.ENTRY_DATE, date);
@@ -236,7 +291,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
 
-        entryID = cursor.getInt(0);
+        //entryID = cursor.getInt(0);
 
 
 
@@ -262,7 +317,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             Log.d("Diss","" + columnTypes.get(i));
             Log.d("Diss", "" + allEds.get(i).getText().toString());
 
-        }
+        }*/
 
         finish();
 

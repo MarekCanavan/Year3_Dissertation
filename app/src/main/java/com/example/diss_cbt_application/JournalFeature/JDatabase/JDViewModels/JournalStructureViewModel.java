@@ -15,7 +15,6 @@ import java.util.List;
 public class JournalStructureViewModel extends AndroidViewModel {
 
     private static JournalStructureRepository repository;
-    private LiveData<List<JournalStructureObject>> getStructureWithIdList;
 
     public JournalStructureViewModel(@NonNull Application application) {
         super(application);
@@ -29,8 +28,8 @@ public class JournalStructureViewModel extends AndroidViewModel {
 
     public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
         Log.d("Diss", "In JSViewModel, printing JournalStructure: " + id);
-        getStructureWithIdList = repository.getStructureWithID(id);
-        return getStructureWithIdList;
+        return repository.getStructureWithID(id);
+
     }
 
 

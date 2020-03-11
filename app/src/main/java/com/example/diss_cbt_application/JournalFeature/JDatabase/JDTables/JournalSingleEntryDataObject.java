@@ -42,14 +42,15 @@ public class JournalSingleEntryDataObject {
 
     private String entryTime;
 
-    private int fk_id;
+    private Long fk_id;
 
-    public JournalSingleEntryDataObject(String columnName, String columnType, String entryData, String entryDate, String entryTime) {
+    public JournalSingleEntryDataObject(String columnName, String columnType, String entryData, String entryDate, String entryTime, Long fk_id) {
         this.columnName = columnName;
         this.columnType = columnType;
         this.entryData = entryData;
         this.entryDate = entryDate;
         this.entryTime = entryTime;
+        this.fk_id = fk_id;
     }
 
     /*Room uses this to set the id on the object*/
@@ -57,7 +58,7 @@ public class JournalSingleEntryDataObject {
         this.id = id;
     }
 
-    public void setFk_id(int fk_id) {
+    public void setFk_id(Long fk_id) {
         this.fk_id = fk_id;
     }
 
@@ -67,7 +68,7 @@ public class JournalSingleEntryDataObject {
         return id;
     }
 
-    public int getFk_id() {
+    public Long getFk_id() {
         return fk_id;
     }
 

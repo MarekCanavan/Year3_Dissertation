@@ -25,14 +25,9 @@ public class JournalViewModel extends AndroidViewModel {
         allJournals = repository.getAllJournals();
     }
 
-    public static LiveData<Long> insert(JournalObject journal){
-         return repository.insert(journal);
-    }
-
     public static Long insertNotAsync(JournalObject journal){
         return repository.insertNotAsync(journal);
     }
-
 
     public void update(JournalObject journal){
          repository.update(journal);

@@ -15,7 +15,7 @@ import java.util.List;
 public interface JournalSingleEntryDao {
 
     @Insert
-    void insert(JournalSingleEntryObject goal);
+    Long insert(JournalSingleEntryObject goal);
 
     @Update
     void update(JournalSingleEntryObject goal);
