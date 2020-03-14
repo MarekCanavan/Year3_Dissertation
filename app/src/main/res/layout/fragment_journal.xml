@@ -11,7 +11,7 @@
         android:id="@+id/recycler_view_journal_fragment"
         android:layout_width="408dp"
         android:layout_height="460dp"
-        android:background="@color/lightGray"
+        android:background="@color/lightlightGray"
         android:scrollbars="vertical"
         tools:listitem="@layout/list_item_journal_fragment"
         app:layout_constraintBottom_toBottomOf="parent"

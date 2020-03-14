@@ -16,7 +16,6 @@ import java.util.List;
 public class JournalStructureRepository {
 
     private JournalStructureDao journalStructureDao;
-    private LiveData<List<JournalStructureObject>> getStructureWithIdList;
 
     public JournalStructureRepository(Application application){
         JournalDatabase database = JournalDatabase.getInstance(application);
@@ -28,8 +27,7 @@ public class JournalStructureRepository {
     }
 
     public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
-        getStructureWithIdList = journalStructureDao.getStructureWithID(id);
-        return getStructureWithIdList;
+        return journalStructureDao.getStructureWithID(id);
     }
 
 

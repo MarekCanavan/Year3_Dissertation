@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalEntryData;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.R;
 
@@ -37,6 +38,9 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
     private ArrayList<Integer> mIDs = new ArrayList<>();
     private ArrayList<Integer> mJournalColour = new ArrayList<>();
     private Context mContext;
+
+
+    private RVAJournalFragement.OnItemClickListener listener;
 
     private List<JournalSingleEntryObject> entries = new ArrayList<>();
 
@@ -102,6 +106,13 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         */
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(JournalSingleEntryObject entry);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
 
     public void setEntries(List <JournalSingleEntryObject> entries){
         this.entries = entries;
@@ -126,6 +137,17 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
             time = itemView.findViewById(R.id.tv_time);
             date = itemView.findViewById(R.id.tv_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null){
+                        listener.onItemClick(entries.get(position));
+                    }
+                }
+            });
         }
     }
 }

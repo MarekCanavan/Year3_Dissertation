@@ -1,6 +1,8 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,24 +16,35 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class JournalEntryData extends AppCompatActivity {
 
-    TextView tv_entry_name, tv_journal_name;
+    TextView tv_entry_name, tv_journal_name, tv_journal_date, tv_journal_time;
 
     private DatabaseHelper dbHelper = null; //reference to db helper for insertion
     private SQLiteDatabase db_write, db_read;
     private static String st_Text_View = "TextView";
     private static String st_Edit_View = "EditView";
-    int mainEntryID = 0;
+    Long mainEntryID = 0L;
     int mJournalColour;
+
+
+
+    String gDataRepresentation, date, time;
 
 
     List<String> columnNames =new ArrayList<String>();
@@ -39,7 +52,13 @@ public class JournalEntryData extends AppCompatActivity {
     List<String> columnTypes =new ArrayList<String>();
     ArrayList<EditText> allEds = new ArrayList<EditText>();
     ArrayList<TextView> allTvs = new ArrayList<TextView>();
-    List<Integer> uniqueEntryIDs = new ArrayList<Integer>();
+    List<Long> uniqueEntryIDs = new ArrayList<Long>();
+    List<Long> fk_ids = new ArrayList<Long>();
+
+    private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
+
+
+
 
     boolean edit = true;
 
@@ -54,25 +73,34 @@ public class JournalEntryData extends AppCompatActivity {
         db_write = dbHelper.getWritableDatabase();
         db_read = dbHelper.getReadableDatabase();
 
+        uniqueEntryIDs.clear();
+        fk_ids.clear();
+
 
         /*Unpacking the bundle and placing values in varaibles*/
         Bundle entryBundle = getIntent().getExtras();;
-        mainEntryID = entryBundle.getInt("_id");
+        mainEntryID = entryBundle.getLong("_id");
         String mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
         String mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
         String mEntryTime = entryBundle.getString(JournalContract.ENTRY_TIME);
+        String mEntryDate = entryBundle.getString(JournalContract.ENTRY_DATE);
         mJournalColour = entryBundle.getInt(JournalContract.JOURNAL_COLOUR);
 
-        Log.d("Diss", "Value of id from bundle: " + mainEntryID);
+       // Log.d("Diss", "Value of id from bundle: " + mainEntryID);
+        Toast.makeText(this, "Value of Entry ID: " + mainEntryID, Toast.LENGTH_SHORT).show();
 
 
         /*Getting reference to the textViews*/
         tv_entry_name = findViewById(R.id.tv_entry_name);
         tv_journal_name = findViewById(R.id.tv_journal_name);
+        tv_journal_date = findViewById(R.id.tv_entry_data_date);
+        tv_journal_time = findViewById(R.id.tv_entry_data_time);
 
         tv_entry_name.setText(mEntryName);
         tv_journal_name.setText(mJournalName);
         tv_journal_name.setTextColor(mJournalColour);
+        tv_journal_date.setText(mEntryDate);
+        tv_journal_time.setText(mEntryTime);
 
         createEntryData(mainEntryID, st_Text_View);
     }
@@ -80,98 +108,94 @@ public class JournalEntryData extends AppCompatActivity {
     /*dataRepresentation is pararmemter that defines if an EditText will be generated for the data or a TextView
     * In the editButton onClick an If statement determines what value will be set
     * Doing it this way save copying a lot of the same good*/
-    public void createEntryData(int entryID, String dataRepresentation ){
+    public void createEntryData(final Long entryID, String dataRepresentation ){
 
-        /*Very important code
-        * Defines the ScrollView and removes views
-        * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
-        * Set the Orientation Vertical and add to the scrollView*/
-        ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation_entry_data);
-        fieldReGeneration.removeAllViews();
-        LinearLayout scroll = new LinearLayout(this);
-        scroll.setOrientation(LinearLayout.VERTICAL);
-        fieldReGeneration.addView(scroll);
+        Log.d("Diss", "In createEntryData");
+        gDataRepresentation = dataRepresentation;
 
+        journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
+                .get(JournalSingleEntryDataViewModel.class);
+        journalSingleEntryDataViewModel.getEntryDataWithId(mainEntryID).observe(this, new Observer<List<JournalSingleEntryDataObject>>() {
+            @Override
+            public void onChanged(List<JournalSingleEntryDataObject> journalSingleEntryDataObjects) {
 
-        String entryIDString = Integer.toString(entryID);
+                /*Very important code
+                 * Defines the ScrollView and removes views
+                 * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
+                 * Set the Orientation Vertical and add to the scrollView*/
+                ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation_entry_data);
+                fieldReGeneration.removeAllViews();
+                LinearLayout scroll = new LinearLayout(getApplicationContext());
+                scroll.setOrientation(LinearLayout.VERTICAL);
+                fieldReGeneration.addView(scroll);
 
-        Log.d("Diss", "Value of journalIDString: " + entryIDString);
+                for(int i = 0 ; i < journalSingleEntryDataObjects.size() ; i++){
 
-        String selectQuery = "SELECT * FROM " + JournalContract.SENTRY_DATA + " WHERE " + JournalContract.ENTRY_ID +" = " + entryIDString;
+                    Log.d("Diss", "In cursor move ");
 
-        //Log.d("Diss", selectQuery);
+                    /*Take values from the cursor and store in variables for manipulation*/
+                    Long _id =  journalSingleEntryDataObjects.get(i).getId();
+                    String columnName = journalSingleEntryDataObjects.get(i).getColumnName();
+                    String columnType = journalSingleEntryDataObjects.get(i).getColumnType();
+                    String entryData = journalSingleEntryDataObjects.get(i).getEntryData();
+                    Long entryID_ = journalSingleEntryDataObjects.get(i).getFk_id();
 
-        Cursor cursor = db_write.rawQuery(selectQuery, null);
+                    //Name of the Entry Field
+                    TextView columnText = new TextView(getApplicationContext());
+                    columnText.setText(columnName);
+                    columnText.setTextSize(25);
+                    columnText.setTextColor(Color.parseColor("#000000"));
 
-        //Log.d("Diss", "Cursor: " + cursor );
-
-        if(cursor.moveToFirst()) {
-            do {
-
-                Log.d("Diss", "In cursor move ");
-
-                /*Take values from the cursor and store in variables for manipulation*/
-                int _id = cursor.getInt(0);
-                String columnName = cursor.getString(1);
-                String columnType = cursor.getString(2);
-                String entryData = cursor.getString(3);
-                int entryID_ = cursor.getInt(4);
-
-
-                //Name of the Entry Field
-                TextView columnText = new TextView(this);
-                columnText.setText(columnName);
-                columnText.setTextSize(25);
-                columnText.setTextColor(Color.parseColor("#000000"));
-
-                scroll.addView(columnText);//Add to LinearLayout on ScrollView
+                    scroll.addView(columnText);//Add to LinearLayout on ScrollView
 
 
-                if(dataRepresentation == st_Text_View){
-                    //Text Field for the entry data
-                    TextView entryData_ = new TextView(JournalEntryData.this);
+                    if(gDataRepresentation == st_Text_View){
+                        //Text Field for the entry data
+                        TextView entryData_ = new TextView(JournalEntryData.this);
 
-                    entryData_.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
+                        entryData_.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                    entryData_.setText(entryData);
+                        entryData_.setText(entryData);
 
-                    scroll.addView(entryData_);//Add to LinearLayout on ScrollView
+                        scroll.addView(entryData_);//Add to LinearLayout on ScrollView
+
+                        uniqueEntryIDs.add(_id);
+                        fk_ids.add(entryID_);
+
+                        Log.d("updatetest", "Value of _id in creation: " + _id );
+                        Log.d("updatetest", "Value of fk_id in creation: " + entryID_ );
+
+                    }
+                    else if(gDataRepresentation == st_Edit_View){
+                        //Text Field for the entry data
+                        EditText entryDataView = new EditText(JournalEntryData.this);
+
+                        entryDataView.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        entryDataView.setText(entryData);
+
+                        allEds.add(entryDataView);
+
+                        scroll.addView(entryDataView);//Add to LinearLayout on ScrollView
+                    }
+
+
+                    //Adding variables to array for later persistance
+                    entryDataList.add(entryData);
+                    columnNames.add(columnName);
+                    columnTypes.add(columnType);
+
+
+
                 }
-                else if(dataRepresentation == st_Edit_View){
-                    //Text Field for the entry data
-                    EditText entryDataView = new EditText(JournalEntryData.this);
 
-                    entryDataView.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
+            }
+        });
 
-                    entryDataView.setText(entryData);
-
-                    allEds.add(entryDataView);
-
-                    scroll.addView(entryDataView);//Add to LinearLayout on ScrollView
-                }
-
-
-                //Adding variables to array for later persistance
-                entryDataList.add(entryData);
-                columnNames.add(columnName);
-                columnTypes.add(columnType);
-                uniqueEntryIDs.add(_id);
-
-
-                /*Logs of Cursor Values*/
-                //Log.d("Diss", "Value of id: " + _id);
-                //Log.d("Diss", "Value of columnName: " + columnName);
-                //Log.d("Diss", "Value of columnType: " + columnType);
-                // Log.d("Diss", "Value of tableID: " + mainEntryID);
-            }while(cursor.moveToNext());
-        }
-        else{
-            Log.d("Diss", "In cursor no move ");
-        }
     }
 
     /*If the user wants to edit their entry this function handles it
@@ -191,7 +215,6 @@ public class JournalEntryData extends AppCompatActivity {
         else{//false
             /*Save the fields the user has been edited back to the database*/
 
-
             bt_save_edit.setText("Edit");
             saveEditedData();
             createEntryData(mainEntryID, st_Text_View);
@@ -204,29 +227,40 @@ public class JournalEntryData extends AppCompatActivity {
 
     public void saveEditedData(){
 
-        for(int i=0; i < allEds.size(); i++){
+        //Getting current date to save in database
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
+        date = dateFormat.format(new java.util.Date());
 
-            //Set values to be persisted
-            ContentValues js_values = new ContentValues();
-
-            js_values.put(JournalContract.COLUMN_NAME, columnNames.get(i)); //columnName
-            js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i)); //columnType
-            js_values.put(JournalContract.ENTRY_DATA, allEds.get(i).getText().toString()); //entryData
-            js_values.put(JournalContract.ENTRY_ID, mainEntryID); //mainEntryID
-            js_values.put(JournalContract.ENTRY_TIME, System.currentTimeMillis()); //mainEntryID
-
-            Log.d("Diss", "Start time: " + System.currentTimeMillis());
-
-            //insert into database
-            db_write.update(JournalContract.SENTRY_DATA, js_values,
-                    "_id="+ uniqueEntryIDs.get(i), null);
+        //Getting current time to save in database
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        time = timeFormat.format(new java.util.Date());
 
 
-            //strings[i] = allEds.get(i).getText().toString();
-            Log.d("Diss","" + columnTypes.get(i));
-            Log.d("Diss", "" + allEds.get(i).getText().toString());
 
+        for(int i=0; i < uniqueEntryIDs.size(); i++){
+
+            Log.d("updatetest", "Value in uniqueEntry array in save: " + uniqueEntryIDs.get(i));
+
+
+
+            JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
+                    columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
+                    date, time, fk_ids.get(i));
+
+            journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
+                    .get(JournalSingleEntryDataViewModel.class);
+
+            journalSingleEntryDataObject.setId(uniqueEntryIDs.get(i));
+
+
+            Log.d("updatetest", "Value of _id in saving: " + uniqueEntryIDs.get(i) );
+            Log.d("updatetest", "Value of fk_id in saving: " + fk_ids.get(i) );
+
+
+            journalSingleEntryDataViewModel.update(journalSingleEntryDataObject);
         }
+
+        finish();
     }
 
 

@@ -136,21 +136,6 @@ public class GNewEditGoal extends AppCompatActivity {
 
         setResult(RESULT_OK, data);
 
-
-
-        /*
-        /*Saving data to SEntry table
-        ContentValues gt_values = new ContentValues();
-
-        gt_values.put(GContract.G_TITLE, et_title_of_goal.getText().toString() );
-        gt_values.put(GContract.G_DESCRIPTION, et_description_of_goal.getText().toString() );
-        gt_values.put(GContract.G_DATE, et_goal_date.getText().toString());
-        gt_values.put(GContract.G_TIME, et_goal_time.getText().toString());
-        gt_values.put(GContract.G_MARKED_COMPLETE, mMarkedComplete);
-
-        db_write.insert(GContract.G_TABLE, null, gt_values);
-        */
-
         finish();
     }
 }

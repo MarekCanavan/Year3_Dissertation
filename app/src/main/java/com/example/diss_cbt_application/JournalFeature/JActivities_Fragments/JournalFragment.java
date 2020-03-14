@@ -1,5 +1,6 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -99,14 +100,33 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         journalSingleEntryViewModel.getAllEntries().observe(this, new Observer<List<JournalSingleEntryObject>>() {
             @Override
             public void onChanged(List<JournalSingleEntryObject> journalSingleEntryObjects) {
+
                 adapter.setEntries(journalSingleEntryObjects);
 
                 Log.d("Dissss", "In OnChange JournalFragment");
 
-                JournalSingleEntryObject journalSingleEntryObject2 = journalSingleEntryObjects.get(0);
+                //JournalSingleEntryObject journalSingleEntryObject2 = journalSingleEntryObjects.get(0);
 
-                Log.d("Dissss", "In OnChange JournalFragment Accessing data: " + journalSingleEntryObjects.get(0));
-                Log.d("Dissss", "In OnChange JournalFragment Accessing SingleEntryDatat: " + journalSingleEntryObject2.getEntryName());
+                //Log.d("Dissss", "In OnChange JournalFragment Accessing data: " + journalSingleEntryObjects.get(0));
+                //Log.d("Dissss", "In OnChange JournalFragment Accessing SingleEntryDatat: " + journalSingleEntryObject2.getEntryName());
+            }
+        });
+
+        adapter.setOnItemClickListener(new RVAJournalFragement.OnItemClickListener() {
+            @Override
+            public void onItemClick(JournalSingleEntryObject entry) {
+
+                Intent intent = new Intent(getContext(), JournalEntryData.class);
+
+                intent.putExtra("_id", entry.getId());
+                intent.putExtra(JournalContract.ENTRY_NAME, entry.getEntryName());
+                intent.putExtra(JournalContract.JOURNAL_NAME, entry.getJournalType());
+                intent.putExtra(JournalContract.ENTRY_TIME, entry.getEntryTime());
+                intent.putExtra(JournalContract.ENTRY_DATE, entry.getEntryDate());
+                intent.putExtra(JournalContract.JOURNAL_COLOUR, entry.getJournalColour());
+
+                startActivity(intent);
+
             }
         });
 

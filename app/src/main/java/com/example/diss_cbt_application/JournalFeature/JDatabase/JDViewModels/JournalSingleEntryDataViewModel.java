@@ -25,7 +25,11 @@ public class JournalSingleEntryDataViewModel extends AndroidViewModel {
         repository.insert(journalSingleEntryDataObject);
     }
 
-    /*public LiveData<List<JournalSingleEntryDataObject>> getEntryDataWithId(Long id){
-        return getEntriesWithItList = repository.getEntryDataWithId(id);
-    }*/
+    public static void update(JournalSingleEntryDataObject journalSingleEntryDataObject){
+        repository.update(journalSingleEntryDataObject);
+    }
+
+    public LiveData<List<JournalSingleEntryDataObject>> getEntryDataWithId(Long id){
+        return repository.getEntryDataWithId(id);
+    }
 }

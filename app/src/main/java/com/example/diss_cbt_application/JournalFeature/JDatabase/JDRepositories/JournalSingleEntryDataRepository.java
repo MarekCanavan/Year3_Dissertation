@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalSingleEntryDataDao;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase;
 
 import java.util.List;
@@ -24,10 +25,14 @@ public class JournalSingleEntryDataRepository {
         new InsertJournalSEDAsyncTask(singleEntryDataDao).execute(journalSingleEntryDataObject);
     }
 
-    /*public LiveData<List<JournalSingleEntryDataObject>> getEntryDataWithId(Long id){
-        return singleEntryDataDao.getAllDataEntries(id);
+    public void update (JournalSingleEntryDataObject journalSingleEntryDataObject){
+        new UpdateSEDAsyncTask(singleEntryDataDao).execute(journalSingleEntryDataObject);
+    }
 
-    }*/
+    public LiveData<List<JournalSingleEntryDataObject>> getEntryDataWithId(Long id){
+        return singleEntryDataDao.getEntriesWithID(id);
+
+    }
 
     private static class InsertJournalSEDAsyncTask extends AsyncTask<JournalSingleEntryDataObject, Void, Void>{
 
@@ -43,5 +48,23 @@ public class JournalSingleEntryDataRepository {
             return null;
         }
     }
+
+    private static class UpdateSEDAsyncTask extends AsyncTask<JournalSingleEntryDataObject, Void, Void>{
+
+        private JournalSingleEntryDataDao journalSingleEntryDataDao;
+
+        public UpdateSEDAsyncTask(JournalSingleEntryDataDao journalSingleEntryDataDao){
+            this.journalSingleEntryDataDao = journalSingleEntryDataDao;
+        }
+
+        @Override
+        protected Void doInBackground(JournalSingleEntryDataObject... journalSingleEntryDataObjects) {
+            journalSingleEntryDataDao.update(journalSingleEntryDataObjects[0]);
+            return null;
+        }
+    }
+
+
+
 
 }

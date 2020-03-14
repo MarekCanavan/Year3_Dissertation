@@ -32,7 +32,7 @@ public class JournalSingleEntryObject {
 
     /*Table member variables*/
     @PrimaryKey(autoGenerate = true)//id is auto incremented
-    private int id;
+    private Long id;
 
     private String entryName;
 
@@ -56,7 +56,7 @@ public class JournalSingleEntryObject {
     }
 
     /*Room uses this to set the id on the object*/
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,7 +65,7 @@ public class JournalSingleEntryObject {
     }
 
     /*To persist these fields room needs getter methods for all of the fields*/
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

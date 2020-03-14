@@ -108,19 +108,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 Log.d("Diss", "Seeing if there is anything in the list: " +
                         journalStructureObjects.get(0));
 
-                journalStructureObject = journalStructureObjects.get(0);
-                journalStructureObject1 = journalStructureObjects.get(1);
-                journalStructureObject2 = journalStructureObjects.get(2);
-
-
                 createForm(journalStructureObjects);
-
-
-                //Log.d("Diss", "Value of the ID: ");
-                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject.getColumnName());
-                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject1.getColumnName());
-                Log.d("Diss", "Trying to access journalIDs Data:" + journalStructureObject2.getColumnName());
-
 
             }
         });

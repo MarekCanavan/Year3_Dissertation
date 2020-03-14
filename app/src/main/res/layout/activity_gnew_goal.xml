@@ -106,18 +106,32 @@
         app:layout_constraintVertical_bias="0.639" />
 
     <Button
-        android:id="@+id/bt_save_entry"
+        android:id="@+id/bt_save_entry2"
         android:layout_width="195dp"
         android:layout_height="45dp"
+        android:background="@color/darkBlue"
         android:onClick="saveGoalOnClick"
         android:text="Save"
-        android:background="@color/darkBlue"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
+    <Button
+        android:id="@+id/bt_save_entry"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:background="@color/darkBlue"
+        android:onClick="deleteGoalOnClick"
+        android:text="Delete"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.842" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
