@@ -11,6 +11,9 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 
 import java.util.List;
 
+/**
+ * This a simple Interface that defines all the database operations that will be made on the JournalSingleEntry Database
+ * */
 @Dao
 public interface JournalSingleEntryDao {
 

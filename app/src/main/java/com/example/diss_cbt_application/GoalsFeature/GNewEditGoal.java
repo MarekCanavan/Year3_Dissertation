@@ -20,11 +20,26 @@ import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
 
+/**
+ * This class represents a New Goal
+ * In this class the user can create a new goal and define:
+ *      - Goal Title
+ *      - Goal Description
+ *      - Goal Time and Date for completion
+ **/
 public class GNewEditGoal extends AppCompatActivity {
 
-    private int mYear, mMonth, mDay, mHour, mMinute, mMarkedComplete;
-    EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
+    /*Declaring integers needed for the Time and Date picker*/
+    private int mYear, mMonth, mDay, mHour, mMinute;
 
+    /*Declaring integers for the functionality of the goals*/
+    private int mMarkedComplete;
+
+    /*Declaring the EditText Fields so that the data can be retrieved and persisted to the database*/
+    private EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
+
+    /*Declaring Strings that can be used to pass values by intent
+    * These are needed so data can be passed back to the MainActivity for persistence to the database*/
     public static final String EXTRA_ID = "EXTRA_ID";
     public static final String EXTRA_TITLE = "EXTRA_TITLE";
     public static final String EXTRA_DESCRIPTION = "EXTRA_DESCRIPTION";
@@ -32,26 +47,26 @@ public class GNewEditGoal extends AppCompatActivity {
     public static final String EXTRA_TIME = "EXTRA_TIME";
     public static final String EXTRA_MC = "EXTRA_MC";
 
-    /*Database Definitions for the Activity*/
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_write, db_read;
 
+    /**
+     * onCreate is run when the Activity is first loaded
+     * This function is responsible for populating the EditTexts in the Activity
+     * with the appropriate information for the user to see*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gnew_goal);
 
+        /*Assigning the EditTexts to their correct fields in the layout.xml file*/
         et_goal_date = (EditText) findViewById(R.id.et_goal_date);
         et_goal_time = (EditText) findViewById(R.id.et_goal_time);
         et_description_of_goal = findViewById(R.id.et_description_of_goal);
         et_title_of_goal = findViewById(R.id.et_title_of_goal);
 
-        dbHelper = new DatabaseHelper(this);
-        db_write = dbHelper.getWritableDatabase();
-        db_read = dbHelper.getReadableDatabase();
-
         mMarkedComplete = 0;//Initially every goal is marked incomplete
 
+        /*Retrieving the title, description, date and time from the intent
+        * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
 
         if(intent.hasExtra(EXTRA_ID)){
@@ -62,6 +77,11 @@ public class GNewEditGoal extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function utilises the DatePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the date for the goal to be completed by
+     * the integers mYear, mMonth and mDay previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseDateOnClick(View v){
 
         // Get Current Date
@@ -85,7 +105,11 @@ public class GNewEditGoal extends AppCompatActivity {
 
     }
 
-    /**Function allows the user to choose the time they want their reminder to go off */
+    /**
+     * This function utilises the TimePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the time for the goal to be completed by
+     * the integers mHour, mMinute previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseTimeOnClick(View v){
 
         // Get Current Time
@@ -108,20 +132,26 @@ public class GNewEditGoal extends AppCompatActivity {
 
     }
 
+    /**
+     * This function is triggered when the user clicks on the "Save" button in this Activity
+     * The title, description, date, time and marked complete value are put into an intent
+     * They are sent back to the MainActivity so they can be persisted to the database*/
     public void saveGoalOnClick(View v){
 
+        /*Retrieving the values set by the user from the EditTexts*/
         String title = et_title_of_goal.getText().toString();
         String description = et_description_of_goal.getText().toString();
         String date = et_goal_date.getText().toString();
         String time = et_goal_time.getText().toString();
         int marketComplete = 0;
 
-        /*Show text if a title and descirption arent set */
+        /*Show text if a title and description aren't set */
         if(title.trim().isEmpty() || description.trim().isEmpty()){
             Toast.makeText(this, "Please insert title and description", Toast.LENGTH_SHORT ).show();
             return;
         }
 
+        /*Putting the Goal Information retrieved from the EditTexts into the Intent*/
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_DESCRIPTION, description);
@@ -129,11 +159,13 @@ public class GNewEditGoal extends AppCompatActivity {
         data.putExtra(EXTRA_TIME, time);
         data.putExtra(EXTRA_MC, marketComplete);
 
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        if(id != -1){
+
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);//Default value as -1 as this will never be a valid id
+        if(id != -1){//Only if this is the case, put the id into the intent
             data.putExtra(EXTRA_ID, id);
         }
 
+        /*Pass back the intent with the RESULT_OK identifier, so MainActivity knows the goal has been successfully made*/
         setResult(RESULT_OK, data);
 
         finish();

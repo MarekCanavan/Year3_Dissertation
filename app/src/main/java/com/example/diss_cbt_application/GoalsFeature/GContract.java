@@ -1,5 +1,9 @@
 package com.example.diss_cbt_application.GoalsFeature;
 
+/**
+ * This class defines all of the strings that are needed in the Goals Feature
+ * They are set in this class so that they are consistent throughout the entire feature
+ * This should reduce errors and improve the quality and reliability of the code*/
 public class GContract {
 
         /*Name of the Table*/

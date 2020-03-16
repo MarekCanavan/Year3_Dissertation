@@ -28,9 +28,8 @@ import static androidx.room.ForeignKey.CASCADE;
         })
 public class JournalSingleEntryObject {
 
-    //Room automatically creates these fields
-
-    /*Table member variables*/
+    /*Room automatically creates these fields
+     *Table member variables*/
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private Long id;
 
@@ -46,6 +45,9 @@ public class JournalSingleEntryObject {
 
     private Long fk_id;
 
+    /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
+     * these fields need to be parsed for it to be valid
+     * We dont want to pass id as it is auto generated*/
     public JournalSingleEntryObject(String entryName, String entryDate, String entryTime, String journalType, int journalColour, Long fk_id) {
         this.entryName = entryName;
         this.entryDate = entryDate;

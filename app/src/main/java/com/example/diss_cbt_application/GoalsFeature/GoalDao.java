@@ -9,6 +9,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * This a simple Interface that defines all the database operations that will be made on the Goal Database
+ * */
 @Dao
 public interface GoalDao {
 

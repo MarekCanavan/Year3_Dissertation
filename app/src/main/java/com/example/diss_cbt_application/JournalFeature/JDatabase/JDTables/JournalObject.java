@@ -11,13 +11,12 @@ import androidx.room.PrimaryKey;
  *      journalName - name given by the user for the journal
  *      journalColour - A colour given to the table by the user
  *      archived - handles if the journal has been archived by the user or not
- *      the user can choose if they want a journal to be taken away from their vie wby archived*/
+ *      the user can choose if they want a journal to be taken away from their view by archived*/
 @Entity(tableName = "journal_table")
 public class JournalObject {
 
-    //Room automatically creates these fields
-
-    /*Table member variables*/
+    /*Room automatically creates these fields
+     *Table member variables*/
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private Long id;
 
@@ -27,13 +26,17 @@ public class JournalObject {
 
     private int archived;
 
+    /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
+     * these fields need to be parsed for it to be valid
+     * We dont want to pass id as it is auto generated*/
     public JournalObject(String journalName, int journalColour, int archived) {
         this.journalName = journalName;
         this.journalColour = journalColour;
         this.archived = archived;
     }
 
-    /*Room uses this to set the id on the object*/
+    /*Room uses this to set the id on the object
+     * And also when we update a field in the table*/
     public void setId(Long id) {
         this.id = id;
     }
