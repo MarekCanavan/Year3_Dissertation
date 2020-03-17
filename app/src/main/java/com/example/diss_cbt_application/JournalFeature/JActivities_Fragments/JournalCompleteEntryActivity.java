@@ -39,11 +39,6 @@ import java.util.concurrent.Executors;
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 
 
-    /*Database Definitions for the Activity*/
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_write, db_read;
-
-
     int columnCounter, journalColour;
     Long journalID;
     String journalIDString, journalNameString;
@@ -60,9 +55,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     private List<JournalStructureObject> journalStructuresWithIds;
     JournalStructureViewModel journalStructureViewModel;
     JournalStructureObject journalStructureObject;
-    JournalStructureObject journalStructureObject1;
-    JournalStructureObject journalStructureObject2;
-
 
     JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
 
@@ -83,12 +75,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         columnCounter = 0;
 
-        Log.d("Diss", "Value of journalID" + journalID);
-
-
-        dbHelper = new DatabaseHelper(this);
-        db_write = dbHelper.getWritableDatabase();
-        db_read = dbHelper.getReadableDatabase();
 
         Bundle journalBundle = getIntent().getExtras();
         journalID = journalBundle.getLong("id");
@@ -109,11 +95,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                         journalStructureObjects.get(0));
 
                 createForm(journalStructureObjects);
-
             }
         });
-
-
     }
 
     private void createForm(List<JournalStructureObject> journalStructureObjects){
@@ -182,7 +165,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
             }
 
-
             //Adding variables to array for later persistance
             columnTypes.add(columnType);
             columnNames.add(columnName);
@@ -213,13 +195,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         //Getting current time to save in database
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         time = timeFormat.format(new java.util.Date());
-
-
-        Log.d("Diss", "Value of other date format: " + date);
-        Log.d("Diss", "Value of other time format: " + time);
-
-        Log.d("Diss", "Value of Journal Colour Before Complete Entry: " + journalColour);
-
 
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
@@ -258,54 +233,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
             }
         });
-
-        /*
-        /*Saving data to SEntry table
-        ContentValues se_values = new ContentValues();
-        se_values.put(JournalContract.ENTRY_NAME, st_entry_name);
-        se_values.put(JournalContract.ENTRY_DATE, date);
-        se_values.put(JournalContract.ENTRY_TIME, time);
-        se_values.put(JournalContract.ENTRY_JOURNAL_TYPE, journalNameString);
-        se_values.put(JournalContract.JOURNAL_COLOUR, journalColour);
-        se_values.put(JournalContract.TABLE_ID, journalID); //tableID
-
-        db_write.insert(JournalContract.SENTRY, null, se_values);
-
-
-
-        String selectQuery = "SELECT MAX(" + JournalContract._ID + ") as _id FROM SEntry";
-        Cursor cursor = db_write.rawQuery(selectQuery, null);
-        cursor.moveToFirst();
-
-        Log.d("Diss",  "Cursor Val: " + cursor.getInt(0));
-
-        //entryID = cursor.getInt(0);
-
-
-
-        for(int i=0; i < allEds.size(); i++){
-
-            //Set values to be persisted
-            ContentValues js_values = new ContentValues();
-
-            js_values.put(JournalContract.COLUMN_NAME, columnNames.get(i)); //columnName
-            js_values.put(JournalContract.COLUMN_TYPE, columnTypes.get(i)); //columnType
-            js_values.put(JournalContract.ENTRY_DATA, allEds.get(i).getText().toString()); //entryData
-            js_values.put(JournalContract.ENTRY_ID, entryID); //mainEntryID
-            js_values.put(JournalContract.ENTRY_TIME, time);
-            js_values.put(JournalContract.ENTRY_DATE, date);
-
-            Log.d("Diss", "Start time: " + System.currentTimeMillis());
-
-            //insert into database
-            db_write.insert(JournalContract.SENTRY_DATA,  null, js_values);
-
-
-            //strings[i] = allEds.get(i).getText().toString();
-            Log.d("Diss","" + columnTypes.get(i));
-            Log.d("Diss", "" + allEds.get(i).getText().toString());
-
-        }*/
 
         finish();
 

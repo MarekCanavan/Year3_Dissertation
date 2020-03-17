@@ -35,8 +35,6 @@ public class JournalEntryData extends AppCompatActivity {
 
     TextView tv_entry_name, tv_journal_name, tv_journal_date, tv_journal_time;
 
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_write, db_read;
     private static String st_Text_View = "TextView";
     private static String st_Edit_View = "EditView";
     Long mainEntryID = 0L;
@@ -67,11 +65,6 @@ public class JournalEntryData extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_entry_data);
-
-        /*Setting references to the database*/
-        dbHelper = new DatabaseHelper(this);
-        db_write = dbHelper.getWritableDatabase();
-        db_read = dbHelper.getReadableDatabase();
 
         uniqueEntryIDs.clear();
         fk_ids.clear();
@@ -270,7 +263,6 @@ public class JournalEntryData extends AppCompatActivity {
         String table = "SEntry";
         String whereClause = "_id=?";
         String[] whereArgs = new String[] { String.valueOf(mainEntryID) };
-        db_write.delete(table, whereClause, whereArgs);
 
         finish();
 

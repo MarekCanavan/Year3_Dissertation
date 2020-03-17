@@ -24,28 +24,26 @@ import com.example.diss_cbt_application.MainActivity;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**This Activity presents the user their predefined goals in a Recycler View on the fragment
+ * The user has the option of clicking a specific goal - to which they will be taken to a new activity - and inspecting it
+ * or setting a new goal by clicking the '+' button, which will launch a new activity where they can set their goal*/
 public class GoalsFragment extends Fragment {
 
-    /*Database variable declarations*/
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_read;
-
-
-    /*ArrayList definitions for the representation of data on the RecyclerView*/
-    private ArrayList<Integer> mIDs = new ArrayList<>();
-    private ArrayList<String> mTitle = new ArrayList<>();
-    private ArrayList<String> mDate= new ArrayList<>();
-    private ArrayList<String> mTime = new ArrayList<>();
-
+    /*Member variable for the goalViewModel*/
     private GoalViewModel goalViewModel;
 
     public GoalsFragment() {
         super();
     }
 
+    /**
+     * Sets up the Fragment when the user first navigates to it
+     * Populates the RecyclerView
+     * Draws a plus on the Button for styling
+     *
+     * @return RootView which is the View in which all the other views are placed*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,31 +52,32 @@ public class GoalsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_goals, container, false);
 
-        //loadDataForRecyclerView();
-
-        /*Adds the image to the button for a New Entry*/
+        /*Adds the '+' image in drawable folder to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_goal);
         newEntry.setImageResource(R.mipmap.ic_addition_button_dark_blue_round);
 
-
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_goals_fragment);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        /*Initialise Recycler View*/
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_goals_fragment);//get reference to recycler view
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext())); //every recycler view needs a layout manager
+        recyclerView.setHasFixedSize(true); //Makes recycler view more efficient, we know card size wont change
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
-        recyclerView.setHasFixedSize(true); //Needed as we know our cards will always be the same size
 
-        final RVAGoalsFragement adapter = new RVAGoalsFragement(); //Parse RecyclerView arrays to populate with data
-        recyclerView.setAdapter(adapter);
 
-        /*Had major error with this line, needed to look at comments from codinginflow video */
+        final RVAGoalsFragement adapter = new RVAGoalsFragement(); //new adapter
+        recyclerView.setAdapter(adapter);//by default this is empty, it gets set in the observer below
+
+        /* Get reference to the Goal View Model - member variable
+         * Then observe the changes to the database, specifically the 'getAllGoals' Query
+         * Update the recycler with these objects when a change is made to the database */
         goalViewModel = ViewModelProviders.of(this).get(GoalViewModel.class);
         goalViewModel.getAllGoals().observe(this, new Observer<List<GoalObject>>() {
             @Override
             public void onChanged(List<GoalObject> goalObjects) {
-                Toast.makeText(getContext(), "OnChanged", Toast.LENGTH_SHORT).show();
                 adapter.setGoals(goalObjects);
             }
         });
 
+        /*Handles when a user clicks on a card in the recycler view*/
         adapter.setOnItemClickListener(new RVAGoalsFragement.OnItemClickListener() {
             @Override
             public void onItemClick(GoalObject goal) {
@@ -96,45 +95,7 @@ public class GoalsFragment extends Fragment {
             }
         });
 
-
-
         return rootView;
     }
 
-    private void loadDataForRecyclerView(){
-
-        /*Connect to database */
-        dbHelper = new DatabaseHelper(getContext());
-        db_read = dbHelper.getReadableDatabase();
-
-        /*The fields we expect to return from the database */
-        String[] projection = new String[]{
-                GContract._ID,
-                GContract.G_TITLE,
-                GContract.G_DATE,
-                GContract.G_TIME
-        };
-
-        /*Projection is sent to the databased and all fields retrieved and stored in a cursor*/
-        Cursor c = db_read.query(GContract.G_TABLE, projection, null, null ,
-                null, null, null);
-
-        Log.d("Diss", "Value of cursor: " + c);
-
-        /*If statement iterates through the cursor to retrieve entry data*/
-        if(c.moveToFirst()) {
-            do {
-
-                /*Values are taken from the cursor and stored in ArrayList
-                 * After this function is finished the Arraylists will be sent to the RecyclerView
-                 * And the data will be represented to the user*/
-                mIDs.add(c.getInt(0));
-                mTitle.add(c.getString(1));
-                mDate.add(c.getString(2));
-                mTime.add(c.getString(3));
-
-            }while(c.moveToNext());
-        }
-
-    }
 }

@@ -24,41 +24,36 @@ import com.example.diss_cbt_application.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * */
+/**This class handles the recycler view for when the user is choosing which entry they want to view
+ * It is parsed the View Holder we created inside it*/
 public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragement.ViewHolder>{
 
-    private static final String TAG = "RVAJournalFragement";
-
-    /*Definition of the local ArrayLists in this class, the Arraylists are set in the constructor*/
-    private ArrayList<String> mEntryNames = new ArrayList<>();
-    private ArrayList<String> mJournalNames = new ArrayList<>();
-    private ArrayList<String> mEntryTimes = new ArrayList<>();
-    private ArrayList<String> mEntryDates = new ArrayList<>();
-    private ArrayList<Integer> mIDs = new ArrayList<>();
-    private ArrayList<Integer> mJournalColour = new ArrayList<>();
-    private Context mContext;
-
-
-    private RVAJournalFragement.OnItemClickListener listener;
-
+    /*Member variable for the list of all entries*/
     private List<JournalSingleEntryObject> entries = new ArrayList<>();
 
+    /*Member variable for the interface onItemClickListener*/
+    private RVAJournalFragement.OnItemClickListener listener;
 
+    /**This class is where we create and return a view holder
+     *
+     * @return - viewholder */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Responsible for inflating the view
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_journal_fragment, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_journal_fragment,
+                parent,
+                false);
         ViewHolder holder = new ViewHolder(view);
 
         return holder;
     }
 
+    /**This class is where we take care of getting the data from the JournalEntry Objects
+     * and populate the textfields with data*/
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder called");
 
         JournalSingleEntryObject currentEntry = entries.get(position);
 
@@ -73,47 +68,24 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         holder.time.setText(currentEntry.getEntryTime());
         holder.date.setText(currentEntry.getEntryDate());
 
-        Log.d("Dissss", "Value of entry Name: " + currentEntry.getEntryName());
-
-        /*
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, mEntryNames.get(position), Toast.LENGTH_SHORT).show();
-
-                Log.d("Diss", "Value of id: " + mIDs.get(position));
-                //Log.d("Diss", "Value of entryName: " + mEntryNames.get(position));
-                //Log.d("Diss", "Value of journalName: " +  mJournalNames.get(position));
-
-                Intent i_entry = new Intent(mContext, JournalEntryData.class);
-
-                Bundle entryBundle = new Bundle();
-                entryBundle.putInt(JournalContract._ID, mIDs.get(position));
-                entryBundle.putString(JournalContract.ENTRY_NAME, mEntryNames.get(position));
-                entryBundle.putString(JournalContract.JOURNAL_NAME, mJournalNames.get(position));
-                entryBundle.putString(JournalContract.ENTRY_DATE, mEntryDates.get(position));
-                entryBundle.putString(JournalContract.ENTRY_TIME, mEntryTimes.get(position));
-                entryBundle.putInt(JournalContract.JOURNAL_COLOUR, mJournalColour.get(position));
-                i_entry.putExtras(entryBundle);
-
-                Log.d("Diss", "Value of _id before sending: " + mIDs.get(position));
-
-                mContext.startActivity(i_entry);
-
-            }
-        });
-
-        */
     }
 
+    /**Declaring the onItemClick method
+     * Anything that implements this interface has to implement this method*/
     public interface OnItemClickListener{
         void onItemClick(JournalSingleEntryObject entry);
     }
 
+    /**Parse the onItemClick Listener we created in this class above
+     * Assign the member variable listener to the listener that is parsed*/
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
 
+    /**This is the function that is called from the Activity
+     * A list of entries is parsed (after being retrieved as live data
+     * the local entry list is set to this parsed list so that the data can be represented on the recyclerview
+     * Then notifyDataSetChanged (an android function) is called*/
     public void setEntries(List <JournalSingleEntryObject> entries){
         this.entries = entries;
         notifyDataSetChanged();
@@ -124,11 +96,13 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
         return entries.size();
     }
 
+    /**This class holds the views in the single recycler view items*/
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView entryName, journalName, time, date;
         CardView parentLayout;
 
+        /**Assign the text views and layout in this constructor*/
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -138,6 +112,8 @@ public class RVAJournalFragement extends RecyclerView.Adapter<RVAJournalFragemen
             date = itemView.findViewById(R.id.tv_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
+
+            /*Parse the listener the entry at the position we are clicking*/
             itemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override

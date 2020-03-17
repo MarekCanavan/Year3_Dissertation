@@ -165,11 +165,6 @@ public class JournalNewStructure extends AppCompatActivity {
 
         doThingAThenThingB();
 
-
-        Log.d("Diss", "Value of table id: AFTER OBSERVER " + tableID);
-
-
-
         Intent returnIntent = new Intent();
         setResult(2,returnIntent);
         finish();
@@ -210,10 +205,6 @@ public class JournalNewStructure extends AppCompatActivity {
 
                     JournalStructureViewModel = ViewModelProviders.of(JournalNewStructure.this).get(JournalStructureViewModel.class);
                     JournalStructureViewModel.insert(journalStructure);
-
-                    //Log.d("Diss","Value of Column Types: " + columnTypes.get(i));
-                    //Log.d("Diss", "Value of ED's Text: " + allEds.get(i).getText().toString());
-                    //Log.d("Diss", "Value of tableID: " + tableID);
 
                 }
 

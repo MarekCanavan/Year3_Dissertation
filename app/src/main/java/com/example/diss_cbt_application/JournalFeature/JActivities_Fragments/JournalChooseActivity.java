@@ -25,15 +25,11 @@ import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**This Activity gives the user the option to complete a Journal Structure that has been already created
+ * or they can choose to create their own new one. The already made journals are represented to the user
+ * in a recycler view which is fetching the LiveData from our Room database.
+ * */
 public class JournalChooseActivity extends AppCompatActivity {
-
-    private static final String TAG = "JournalChooseActivity";
-    //vars
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<Integer> mIDs = new ArrayList<>();
-    private ArrayList<Integer> mJournalColours = new ArrayList<>();
-    private DatabaseHelper dbHelper = null; //reference to db helper for insertion
-    private SQLiteDatabase db_read;
 
     private JournalViewModel journalViewModel;
 
@@ -41,102 +37,54 @@ public class JournalChooseActivity extends AppCompatActivity {
     int NEW_JOURNAL_MADE = 2;
     int NEW_ENTRY_MADE = 3;
 
+    /**
+     * Sets up the Fragment when the user first navigates to it
+     * Populates the RecyclerView
+     * Draws a plus on the Button for styling
+     *
+     * @return RootView which is the View in which all the other views are placed*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_choose);
 
-        Log.d(TAG, "onCreate: started");
+        /*Initialise Recycler View*/
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);//get reference to recycler view
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));//every recycler view needs a layout manager
+        recyclerView.setHasFixedSize(true);//Makes recycler view more efficient, we know card size wont change
+        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(3));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
 
-        dbHelper = new DatabaseHelper(this);
-        db_read = dbHelper.getReadableDatabase();
+        final RVAChooseJournal adapter = new RVAChooseJournal();//new adapter
+        recyclerView.setAdapter(adapter);//by default this is empty, it gets set in the observer below
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        //recyclerView.removeAllViews();
-        //Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
-        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(3));
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-
-        final RVAChooseJournal adapter = new RVAChooseJournal();
-        recyclerView.setAdapter(adapter);
-
-        /*Had major error with this line, needed to look at comments from codinginflow video */
+        /* Get reference to the Journal View Model
+        * Then observe the changes to the database, specifically the 'getAllJournals' Query
+        * Update the recycler with these objects when a change is made to the database */
         journalViewModel = ViewModelProviders.of(this).get(JournalViewModel.class);
         journalViewModel.getAllJournals().observe(this, new Observer<List<JournalObject>>() {
             @Override
             public void onChanged(List<JournalObject> journalObjects) {
-                //Toast.makeText(JournalChooseActivity.this, "OnChanged", Toast.LENGTH_SHORT).show();
                 adapter.setJournals(journalObjects);
             }
         });
 
+        /*Handles when a user clicks on a card in the recycler view*/
         adapter.setOnItemClickListener(new RVAChooseJournal.OnItemClickListener() {
             @Override
             public void onItemClick(JournalObject journal) {
                 Intent intent = new Intent(JournalChooseActivity.this, JournalCompleteEntryActivity.class);
 
-                intent.putExtra("id" , journal.getId());
-                intent.putExtra("journalName", journal.getJournalName());
+                intent.putExtra(JournalContract.ID , journal.getId());
+                intent.putExtra(JournalContract.JOURNAL_NAME, journal.getJournalName());
                 intent.putExtra(JournalContract.JOURNAL_COLOUR, journal.getJournalColour());
 
                 startActivity(intent);
             }
         });
-        //recyclerViewFunc();
-    }
-
-    private void recyclerViewFunc(){
-
-        //Clear and left over values
-        mNames.clear();
-        mIDs.clear();
-        mJournalColours.clear();
-
-        String[] projection = new String[]{
-                JournalContract._ID,
-                JournalContract.JOURNAL_NAME,
-                JournalContract.JOURNAL_COLOUR
-        };
-
-        Cursor c = db_read.query(JournalContract.JOURNAL_NAMES, projection, null, null ,
-                                    null, null, null);
-
-        Log.d("Diss", "Value of cursor: " + c);
-
-        if(c.moveToFirst()) {
-            do {
-                int id = c.getInt(0);
-                String name = c.getString(1);
-                int colour = c.getInt(2);
-
-
-                mIDs.add(c.getInt(0));
-                mNames.add(c.getString(1));
-                mJournalColours.add(colour);
-
-                Log.d("Diss", "Value of id: " + id);
-                Log.d("Diss", "Value of name: " + name);
-
-            }while(c.moveToNext());
-        }
-
-        initRecylcerView();
-    }
-
-    private void initRecylcerView(){
-        //RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        //recyclerView.removeAllViews();
-        //Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
-        //recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(3));
-        //RVAChooseJournal adapter = new RVAChooseJournal(mIDs, mNames, mJournalColours, this);
-        //recyclerView.setAdapter(adapter);
-
-       // recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
+    /**Simple function that opens the JournalNewStructure activity when the '+' button is pressed*/
     public void newJournalOnClick(View v){
 
         Intent i_choose_journal = new Intent(JournalChooseActivity.this, JournalNewStructure.class);
@@ -148,7 +96,7 @@ public class JournalChooseActivity extends AppCompatActivity {
 
         if (requestCode == LAUNCH_Journal_Choose_Activity) {
             if(resultCode == NEW_JOURNAL_MADE){
-                recyclerViewFunc();
+                //recyclerViewFunc();
             }
         }
     }//onActivityResult

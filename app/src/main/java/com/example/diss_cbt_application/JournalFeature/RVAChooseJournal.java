@@ -21,77 +21,67 @@ import com.example.diss_cbt_application.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**This class handles the recycler view for when the user is choosing which journal they want to complete and entry for
+ * It is parsed the View Holder we created inside it*/
 public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.ViewHolder>{
 
-    private static final String TAG = "RVAChooseJournal";
 
-    private ArrayList<String> mJournalNames = new ArrayList<>();
-    private ArrayList<Integer> mIDs = new ArrayList<>();
-    private ArrayList<Integer> mJournalColours = new ArrayList<>();
-    private Context mContext;
-
+    /*Member variable for the list of journals*/
     private List<JournalObject> journals = new ArrayList<>();
-    int LAUNCH_JOURNAL_CHOOSE_ACTIVITY = 1;
+
+    /*Member variable for the interface onItemClickListener*/
     private OnItemClickListener listener;
 
+
+    /**This class is where we create and return a view holder
+    *
+    * @return - viewholder */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Responsible for inflating the view
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_journal,
-                parent, false);
+                parent,
+                false);
 
         ViewHolder holder = new ViewHolder(view);
 
         return holder;
     }
 
+    /**This class is where we take care of getting the data from the Journal Structure Objects
+    * and populate the textfields with data*/
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder called");
 
+
+        /*Reference to the current journal at this position*/
         JournalObject currentJournal = journals.get(position);
 
         holder.entryName.setText(currentJournal.getJournalName());
         holder.entryName.setTextColor(currentJournal.getJournalColour());
 
-
-        Log.d("Diss", "Value of Text: " + currentJournal.getJournalName());
-        Log.d("Diss", "Value of Colour: " + currentJournal.getJournalColour());
-
-
-
-        /*holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, mJournalNames.get(position), Toast.LENGTH_SHORT).show();
-
-                Log.d("Diss", "Value of if: " + mIDs.get(position));
-                Intent i_complete_journal = new Intent(mContext, JournalCompleteEntryActivity.class);
-
-                Bundle journalBundle = new Bundle();
-                journalBundle.putInt(JournalContract._ID, mIDs.get(position));
-                journalBundle.putString("mJournalNames", mJournalNames.get(position));
-                journalBundle.putInt(JournalContract.JOURNAL_COLOUR, mJournalColours.get(position));
-                i_complete_journal.putExtras(journalBundle);
-
-                mContext.startActivity(i_complete_journal);
-
-            }
-        });*/
-
     }
 
+    /**This is the function that is called from the Activity
+     * A list of journals is parsed (after being retrieved as live data
+     * the local journals list is set to this parsed list so that the data can be represented on the recyclerview
+     * Then notifyDataSetChanged (an android function) is called*/
     public void setJournals(List<JournalObject> journals){
         this.journals = journals;
         notifyDataSetChanged();
     }
 
+    /**Declaring the onItemClick method
+     * Anything that implements this interface has to implement this method*/
     public interface OnItemClickListener{
         void onItemClick(JournalObject journal);
     }
 
+
+    /**Parse the onItemClick Listener we created in this class above
+     * Assign the member variable listener to the listener that is parsed*/
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
@@ -101,22 +91,25 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
         return journals.size();
     }
 
+    /**This class holds the views in the single recycler view items*/
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView entryName;
         RelativeLayout parentLayout;
 
+        /**Assign the text views and layout in this constructor*/
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             entryName = itemView.findViewById(R.id.tv_main);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+                /*Parse the listener the journal at the position we are clicking*/
+                itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if(listener != null){
+                    if(listener != null){//Check to avoid crash is listener is not set
                         listener.onItemClick(journals.get(position));
                     }
                 }

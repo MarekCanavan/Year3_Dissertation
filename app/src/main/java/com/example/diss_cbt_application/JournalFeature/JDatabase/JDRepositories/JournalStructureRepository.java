@@ -13,15 +13,26 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase
 
 import java.util.List;
 
+/**
+ * Simple Java Class that provides another abstraction layer between data source and the rest of the app
+ * Clean API to the rest of the application to handle calls to the Journals Database
+ * Best Practice to create a repository per Table/Dao, so this is the repository for the Journal Structure Table
+ * */
 public class JournalStructureRepository {
 
+    /*Member Variables*/
     private JournalStructureDao journalStructureDao;
 
+    /**
+     * Constructor assigns the member variable for the journalStructureDao
+     *
+     * @param - application - subclass of context used to create a database instance*/
     public JournalStructureRepository(Application application){
         JournalDatabase database = JournalDatabase.getInstance(application);
         journalStructureDao = database.JournalStructureDao();
     }
 
+    /*Public methods for all database operations*/
     public void insert(JournalStructureObject journalStructure){
         new InsertJournalStructureAsyncTask(journalStructureDao).execute(journalStructure);
     }
@@ -30,7 +41,10 @@ public class JournalStructureRepository {
         return journalStructureDao.getStructureWithID(id);
     }
 
-
+    /**
+     * Database operations need to be conducted on a background thread
+     * This Async Task inserts a journal structure off of the main thread so the main thread is not blocked
+     * */
     private static class InsertJournalStructureAsyncTask extends AsyncTask<JournalStructureObject, Void, Void>{
 
         private JournalStructureDao journalStructureDao;
