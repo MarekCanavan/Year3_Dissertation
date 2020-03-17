@@ -23,7 +23,13 @@ import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Jou
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalsMyJActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
+/**This is the MainActivity of the Application, so is the first Activity that gets loaded
+ * The Main Activity holds 4 fragments which represent the 4 features of the application
+ *      - Home Fragment - the first one that is loaded
+ *      - Journal Fragment
+ *      - Goals Fragment
+ *      - Breath Fragment
+ *This activity hols the bottom navigation bar to switch between these fragments/features*/
 public class MainActivity extends AppCompatActivity {
 
 
@@ -41,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
 
+    /*This is where the bottom navigation is handled
+    * When the user selects an option of the navigation bar their selection is checked in the switch statement
+    * The corresponding Fragment is then launched*/
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -75,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
             };
 
 
-
+    /**Simple function that launches an Activity when the user wants to create a new journal entry*/
     public void newEntryOnClick(View v){
         Intent i_choose_journal = new Intent(MainActivity.this, JournalChooseActivity.class);
         startActivity(i_choose_journal);
     }
 
+    /**Simple function that launches an Activity when the user wants to inspect their already made Journal Structures*/
     public void journalsOnClick(View v){
         Intent i_my_journals = new Intent(MainActivity.this, JournalsMyJActivity.class);
         startActivity(i_my_journals);
@@ -98,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i_new_goal, ADD_GOAL_REQUEST);
     }
 
+    /**This function handles request and result codes back from the MainActivity
+     * Due to the Fragment structure there are a few different results that can be returned
+     * so these are handled by this function*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -127,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Goal Can't be updated", Toast.LENGTH_SHORT).show();
                 return;
             }
-
 
             String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
             String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);

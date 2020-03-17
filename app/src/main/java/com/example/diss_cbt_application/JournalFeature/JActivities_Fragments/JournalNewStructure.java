@@ -38,54 +38,54 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
+/**This Activity is where the user can create a new journal structure for themselves
+ * This will then be saved to the database and they can complete entries with this structure
+ * They can also assign a colour to their journal */
 public class JournalNewStructure extends AppCompatActivity {
 
-    private Button newColumn, newPercentage;
+    /*Member Variables for the ScrollView*/
     private ScrollView fieldReGeneration;
     LinearLayout scroll;
-    int Counter;
+
+    /*Integer member variables*/
     Long tableID;
+    int Counter, mDefualtColour;
 
-
-    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
-
-    ArrayList<EditText> allEds = new ArrayList<EditText>();
+    /*Arraylist that are needed to store the column type and edit texts to later be persisted to the database*/
     List<String> columnTypes =new ArrayList<String>();
+    ArrayList<EditText> allEds = new ArrayList<EditText>();
 
+    /*TextView used to present the colour of the journal chosen by the user*/
     TextView testTextView ;
-    int mDefualtColour;
-    private JournalStructureViewModel JournalStructureViewModel;
-    private JournalViewModel JournalViewModel;
 
+    /*ViewModel References needed for persisting to the database*/
+    private JournalViewModel JournalViewModel;
+    private JournalStructureViewModel JournalStructureViewModel;
+
+    /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_new_strucure);
 
+        /*Initialise Variables*/
         tableID = 0L;
-
-        /*Very important code
-         * Defines the ScrollView and removes views
-         * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
-         * Set the Orientation Vertical and add to the scrollView*/
-        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation);
-        fieldReGeneration.removeAllViews();
-        scroll = new LinearLayout(this);
-        scroll.setOrientation(LinearLayout.VERTICAL);
-        fieldReGeneration.addView(scroll);
-
         Counter = 0;
+        initialiseScrollView();
     }
 
 
+    /**This function creates a new Edit Text Field where the user can assign a name to a column */
     public void newColumnOnClick(View v){
 
         EditText newColumn = new EditText(this);
         newColumn.setGravity(0);
 
-        allEds.add(newColumn);
+        allEds.add(newColumn);//add this column to the arraylist of all EditTexts
 
+        /*Creating and Setting the edit texts*/
         TextView text = new TextView(this);
 
         text.setLayoutParams(new LinearLayout.LayoutParams(
@@ -110,6 +110,7 @@ public class JournalNewStructure extends AppCompatActivity {
 
     }
 
+    /**This function creates a new Edit Text Field where the user can assign a name to a percentage field */
     public void newPercentageOnClick(View v){
 
         EditText newPercentage = new EditText(JournalNewStructure.this);
@@ -137,18 +138,20 @@ public class JournalNewStructure extends AppCompatActivity {
         scroll.addView(newPercentage);
     }
 
+    /**Button onClick that launches the color picker*/
     public void changeColourOnClick(View v){
         testTextView = findViewById(R.id.tv_test_text);
         openColorPicker();
     }
 
+    /**This function implements the colorPicker Library which allows the user to choose form a wide range of colours
+     * This colour is then displayed to the user via a TextView*/
     public void openColorPicker(){
         AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, 0, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
 
             }
-
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
 
@@ -161,6 +164,9 @@ public class JournalNewStructure extends AppCompatActivity {
     }
 
 
+    /**When the user chooses to click the 'Save' button, this function is called
+     * The JournalName and Structure is saved to the database using function doThingAThenThingB
+     * and then a result is set to send back to the previous activity*/
     public void saveStructureOnClick(View v){
 
         doThingAThenThingB();
@@ -171,6 +177,12 @@ public class JournalNewStructure extends AppCompatActivity {
 
     }
 
+    /**This function is very important for the persisting of data to the database
+     * Room will only do database operations on a background thread as to not block the main thread
+     * In order to insert the Journal Structure the id of the Journal needs to be inserted with the Object as a foriegn key
+     * This requires retrieving the id from insertion that has just happened
+     * A sharedSingleThreadExecutor needs to be setup so that the insertion can be completed, the id saved in tableID
+     * and then that tableID can be used in the next thread to insert the Journal Structure Object */
     private void doThingAThenThingB(){
 
         //Insert the Journal Name into JournalNames
@@ -178,6 +190,7 @@ public class JournalNewStructure extends AppCompatActivity {
         final String name_of_journal = et_name_of_journal.getText().toString();
 
 
+        /*Thread 1 - insertion of the Journal Object, which returns an ID */
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -192,6 +205,8 @@ public class JournalNewStructure extends AppCompatActivity {
             }
         });
 
+        /*Thread 2 - insertion of multiple Journal Structure objects which use the tableID we have just set
+        * This thread only executes ones the insertion in Thread 1 is complete*/
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -211,6 +226,17 @@ public class JournalNewStructure extends AppCompatActivity {
             }
         });
 
+    }
+
+    /** Defines the ScrollView and removes views
+     * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
+     * Set the Orientation Vertical and add to the scrollView*/
+    private void initialiseScrollView(){
+         fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation);
+        fieldReGeneration.removeAllViews();
+        scroll = new LinearLayout(this);
+        scroll.setOrientation(LinearLayout.VERTICAL);
+        fieldReGeneration.addView(scroll);
     }
 
 }
