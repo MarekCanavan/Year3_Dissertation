@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.example.diss_cbt_application.MainActivity;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**This Activity presents the user their predefined goals in a Recycler View on the fragment
@@ -33,6 +35,8 @@ public class GoalsFragment extends Fragment {
 
     /*Member variable for the goalViewModel*/
     private GoalViewModel goalViewModel;
+
+    public ImageView mDeleteImage;
 
     public GoalsFragment() {
         super();
@@ -46,7 +50,7 @@ public class GoalsFragment extends Fragment {
      * @return RootView which is the View in which all the other views are placed*/
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Log.d("g53mdp", "In Breath Create View");
 
@@ -61,7 +65,6 @@ public class GoalsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext())); //every recycler view needs a layout manager
         recyclerView.setHasFixedSize(true); //Makes recycler view more efficient, we know card size wont change
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(5));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
-
 
         final RVAGoalsFragement adapter = new RVAGoalsFragement(); //new adapter
         recyclerView.setAdapter(adapter);//by default this is empty, it gets set in the observer below
@@ -92,6 +95,11 @@ public class GoalsFragment extends Fragment {
                 intent.putExtra(GNewEditGoal.EXTRA_MC, goal.getMarkedComplete());
 
                 getActivity().startActivityForResult(intent, MainActivity.EDIT_GOAL_REQUEST);
+            }
+
+            @Override
+            public void onDeleteClick(GoalObject goal) {
+                goalViewModel.delete(goal);
             }
         });
 

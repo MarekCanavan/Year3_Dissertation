@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -75,6 +76,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
      * Anything that implements this interface has to implement this method*/
     public interface OnItemClickListener{
         void onItemClick(GoalObject goal);
+        void onDeleteClick(GoalObject goal);
     }
 
     /**Parse the onItemClick Listener we created in this class above
@@ -88,6 +90,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
 
         TextView gTitle, time, date;
         ConstraintLayout parentLayout;
+        ImageView mDeleteImage;
 
         /**Assign the text views and layout in this constructor*/
         public ViewHolder(@NonNull View itemView) {
@@ -97,6 +100,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
             time = itemView.findViewById(R.id.tv_goal_time);
             date = itemView.findViewById(R.id.tv_goal_date);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            mDeleteImage = itemView.findViewById(R.id.image_delete);
 
             /*Parse the listener the goal at the position we are clicking*/
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +109,16 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
                     int position = getAdapterPosition();
                     if(listener != null && position != RecyclerView.NO_POSITION){
                         listener.onItemClick(goals.get(position));
+                    }
+                }
+            });
+
+            mDeleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){
+                        listener.onDeleteClick(goals.get(position));
                     }
                 }
             });

@@ -1,24 +1,39 @@
 package com.example.diss_cbt_application.GoalsFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
+
+import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
 
 /**
  * This class represents a New Goal
@@ -47,6 +62,11 @@ public class GNewEditGoal extends AppCompatActivity {
     public static final String EXTRA_TIME = "EXTRA_TIME";
     public static final String EXTRA_MC = "EXTRA_MC";
 
+    /*Declaring member variables for the RadioGroup which assigned when/if the goal will repeat*/
+    RadioGroup radioGroup;
+    RadioButton radioButton;
+
+    private NotificationManagerCompat notificationManager;
 
     /**
      * onCreate is run when the Activity is first loaded
@@ -62,6 +82,11 @@ public class GNewEditGoal extends AppCompatActivity {
         et_goal_time = (EditText) findViewById(R.id.et_goal_time);
         et_description_of_goal = findViewById(R.id.et_description_of_goal);
         et_title_of_goal = findViewById(R.id.et_title_of_goal);
+
+        /*Assigning the RadioGroup member variables*/
+        radioGroup = findViewById(R.id.goal_radioGroup);
+
+        notificationManager = NotificationManagerCompat.from(this);
 
         mMarkedComplete = 0;//Initially every goal is marked incomplete
 
@@ -103,6 +128,7 @@ public class GNewEditGoal extends AppCompatActivity {
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
 
+
     }
 
     /**
@@ -132,11 +158,22 @@ public class GNewEditGoal extends AppCompatActivity {
 
     }
 
+    public void checkButton(View v){
+        int radioId = radioGroup.getCheckedRadioButtonId();
+        
+        radioButton = findViewById(radioId);
+
+        Toast.makeText(this, "Selected Radio Group: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * This function is triggered when the user clicks on the "Save" button in this Activity
      * The title, description, date, time and marked complete value are put into an intent
      * They are sent back to the MainActivity so they can be persisted to the database*/
     public void saveGoalOnClick(View v){
+
+
+        setAlarm();
 
         /*Retrieving the values set by the user from the EditTexts*/
         String title = et_title_of_goal.getText().toString();
@@ -170,4 +207,41 @@ public class GNewEditGoal extends AppCompatActivity {
 
         finish();
     }
+
+    private void setAlarm(){
+
+        Calendar alarmCal = Calendar.getInstance();
+
+        //alarmCal.set(Calendar.YEAR, mYear);
+        //alarmCal.set(Calendar.MONTH, mMonth);
+        //alarmCal.set(Calendar.DAY_OF_MONTH, mDay);
+        alarmCal.set(Calendar.HOUR_OF_DAY, 13);
+        alarmCal.set(Calendar.MINUTE, 53);
+        alarmCal.set(Calendar.SECOND, 0);
+
+        Log.d("Diss", "Value of Hour: " + mHour);
+        Log.d("Diss", "Value of Minute: " + mMinute);
+
+        Intent alarmIntent = new Intent(this, AlertReceiver.class);
+        //alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
+
+        PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0 );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmCal.before(Calendar.getInstance())) {
+
+            Log.d("Diss", "In before If ");
+            alarmCal.add(Calendar.DATE, 1);
+        }
+        /*SET for for but soon we want to do repeating*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            Log.d("Diss", "In SDK If ");
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
+        }
+
+    }
+
 }
