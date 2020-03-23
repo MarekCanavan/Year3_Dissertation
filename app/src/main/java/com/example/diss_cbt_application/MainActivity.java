@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     int count, breathBoolean;
     long startTime;
-    TextView breathTextView;
+    TextView breathTextView, instruction;
     Button breathButton;
 
     @Override
@@ -134,12 +135,66 @@ public class MainActivity extends AppCompatActivity {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-
             breathTextView.setText("" + seconds);
+            breathCases(seconds);
 
-            timerHandler.postDelayed(this, 500);
+            timerHandler.postDelayed(this, 1000);
         }
     };
+
+    private void breathCases(int seconds){
+
+        instruction = findViewById(R.id.tv_breath_instruction);
+        int value = seconds % 13;
+
+        switch(value){
+            case 0:
+                breathTextView.setText("4");
+                instruction.setText("Breath in");
+                break;
+            case 1:
+                breathTextView.setText("3");
+                break;
+            case 2:
+                breathTextView.setText("2");
+                break;
+            case 3:
+                breathTextView.setText("1");
+                break;
+            case 4:
+                breathTextView.setText("2");
+                instruction.setText("Hold");
+            case 5:
+                breathTextView.setText("1");
+                break;
+            case 6:
+                breathTextView.setText("5");
+                instruction.setText("Breath Out");
+            case 7:
+                breathTextView.setText("4");
+                break;
+            case 8:
+                breathTextView.setText("3");
+                break;
+            case 9:
+                breathTextView.setText("2");
+                break;
+            case 10:
+                breathTextView.setText("1");
+                break;
+            case 11:
+                breathTextView.setText("2");
+                instruction.setText("Hold");
+                break;
+            case 12:
+                breathTextView.setText("1");
+                break;
+        }
+
+
+    }
+
+
     public void startBreathOnClick(View v){
 
         //startTime = (Date) Calendar.getInstance().getTime();
@@ -160,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
             count = 0;
             timerHandler.removeCallbacks(timerRunnable);
-            breathTextView.setText("" + count);
             breathButton.setText("Start");
             breathBoolean = 0;
 
