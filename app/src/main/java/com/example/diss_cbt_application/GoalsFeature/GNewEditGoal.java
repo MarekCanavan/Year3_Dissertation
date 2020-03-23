@@ -42,7 +42,7 @@ import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
  *      - Goal Description
  *      - Goal Time and Date for completion
  **/
-public class GNewEditGoal extends AppCompatActivity {
+public class GNewEditGoal extends AppCompatActivity{
 
     /*Declaring integers needed for the Time and Date picker*/
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -68,6 +68,8 @@ public class GNewEditGoal extends AppCompatActivity {
 
     private NotificationManagerCompat notificationManager;
 
+    private int mGoalId;
+
     /**
      * onCreate is run when the Activity is first loaded
      * This function is responsible for populating the EditTexts in the Activity
@@ -90,9 +92,15 @@ public class GNewEditGoal extends AppCompatActivity {
 
         mMarkedComplete = 0;//Initially every goal is marked incomplete
 
+
+
         /*Retrieving the title, description, date and time from the intent
         * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
+
+        mGoalId = intent.getIntExtra(EXTRA_ID, mGoalId);;
+
+        Log.d("Diss", "Value of id: " + mGoalId);
 
         if(intent.hasExtra(EXTRA_ID)){
             et_title_of_goal.setText(intent.getStringExtra(EXTRA_TITLE));
@@ -122,6 +130,9 @@ public class GNewEditGoal extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
+                        mYear = year;
+                        mMonth = monthOfYear;
+                        mDay = dayOfMonth;
                         et_goal_date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                     }
@@ -151,9 +162,11 @@ public class GNewEditGoal extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
+                        mHour = hourOfDay;
+                        mMinute = minute;
                         et_goal_time.setText(hourOfDay + ":" + minute);
                     }
-                }, mHour, mMinute, false);
+                }, mHour, mMinute, true);
         timePickerDialog.show();
 
     }
@@ -173,8 +186,6 @@ public class GNewEditGoal extends AppCompatActivity {
     public void saveGoalOnClick(View v){
 
 
-        setAlarm();
-
         /*Retrieving the values set by the user from the EditTexts*/
         String title = et_title_of_goal.getText().toString();
         String description = et_description_of_goal.getText().toString();
@@ -182,7 +193,9 @@ public class GNewEditGoal extends AppCompatActivity {
         String time = et_goal_time.getText().toString();
         int marketComplete = 0;
 
-        /*Show text if a title and description aren't set */
+        setAlarm();
+
+        /*Show text if a title and description aren't set*/
         if(title.trim().isEmpty() || description.trim().isEmpty()){
             Toast.makeText(this, "Please insert title and description", Toast.LENGTH_SHORT ).show();
             return;
@@ -195,7 +208,6 @@ public class GNewEditGoal extends AppCompatActivity {
         data.putExtra(EXTRA_DATE, date);
         data.putExtra(EXTRA_TIME, time);
         data.putExtra(EXTRA_MC, marketComplete);
-
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);//Default value as -1 as this will never be a valid id
         if(id != -1){//Only if this is the case, put the id into the intent
@@ -212,33 +224,28 @@ public class GNewEditGoal extends AppCompatActivity {
 
         Calendar alarmCal = Calendar.getInstance();
 
-        //alarmCal.set(Calendar.YEAR, mYear);
-        //alarmCal.set(Calendar.MONTH, mMonth);
-        //alarmCal.set(Calendar.DAY_OF_MONTH, mDay);
-        alarmCal.set(Calendar.HOUR_OF_DAY, 13);
-        alarmCal.set(Calendar.MINUTE, 53);
+        alarmCal.set(Calendar.YEAR, mYear);
+        alarmCal.set(Calendar.MONTH, mMonth);
+        alarmCal.set(Calendar.DAY_OF_MONTH, mDay);
+        alarmCal.set(Calendar.HOUR_OF_DAY, mHour);
+        alarmCal.set(Calendar.MINUTE, mMinute);
         alarmCal.set(Calendar.SECOND, 0);
 
         Log.d("Diss", "Value of Hour: " + mHour);
         Log.d("Diss", "Value of Minute: " + mMinute);
 
-        Intent alarmIntent = new Intent(this, AlertReceiver.class);
-        //alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
-
-        PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0 );
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(this, AlertReceiver.class);
+        alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
+
+        /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
+        PendingIntent sender = PendingIntent.getBroadcast(this, mGoalId, alarmIntent, 0 );
 
         if (alarmCal.before(Calendar.getInstance())) {
-
-            Log.d("Diss", "In before If ");
             alarmCal.add(Calendar.DATE, 1);
         }
         /*SET for for but soon we want to do repeating*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Log.d("Diss", "In SDK If ");
-
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
         }
 

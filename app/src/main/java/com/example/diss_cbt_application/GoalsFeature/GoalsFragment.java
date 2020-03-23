@@ -1,5 +1,8 @@
 package com.example.diss_cbt_application.GoalsFeature;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.MainActivity;
+import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
@@ -99,6 +103,16 @@ public class GoalsFragment extends Fragment {
 
             @Override
             public void onDeleteClick(GoalObject goal) {
+
+
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(getContext(), AlertReceiver.class);
+
+                /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
+                PendingIntent sender = PendingIntent.getBroadcast(getContext(), goal.getId(), alarmIntent, 0 );
+
+                alarmManager.cancel(sender);
+
                 goalViewModel.delete(goal);
             }
         });

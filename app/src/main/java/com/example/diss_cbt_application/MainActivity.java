@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diss_cbt_application.BreathFeature.BreathFragment;
@@ -22,6 +25,11 @@ import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Jou
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalFragment;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalsMyJActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**This is the MainActivity of the Application, so is the first Activity that gets loaded
  * The Main Activity holds 4 fragments which represent the 4 features of the application
@@ -36,10 +44,17 @@ public class MainActivity extends AppCompatActivity {
     public static final int ADD_GOAL_REQUEST = 1;
     public static final int EDIT_GOAL_REQUEST = 2;
 
+    int count, breathBoolean;
+    long startTime;
+    TextView breathTextView;
+    Button breathButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        breathBoolean = 0;
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -106,6 +121,51 @@ public class MainActivity extends AppCompatActivity {
         /*Define the intent that will be sent from the MainActivity to the New Goal Page*/
         Intent i_new_goal = new Intent(MainActivity.this, GNewEditGoal.class);
         startActivityForResult(i_new_goal, ADD_GOAL_REQUEST);
+    }
+
+    //runs without a timer by reposting this handler at the end of the runnable
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            long millis = System.currentTimeMillis() - startTime;
+            int seconds = (int) (millis / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+
+
+            breathTextView.setText("" + seconds);
+
+            timerHandler.postDelayed(this, 500);
+        }
+    };
+    public void startBreathOnClick(View v){
+
+        //startTime = (Date) Calendar.getInstance().getTime();
+        breathTextView = findViewById(R.id.tv_breath_number);
+        startTime = System.currentTimeMillis();;
+
+        breathButton = (Button) findViewById(R.id.bt_breath_start_stop);
+
+        if(breathBoolean == 0){
+            startTime = System.currentTimeMillis();;
+            timerHandler.postDelayed(timerRunnable, 0);
+
+            breathBoolean = 1;
+            breathButton.setText("Stop");
+
+        }
+        else{
+
+            count = 0;
+            timerHandler.removeCallbacks(timerRunnable);
+            breathTextView.setText("" + count);
+            breathButton.setText("Start");
+            breathBoolean = 0;
+
+        }
+
     }
 
     /**This function handles request and result codes back from the MainActivity
