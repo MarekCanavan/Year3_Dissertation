@@ -9,6 +9,7 @@ public class JournalContract {
     /*Strings used in more than 1 table*/
     public static final String _ID = "_id";
     public static final String ID = "id";
+    public static final String FK_ID = "id";
     public static final String TABLE_ID = "tableID";
     public static final String JOURNAL_COLOUR = "journalColour";
 

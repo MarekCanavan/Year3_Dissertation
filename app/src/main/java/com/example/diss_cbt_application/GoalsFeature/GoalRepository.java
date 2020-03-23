@@ -34,6 +34,11 @@ public class GoalRepository {
         new InsertGoalAsyncTask(goalDao).execute(goal);
     }
 
+
+    public Long insertNotAsync(GoalObject goal){
+        return goalDao.insert(goal);
+    }
+
     public void update(GoalObject goal){
         new UpdateGoalAsyncTask(goalDao).execute(goal);
     }

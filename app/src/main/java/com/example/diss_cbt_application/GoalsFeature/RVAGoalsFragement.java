@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,7 +90,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView gTitle, time, date;
-        ConstraintLayout parentLayout;
+        CardView parentLayout;
         ImageView mDeleteImage;
 
         /**Assign the text views and layout in this constructor*/

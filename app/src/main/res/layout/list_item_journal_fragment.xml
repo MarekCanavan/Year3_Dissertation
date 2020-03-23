@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:padding="8dp" >
-        //Give Layout id because its what you use to attach the on click listener
+
 
         <TextView
             android:id="@+id/tv_entry_name"

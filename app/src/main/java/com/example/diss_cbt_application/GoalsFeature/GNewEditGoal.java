@@ -28,10 +28,17 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalNewStructure;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
 
@@ -61,6 +68,7 @@ public class GNewEditGoal extends AppCompatActivity{
     public static final String EXTRA_DATE = "EXTRA_DATE";
     public static final String EXTRA_TIME = "EXTRA_TIME";
     public static final String EXTRA_MC = "EXTRA_MC";
+    public static final String EXTRA_UPDATE = "EXTRA_UPDATE";
 
     /*Declaring member variables for the RadioGroup which assigned when/if the goal will repeat*/
     RadioGroup radioGroup;
@@ -68,7 +76,13 @@ public class GNewEditGoal extends AppCompatActivity{
 
     private NotificationManagerCompat notificationManager;
 
-    private int mGoalId;
+    private int mGoalId, iId, markedComplete;
+    private Long gId;
+    private String st_update, title, description, date, time;
+
+    /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+
 
     /**
      * onCreate is run when the Activity is first loaded
@@ -88,25 +102,30 @@ public class GNewEditGoal extends AppCompatActivity{
         /*Assigning the RadioGroup member variables*/
         radioGroup = findViewById(R.id.goal_radioGroup);
 
+
+        /*TODO: COMMENT */
         notificationManager = NotificationManagerCompat.from(this);
 
         mMarkedComplete = 0;//Initially every goal is marked incomplete
 
 
-
+        st_update = "";
+        gId = 0L;
         /*Retrieving the title, description, date and time from the intent
         * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
 
-        mGoalId = intent.getIntExtra(EXTRA_ID, mGoalId);;
 
-        Log.d("Diss", "Value of id: " + mGoalId);
-
+        /*TODO: COMMENT */
         if(intent.hasExtra(EXTRA_ID)){
             et_title_of_goal.setText(intent.getStringExtra(EXTRA_TITLE));
             et_description_of_goal.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
             et_goal_date.setText(intent.getStringExtra(EXTRA_DATE));
             et_goal_time.setText(intent.getStringExtra(EXTRA_TIME));
+            st_update = intent.getStringExtra(EXTRA_UPDATE);
+            gId = intent.getLongExtra(EXTRA_ID, gId);
+            Log.d("Diss", "Value of gid in if: " + gId);
+
         }
     }
 
@@ -171,6 +190,8 @@ public class GNewEditGoal extends AppCompatActivity{
 
     }
 
+
+    /*TODO: COMMENT */
     public void checkButton(View v){
         int radioId = radioGroup.getCheckedRadioButtonId();
         
@@ -187,13 +208,12 @@ public class GNewEditGoal extends AppCompatActivity{
 
 
         /*Retrieving the values set by the user from the EditTexts*/
-        String title = et_title_of_goal.getText().toString();
-        String description = et_description_of_goal.getText().toString();
-        String date = et_goal_date.getText().toString();
-        String time = et_goal_time.getText().toString();
-        int marketComplete = 0;
+        title = et_title_of_goal.getText().toString();
+        description = et_description_of_goal.getText().toString();
+        date = et_goal_date.getText().toString();
+        time = et_goal_time.getText().toString();
+        markedComplete = 0;
 
-        setAlarm();
 
         /*Show text if a title and description aren't set*/
         if(title.trim().isEmpty() || description.trim().isEmpty()){
@@ -201,13 +221,27 @@ public class GNewEditGoal extends AppCompatActivity{
             return;
         }
 
+
+        /*TODO: COMMENT */
+        doThingAThenThingB();
+
+
+
+
+
+
+
+
+
+
         /*Putting the Goal Information retrieved from the EditTexts into the Intent*/
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_DESCRIPTION, description);
         data.putExtra(EXTRA_DATE, date);
         data.putExtra(EXTRA_TIME, time);
-        data.putExtra(EXTRA_MC, marketComplete);
+        data.putExtra(EXTRA_MC, markedComplete);
+        data.putExtra(EXTRA_UPDATE, gId);
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);//Default value as -1 as this will never be a valid id
         if(id != -1){//Only if this is the case, put the id into the intent
@@ -220,34 +254,86 @@ public class GNewEditGoal extends AppCompatActivity{
         finish();
     }
 
-    private void setAlarm(){
+    /*TODO: COMMENT */
+    private void doThingAThenThingB(){
 
-        Calendar alarmCal = Calendar.getInstance();
+        /*TODO: COMMENT */
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
 
-        alarmCal.set(Calendar.YEAR, mYear);
-        alarmCal.set(Calendar.MONTH, mMonth);
-        alarmCal.set(Calendar.DAY_OF_MONTH, mDay);
-        alarmCal.set(Calendar.HOUR_OF_DAY, mHour);
-        alarmCal.set(Calendar.MINUTE, mMinute);
-        alarmCal.set(Calendar.SECOND, 0);
+                GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
 
-        Log.d("Diss", "Value of Hour: " + mHour);
-        Log.d("Diss", "Value of Minute: " + mMinute);
+                if(st_update.equals(EXTRA_UPDATE)){
+                    goal.setId(gId);
+                    GoalViewModel.update(goal);
+                    Log.d("Diss", "Value of gID update: " + gId);
+                }
+                else{
+                    gId = GoalViewModel.insertNotAsync(goal);
+                    Log.d("Diss", "Value of gID insert: " + gId);
+                }
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(this, AlertReceiver.class);
-        alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
 
-        /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
-        PendingIntent sender = PendingIntent.getBroadcast(this, mGoalId, alarmIntent, 0 );
+            }
+        });
 
-        if (alarmCal.before(Calendar.getInstance())) {
-            alarmCal.add(Calendar.DATE, 1);
-        }
-        /*SET for for but soon we want to do repeating*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
-        }
+
+        /*TODO: COMMENT */
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    iId = Math.toIntExact(gId);
+                }
+                Calendar alarmCal = Calendar.getInstance();
+
+                alarmCal.set(Calendar.YEAR, mYear);
+                alarmCal.set(Calendar.MONTH, mMonth);
+                alarmCal.set(Calendar.DAY_OF_MONTH, mDay);
+                alarmCal.set(Calendar.HOUR_OF_DAY, mHour);
+                alarmCal.set(Calendar.MINUTE, mMinute);
+                alarmCal.set(Calendar.SECOND, 0);
+
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(getApplicationContext(), AlertReceiver.class);
+                alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
+
+                /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
+                PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), iId, alarmIntent, 0 );
+
+                if (alarmCal.before(Calendar.getInstance())) {
+                    alarmCal.add(Calendar.DATE, 1);
+                }
+                /*SET for for but soon we want to do repeating*/
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+                    String radioString = radioButton.getText().toString();
+
+                    if(radioString.equals("Never")){
+
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
+                        Log.d("Diss", "in radio string equals never");
+
+                    }
+                    else if(radioString.equals("Daily")){
+
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
+                        Log.d("Diss", "in radio string equals daily");
+                    }
+                    else if(radioString.equals("Weekly")){
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, sender);
+                        Log.d("Diss", "in radio string equals weekly");
+                    }
+                }
+
+
+
+
+            }
+        });
 
     }
 

@@ -140,7 +140,6 @@ public class JournalNewStructure extends AppCompatActivity {
 
     /**Button onClick that launches the color picker*/
     public void changeColourOnClick(View v){
-        testTextView = findViewById(R.id.tv_test_text);
         openColorPicker();
     }
 
@@ -155,8 +154,9 @@ public class JournalNewStructure extends AppCompatActivity {
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
 
+                final EditText et_name_of_journal = (EditText) findViewById(R.id.et_name_of_journal);
                 mDefualtColour = color;
-                testTextView.setTextColor(mDefualtColour);
+                et_name_of_journal.setTextColor(mDefualtColour);
             }
         });
 
@@ -232,7 +232,7 @@ public class JournalNewStructure extends AppCompatActivity {
      * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
      * Set the Orientation Vertical and add to the scrollView*/
     private void initialiseScrollView(){
-         fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation);
+        fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation);
         fieldReGeneration.removeAllViews();
         scroll = new LinearLayout(this);
         scroll.setOrientation(LinearLayout.VERTICAL);

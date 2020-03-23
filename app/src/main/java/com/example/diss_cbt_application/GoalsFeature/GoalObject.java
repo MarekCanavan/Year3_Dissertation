@@ -20,7 +20,7 @@ public class GoalObject {
      *Table member variables*/
 
     @PrimaryKey(autoGenerate = true)//id is auto incremented
-    private int id;
+    private Long id;
 
     private String title;
 
@@ -46,12 +46,12 @@ public class GoalObject {
 
     /*Room uses this to set the id on the object
     * And also when we update a field in the table*/
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /*To persist these fields room needs getter methods for all of the fields*/
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

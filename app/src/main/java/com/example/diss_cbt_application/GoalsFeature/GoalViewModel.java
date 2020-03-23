@@ -35,6 +35,10 @@ public class GoalViewModel extends AndroidViewModel {
         repository.insert(goal);
     }
 
+    public static Long insertNotAsync(GoalObject goal){
+        return repository.insertNotAsync(goal);
+    }
+
     public static void update(GoalObject goal){
         repository.update(goal);
     }

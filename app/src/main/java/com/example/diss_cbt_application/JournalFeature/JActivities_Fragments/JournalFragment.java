@@ -105,6 +105,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
                 intent.putExtra(JournalContract.ENTRY_TIME, entry.getEntryTime());
                 intent.putExtra(JournalContract.ENTRY_DATE, entry.getEntryDate());
                 intent.putExtra(JournalContract.JOURNAL_COLOUR, entry.getJournalColour());
+                intent.putExtra(JournalContract.FK_ID, entry.getFk_id());
 
                 startActivity(intent);
 

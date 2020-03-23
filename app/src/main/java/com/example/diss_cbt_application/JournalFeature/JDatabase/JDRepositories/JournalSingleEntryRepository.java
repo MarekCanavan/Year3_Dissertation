@@ -2,11 +2,14 @@ package com.example.diss_cbt_application.JournalFeature.JDatabase.JDRepositories
 
 import android.app.Application;
 import android.database.sqlite.SQLiteConstraintException;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalDao;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalSingleEntryDao;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase;
 
@@ -38,6 +41,25 @@ public class JournalSingleEntryRepository {
     public Long insertNotAsync(JournalSingleEntryObject singleEntryObject){
         id = journalSingleEntryDao.insert(singleEntryObject);
         return id;
+    }
+
+    public void update (JournalSingleEntryObject singleEntryObject){
+        new UpdateJournalAsyncTask(journalSingleEntryDao).execute(singleEntryObject);
+    }
+
+    private static class UpdateJournalAsyncTask extends AsyncTask<JournalSingleEntryObject, Void, Void> {
+
+        private JournalSingleEntryDao journalSingleEntryDao;
+
+        private UpdateJournalAsyncTask(JournalSingleEntryDao journalSingleEntryDao){
+            this.journalSingleEntryDao = journalSingleEntryDao;
+        }
+
+        @Override
+        protected Void doInBackground(JournalSingleEntryObject... journalSingleEntryObjects) {
+            journalSingleEntryDao.update(journalSingleEntryObjects[0]);
+            return null;
+        }
     }
 
     public LiveData<List<JournalSingleEntryObject>> getAllEntries(){

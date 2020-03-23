@@ -9,75 +9,63 @@
 
     <EditText
         android:id="@+id/et_name_of_journal"
-        android:layout_width="338dp"
+        android:layout_width="280dp"
         android:layout_height="51dp"
         android:ems="10"
         android:hint="Name of Journal"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.048" />
 
     <Button
         android:id="@+id/bt_new_percentage"
         android:layout_width="175dp"
         android:layout_height="50dp"
         android:onClick="newPercentageOnClick"
-        android:text="New Percentage "
+        android:text="+    Numeric"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
+        app:layout_constraintHorizontal_bias="0.932"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.264" />
+        app:layout_constraintVertical_bias="0.173" />
+
 
     <Button
         android:id="@+id/bt_new_column"
         android:layout_width="175dp"
         android:layout_height="50dp"
         android:onClick="newColumnOnClick"
-        android:text="New Column"
+        android:text="+    Column"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
+        app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.173" />
 
     <Button
         android:id="@+id/bt_choose_colour"
-        android:layout_width="125dp"
+        android:layout_width="80dp"
         android:layout_height="50dp"
         android:onClick="changeColourOnClick"
         android:text="Colour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintHorizontal_bias="0.951"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
-
-
-    <TextView
-        android:id="@+id/tv_test_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Text"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.845"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.271" />
+        app:layout_constraintVertical_bias="0.048" />
 
     <ScrollView
         android:id="@+id/sv_field_generation"
         android:layout_width="350dp"
-        android:layout_height="360dp"
+        android:layout_height="460dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:orientation="vertical"
@@ -86,7 +74,7 @@
         app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.735"></ScrollView>
+        app:layout_constraintVertical_bias="0.671"></ScrollView>
 
     <Button
         android:id="@+id/bt_save_structure"

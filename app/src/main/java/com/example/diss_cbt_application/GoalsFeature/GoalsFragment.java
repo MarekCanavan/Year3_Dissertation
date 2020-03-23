@@ -41,6 +41,7 @@ public class GoalsFragment extends Fragment {
     private GoalViewModel goalViewModel;
 
     public ImageView mDeleteImage;
+    int iId;
 
     public GoalsFragment() {
         super();
@@ -97,20 +98,28 @@ public class GoalsFragment extends Fragment {
                 intent.putExtra(GNewEditGoal.EXTRA_TIME, goal.getTime());
                 intent.putExtra(GNewEditGoal.EXTRA_TITLE, goal.getTitle());
                 intent.putExtra(GNewEditGoal.EXTRA_MC, goal.getMarkedComplete());
+                intent.putExtra(GNewEditGoal.EXTRA_UPDATE, GNewEditGoal.EXTRA_UPDATE);
 
                 getActivity().startActivityForResult(intent, MainActivity.EDIT_GOAL_REQUEST);
             }
 
+
+            /*TODO: COMMENT */
             @Override
             public void onDeleteClick(GoalObject goal) {
 
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    iId = Math.toIntExact(goal.getId());
+                }
 
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(getContext(), AlertReceiver.class);
 
                 /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
-                PendingIntent sender = PendingIntent.getBroadcast(getContext(), goal.getId(), alarmIntent, 0 );
+                PendingIntent sender = PendingIntent.getBroadcast(getContext(), iId, alarmIntent, 0 );
 
+
+                /*TODO: COMMENT */
                 alarmManager.cancel(sender);
 
                 goalViewModel.delete(goal);

@@ -16,7 +16,7 @@ import java.util.List;
 public interface GoalDao {
 
     @Insert
-    void insert(GoalObject goal);
+    Long insert(GoalObject goal);
 
     @Update
     void update(GoalObject goal);

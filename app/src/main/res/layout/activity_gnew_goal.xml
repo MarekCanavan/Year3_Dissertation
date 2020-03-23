@@ -45,7 +45,7 @@
         app:layout_constraintVertical_bias="0.404" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/bt_goal_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="chooseDateOnClick"
@@ -58,7 +58,7 @@
         app:layout_constraintVertical_bias="0.474" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/bt_goal_time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="chooseTimeOnClick"
@@ -155,10 +155,10 @@
             android:text="Daily"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.36"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.705"
-            app:layout_constraintHorizontal_bias="0.36"/>
+            app:layout_constraintVertical_bias="0.705" />
 
         <RadioButton
             android:id="@+id/radio_weekly"
@@ -173,18 +173,6 @@
             app:layout_constraintVertical_bias="0.705"
             app:layout_constraintHorizontal_bias="0.57" />
 
-        <RadioButton
-            android:id="@+id/radio_monthly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="checkButton"
-            android:text="Monthly"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.705"
-            app:layout_constraintHorizontal_bias="0.83"/>
     </RadioGroup>
 
 

@@ -240,15 +240,15 @@ public class MainActivity extends AppCompatActivity {
             String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
             int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
 
-            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
-            GoalViewModel.insert(goal);
+//            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
+//            GoalViewModel.insert(goal);
 
 
             Toast.makeText(this, "Goal Saved", Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == EDIT_GOAL_REQUEST && resultCode == RESULT_OK){
 
-            int id = data.getIntExtra(GNewEditGoal.EXTRA_ID, -1);
+            Long id = data.getLongExtra(GNewEditGoal.EXTRA_ID, -1);
 
             if(id == -1){
                 Toast.makeText(this, "Goal Can't be updated", Toast.LENGTH_SHORT).show();
@@ -260,10 +260,10 @@ public class MainActivity extends AppCompatActivity {
             String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
             String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
             int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
-
-            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
-            goal.setId(id);
-            GoalViewModel.update(goal);
+//
+//            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
+//            goal.setId(id);
+//            GoalViewModel.update(goal);
 
             Toast.makeText(this, "Goal Updated", Toast.LENGTH_SHORT).show();
 

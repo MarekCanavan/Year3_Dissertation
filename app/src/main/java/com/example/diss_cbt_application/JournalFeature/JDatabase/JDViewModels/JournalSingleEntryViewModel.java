@@ -38,6 +38,10 @@ public class JournalSingleEntryViewModel extends AndroidViewModel {
         return repository.insertNotAsync(journalSingleEntryObject);
     }
 
+    public void update (JournalSingleEntryObject singleEntryObject){
+        repository.update(singleEntryObject);
+    }
+
     public LiveData<List<JournalSingleEntryObject>> getAllEntries(){
         return allEntries;
     }

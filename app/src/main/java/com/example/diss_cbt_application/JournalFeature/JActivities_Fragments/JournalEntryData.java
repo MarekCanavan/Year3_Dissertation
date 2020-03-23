@@ -15,7 +15,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
@@ -33,14 +35,16 @@ public class JournalEntryData extends AppCompatActivity {
 
     /*Member Variables fo the text views in the Activity*/
     TextView tv_entry_name, tv_journal_name, tv_journal_date, tv_journal_time;
+    EditText et_entry_name;
 
     /*Setting strings*/
     private static final String TEXT_VIEW = "TextView";
     private static final String EDIT_VIEW = "EditView";
-    String gDataRepresentation, date, time;
+    String gDataRepresentation, date, time, mEntryName, mJournalName;
 
     /*Member Variables*/
     Long mainEntryID = 0L;
+    Long fk_id;
     int mJournalColour;
     boolean edit = true;
     private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
@@ -77,11 +81,12 @@ public class JournalEntryData extends AppCompatActivity {
         /*Unpacking the bundle and placing values in variables*/
         Bundle entryBundle = getIntent().getExtras();;
         mainEntryID = entryBundle.getLong(JournalContract._ID);
-        String mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
-        String mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
+        mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
+        mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
         String mEntryTime = entryBundle.getString(JournalContract.ENTRY_TIME);
         String mEntryDate = entryBundle.getString(JournalContract.ENTRY_DATE);
         mJournalColour = entryBundle.getInt(JournalContract.JOURNAL_COLOUR);
+        fk_id = entryBundle.getLong(JournalContract.FK_ID);
 
         /*Getting reference to the TextViews in the Activity*/
         tv_entry_name = findViewById(R.id.tv_entry_name);
@@ -203,6 +208,14 @@ public class JournalEntryData extends AppCompatActivity {
 
         if(edit){//true
 
+
+            tv_entry_name = findViewById(R.id.tv_entry_name);
+            tv_entry_name.setVisibility(View.INVISIBLE);
+
+            et_entry_name = findViewById(R.id.et_entry_name);
+            et_entry_name.setVisibility(View.VISIBLE);
+            et_entry_name.setText(mEntryName);
+
             /*Re-Generate the EditTexts with the data so they can be edited*/
             createEntryData(mainEntryID, EDIT_VIEW);
             bt_save_edit.setText("Save");
@@ -213,22 +226,40 @@ public class JournalEntryData extends AppCompatActivity {
 
             /*Save the fields the user has been edited back to the database*/
             bt_save_edit.setText("Edit");
-            saveEditedData();
+
+
+            //Getting current date to save in database
+            SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
+            date = dateFormat.format(new java.util.Date());
+
+            //Getting current time to save in database
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            time = timeFormat.format(new java.util.Date());
+
+            saveEditedEntry();
+            saveEditedEntryData();
         }
 
     }
 
+    public void saveEditedEntry(){
+
+        JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(et_entry_name.getText().toString(),
+                date, time, mJournalName, mJournalColour, fk_id);
+
+        journalSingleEntryObject.setId(mainEntryID);
+
+        JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this).get(JournalSingleEntryViewModel.class);
+        journalSingleEntryViewModel.update(journalSingleEntryObject);
+
+
+
+    }
+
+
     /*Called when the user chooses to 'Save' the update they made to their entry
     * Sends an update request to the database**/
-    public void saveEditedData(){
-
-        //Getting current date to save in database
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
-        date = dateFormat.format(new java.util.Date());
-
-        //Getting current time to save in database
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        time = timeFormat.format(new java.util.Date());
+    public void saveEditedEntryData(){
 
 
         /*Iterates through all of the objects and updates the fields with the changes the user has made
