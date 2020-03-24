@@ -84,6 +84,8 @@ public class GNewEditGoal extends AppCompatActivity{
     private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
 
+    final Calendar myCalendar = Calendar.getInstance();
+
     /**
      * onCreate is run when the Activity is first loaded
      * This function is responsible for populating the EditTexts in the Activity
@@ -141,6 +143,21 @@ public class GNewEditGoal extends AppCompatActivity{
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        /*
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+
+
+            }
+        };*/
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -300,6 +317,8 @@ public class GNewEditGoal extends AppCompatActivity{
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(getApplicationContext(), AlertReceiver.class);
                 alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
+                alarmIntent.putExtra("description", et_description_of_goal.getText().toString());
+                alarmIntent.putExtra("id", iId);
 
                 /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
                 PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), iId, alarmIntent, 0 );

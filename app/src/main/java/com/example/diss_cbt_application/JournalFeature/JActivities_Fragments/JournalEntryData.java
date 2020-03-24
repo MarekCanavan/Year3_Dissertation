@@ -252,8 +252,6 @@ public class JournalEntryData extends AppCompatActivity {
         JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this).get(JournalSingleEntryViewModel.class);
         journalSingleEntryViewModel.update(journalSingleEntryObject);
 
-
-
     }
 
 

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompat.Builder;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.diss_cbt_application.R;
 
@@ -15,21 +17,29 @@ import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
 
 public class AlertReceiver extends BroadcastReceiver {
 
+    public NotificationManagerCompat notificationManager;
+
     /*This method is called when the alarm is fired*/
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Log.d("Diss", "In Alert Receiver");
+        notificationManager = NotificationManagerCompat.from(context);
+        int id = 0;
 
-        /*
-        Notification notification = new NotificationCompat.Builder(this, GOAL_CHANNEL)
+        String title = intent.getStringExtra("title");
+        String description = intent.getStringExtra("description");
+        id = intent.getIntExtra("id", id);
+
+
+        Notification notification =  new NotificationCompat.Builder(context, GOAL_CHANNEL)
                 .setSmallIcon(R.drawable.ic_attachment)
-                .setContentTitle("Test Goal Title")
-                .setContentText("Test Goal Description")
+                .setContentTitle(title)
+                .setContentText(description)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
 
-        notificationManager.notify(1, notification);*/
+        notificationManager.notify(id, notification);
 
         Toast.makeText(context, "Alarm Gone off", Toast.LENGTH_LONG).show();
 
