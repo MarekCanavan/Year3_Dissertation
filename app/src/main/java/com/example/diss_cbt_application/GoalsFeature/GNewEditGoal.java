@@ -1,7 +1,6 @@
 package com.example.diss_cbt_application.GoalsFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -33,14 +32,16 @@ import java.util.concurrent.Executors;
  *      - Goal Title
  *      - Goal Description
  *      - Goal Time and Date for completion
+ *      - How often (if ever) they want the Goal to repeat
+ *
+ * This class also utilises the AlarmManager, which sends a PendingIntent (with id of the goal,
+ * so that it is unique to each goal). The Pending Intent is received by the AlertReceiver Class
+ * Where a Notification is generated for the Alarm at the time the user defines
  **/
 public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     /*Declaring integers needed for the Time and Date picker*/
     private int mYear, mMonth, mDay, mHour, mMinute;
-
-    /*Declaring integers for the functionality of the goals*/
-    private int mMarkedComplete;
 
     /*Declaring the EditText Fields so that the data can be retrieved and persisted to the database*/
     private EditText et_goal_date, et_goal_time, et_description_of_goal, et_title_of_goal;
@@ -55,23 +56,25 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
     public static final String EXTRA_MC = "EXTRA_MC";
     public static final String EXTRA_UPDATE = "EXTRA_UPDATE";
 
+    /*Defining some strings for the repetition of the Goals*/
+    public static final String NEVER = "Never";
+    public static final String DAILY = "Daily";
+    public static final String WEEKLY = "Weekly";
+
     /*Declaring member variables for the RadioGroup which assigned when/if the goal will repeat*/
     RadioGroup radioGroup;
     RadioButton radioButton;
 
-    private NotificationManagerCompat notificationManager;
-
-    private int mGoalId, iId, markedComplete;
+    /*Thees member variables are used for the Alarm Manager implementation*/
+    private int iId, markedComplete;
     private Long gId;
     private String st_update, title, description, date, time;
+    int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute; //For the setting of the date and time picker
+    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute; //For the setting of the date and time picker
 
     /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
     private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
-
-    /*TODO: Better variable names */
-    int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute;
-    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
 
     /**
      * onCreate is run when the Activity is first loaded
@@ -83,23 +86,19 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         setContentView(R.layout.activity_gnew_goal);
 
         /*Assigning the EditTexts to their correct fields in the layout.xml file*/
-        et_goal_date = (EditText) findViewById(R.id.et_goal_date);
-        et_goal_time = (EditText) findViewById(R.id.et_goal_time);
+        et_goal_date = findViewById(R.id.et_goal_date);
+        et_goal_time = findViewById(R.id.et_goal_time);
         et_description_of_goal = findViewById(R.id.et_description_of_goal);
         et_title_of_goal = findViewById(R.id.et_title_of_goal);
 
         /*Assigning the RadioGroup member variables*/
         radioGroup = findViewById(R.id.goal_radioGroup);
+        radioButton = null;
 
-
-        /*TODO: COMMENT */
-        notificationManager = NotificationManagerCompat.from(this);
-
-        mMarkedComplete = 0;//Initially every goal is marked incomplete
-
-
+        /*Initialising variables, as checks are done against them later in the class*/
         st_update = "";
         gId = -1L;
+
         /*Retrieving the title, description, date and time from the intent
         * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
@@ -125,15 +124,16 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
      * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseDateOnClick(View v){
 
-
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
-        if(gId != -1L){
+        /*This checks if gId (GlobalId) has been set
+        * The same Activity is used when loaded from a card on the recycler view or just a new goal
+        * The time that is parsed to the Date Fragment depends on this */
+        if(gId != -1L){//If globalId has been overwritten, then we have come from the recyclerView
             String st_date = et_goal_date.getText().toString();
             String[] dateArray = st_date.split("-");
             st_dayOfMonth = dateArray[0];
@@ -145,12 +145,10 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
             ps_dayOfMonth = Integer.parseInt(st_dayOfMonth);
 
         }
-        else{
-
+        else{//GlobalId not overwritten
             ps_year = c.get(Calendar.YEAR);
             ps_monthOfYear = c.get(Calendar.MONTH);
             ps_dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-
         }
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -164,6 +162,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
 
     }
 
+
+    /*When the user sets a new Date the member variables are set and the date is presented to the user*/
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         mYear = year;
@@ -184,6 +184,10 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
 
+
+        /*This checks if gId (GlobalId) has been set
+         * The same Activity is used when loaded from a card on the recycler view or just a new goal
+         * The time that is parsed to the Time Fragment depends on this */
         if(gId != -1L){
 
             String st_time = et_goal_time.getText().toString();
@@ -201,6 +205,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         }
 
 
+        /*When the user sets a new Time the member variables are set and the time is presented to the user*/
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(GNewEditGoal.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -215,8 +220,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
 
     }
 
-
-    /*TODO: COMMENT */
+    /*This function handles when the user changes when they want the goal to repeat on the RadioGroup */
     public void checkButton(View v){
         int radioId = radioGroup.getCheckedRadioButtonId();
         
@@ -246,18 +250,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
             return;
         }
 
-
-        /*TODO: COMMENT */
+        /*Call to the function that handles the saving of the goal in a seperate thread of execution*/
         doThingAThenThingB();
-
-
-
-
-
-
-
-
-
 
         /*Putting the Goal Information retrieved from the EditTexts into the Intent*/
         Intent data = new Intent();
@@ -279,10 +273,14 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         finish();
     }
 
-    /*TODO: COMMENT */
+    /**This function is very important for the persisting of data to the database
+     * Room will only do database operations on a background thread as to not block the main thread
+     * In order to give each Alarm Manager a unique ID that related to the goal the Alarm is for the id of the
+     * goal is needed. So we need to insert the goal and retrieve the id from this insertion and then give
+     * that id to the AlarmManager, this can only be done one the first execution thread is finished*/
     private void doThingAThenThingB(){
 
-        /*TODO: COMMENT */
+        /*Thread 1: Inserts or Updates the goal, depending on what state the activity is in*/
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -304,7 +302,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         });
 
 
-        /*TODO: COMMENT */
+        /*Thread 2: Handles setting the AlarmManger now it has the id of the Goal just inserted*/
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -334,31 +332,40 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
                 if (alarmCal.before(Calendar.getInstance())) {
                     alarmCal.add(Calendar.DATE, 1);
                 }
-                /*SET for for but soon we want to do repeating*/
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-                    String radioString = radioButton.getText().toString();
+                    String radioString;
 
-                    if(radioString.equals("Never")){
+                    /*This is a check to see if the user has set a time they want the goal to repeat*/
+                    if(radioButton == null){
+                        radioString = NEVER;
+                    }
+                    else{
+                        radioString = radioButton.getText().toString();
+                    }
 
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
-                        Log.d("Diss", "in radio string equals never");
+                    /*This chain of else/if statements handles how the AlarmManger is set depending on
+                    * when the user indicated they want the goal to repeat*/
+                    if(radioString.equals(NEVER)){
+
+                        if (alarmManager != null) {
+                            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
+                        }
 
                     }
-                    else if(radioString.equals("Daily")){
+                    else if(radioString.equals(DAILY)){
 
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
-                        Log.d("Diss", "in radio string equals daily");
+                        if (alarmManager != null) {
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
+                        }
                     }
-                    else if(radioString.equals("Weekly")){
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, sender);
-                        Log.d("Diss", "in radio string equals weekly");
+                    else if(radioString.equals(WEEKLY)){
+                        if (alarmManager != null) {
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, sender);
+                        }
                     }
                 }
-
-
-
-
             }
         });
 

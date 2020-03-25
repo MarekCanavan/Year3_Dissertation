@@ -18,7 +18,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
@@ -61,12 +60,12 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     LinearLayout scroll;
 
     /*Defining Arraylists used throughout the class*/
-    List<String> columnNames =new ArrayList<String>();
-    List<String> entryDataList =new ArrayList<String>();
-    List<String> columnTypes =new ArrayList<String>();
-    ArrayList<EditText> allEds = new ArrayList<EditText>();
-    List<Long> uniqueEntryIDs = new ArrayList<Long>();
-    List<Long> fk_ids = new ArrayList<Long>();
+    List<String> columnNames =new ArrayList<>();
+    List<String> entryDataList =new ArrayList<>();
+    List<String> columnTypes =new ArrayList<>();
+    ArrayList<EditText> allEds = new ArrayList<>();
+    List<Long> uniqueEntryIDs = new ArrayList<>();
+    List<Long> fk_ids = new ArrayList<>();
 
 
     @Override
@@ -79,6 +78,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         uniqueEntryIDs.clear();
         fk_ids.clear();
 
+
+        /*Initialising values in onCreate as they are used in checks later in the class*/
         time = "";
         date = "";
         mainEntryID = 0L;
@@ -93,7 +94,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     public void unpackingBundle(){
 
         /*Unpacking the bundle and placing values in variables*/
-        Bundle entryBundle = getIntent().getExtras();;
+        Bundle entryBundle = getIntent().getExtras();
         mainEntryID = entryBundle.getLong(JournalContract._ID);
         mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
         mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
@@ -207,7 +208,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
      * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
      * Set the Orientation Vertical and add to the scrollView*/
     private void initialiseScrollView(){
-        ScrollView fieldReGeneration = (ScrollView) findViewById(R.id.sv_field_generation_entry_data);
+        ScrollView fieldReGeneration = findViewById(R.id.sv_field_generation_entry_data);
         fieldReGeneration.removeAllViews();
         scroll = new LinearLayout(getApplicationContext());
         scroll.setOrientation(LinearLayout.VERTICAL);
@@ -241,6 +242,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
             /*Save the fields the user has been edited back to the database*/
             bt_save_edit.setText("Edit");
 
+
+            /*TODO: COMMENT*/
             if(time.equals("")){
                 time = mEntryTime;
             }
@@ -320,6 +323,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
 
+        /*TODO: COMMENT*/
 
         String st_date = tv_journal_date.getText().toString();
         String[] dateArray = st_date.split("-");
@@ -331,6 +335,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         ps_monthOfYear = Integer.parseInt(st_monthOfYear);
         ps_dayOfMonth = Integer.parseInt(st_dayOfMonth);
 
+        /*TODO: COMMENT*/
         DatePickerDialog datePickerDialog = new DatePickerDialog(JournalEntryData.this,
                 (DatePickerDialog.OnDateSetListener) this,
                 ps_year,
@@ -342,6 +347,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
     }
 
+    /*TODO: COMMENT*/
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         mYear = year;
@@ -349,6 +355,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         mDay = dayOfMonth;
         SimpleDateFormat inFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
+        /*TODO: COMMENT*/
         try {
             Date myDate = inFormat.parse(mDay+"-"+mMonth+"-"+mYear);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
@@ -370,6 +377,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
      * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseTimeOnClick(View v){
 
+
+        /*TODO: COMMENT*/
         // Get Current Time
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -382,6 +391,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         ps_hour = Integer.parseInt(st_hour);
         ps_minute = Integer.parseInt(st_minute);
 
+        /*TODO: COMMENT*/
 
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(JournalEntryData.this, new TimePickerDialog.OnTimeSetListener() {

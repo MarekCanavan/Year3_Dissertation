@@ -54,9 +54,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     String journalName, st_entry_name, date, time;
 
     /*ArrayLists are used to store the data and fields for persistence into the database*/
-    List<String> columnTypes =new ArrayList<String>();
-    List<String> columnNames = new ArrayList<String>();
-    ArrayList<EditText> allEds = new ArrayList<EditText>();
+    List<String> columnTypes = new ArrayList<>();
+    List<String> columnNames = new ArrayList<>();
+    ArrayList<EditText> allEds = new ArrayList<>();
 
     /*Member Variables needed to reference the ViewModels to insert the entry into the database*/
     JournalStructureObject journalStructureObject;
@@ -190,9 +190,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             //Adding variables to array for later persistance
             columnTypes.add(columnType);
             columnNames.add(columnName);
-
         }
-
     }
 
     /**When the user has completed their entry and chooses to click the 'Save' button, this function is called
@@ -203,7 +201,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
         /*Collecting Strings from edit texts for persistance and to check the fields have the correct data in them
         * The string for date and time is needed for correct persistence to the database, so a check is needed*/
-        EditText ed_entry_name = (EditText) findViewById(R.id.et_name_of_entry);
+        EditText ed_entry_name = findViewById(R.id.et_name_of_entry);
         st_entry_name = ed_entry_name.getText().toString();
 
         EditText ed_entry_date = findViewById(R.id.et_entry_date);
@@ -220,7 +218,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             doThingAThenThingB();
             finish();
         }
-
     }
 
 
@@ -231,6 +228,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
      * A sharedSingleThreadExecutor needs to be setup so that the insertion can be completed, the id saved in entryID
      * and then that entryID can be used in the next thread to insert the EntryData Object */
     private void doThingAThenThingB(){
+
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -264,7 +262,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                     journalSingleEntryDataViewModel.insert(journalSingleEntryDataObject);
 
                 }
-
             }
         });
 
@@ -283,6 +280,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
+        /*TODO: COMMENT*/
         DatePickerDialog mDatePicker;
         mDatePicker = new DatePickerDialog(JournalCompleteEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -295,7 +293,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 try {
                     Date myDate = inFormat.parse(mDay+"-"+mMonth+"-"+mYear);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
-                    date = inFormat.format(myDate);
+                    if (myDate != null) {
+                        date = inFormat.format(myDate);
+                    }
                     //date =simpleDateFormat.format(myDate);
 
                     et_entry_goal_date.setText(date);
@@ -324,6 +324,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
 
+        /*TODO: COMMENT*/
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(JournalCompleteEntryActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override

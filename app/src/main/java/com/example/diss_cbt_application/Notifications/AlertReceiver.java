@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationCompat.Builder;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.diss_cbt_application.R;
