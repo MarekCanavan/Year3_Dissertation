@@ -1,23 +1,16 @@
 package com.example.diss_cbt_application.GoalsFeature;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -27,20 +20,12 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.diss_cbt_application.DatabaseHelper;
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalNewStructure;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
 
 /**
  * This class represents a New Goal
@@ -49,7 +34,7 @@ import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
  *      - Goal Description
  *      - Goal Time and Date for completion
  **/
-public class GNewEditGoal extends AppCompatActivity{
+public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     /*Declaring integers needed for the Time and Date picker*/
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -84,7 +69,9 @@ public class GNewEditGoal extends AppCompatActivity{
     private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
 
-    final Calendar myCalendar = Calendar.getInstance();
+    /*TODO: Better variable names */
+    int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute;
+    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
 
     /**
      * onCreate is run when the Activity is first loaded
@@ -112,7 +99,7 @@ public class GNewEditGoal extends AppCompatActivity{
 
 
         st_update = "";
-        gId = 0L;
+        gId = -1L;
         /*Retrieving the title, description, date and time from the intent
         * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
@@ -138,44 +125,51 @@ public class GNewEditGoal extends AppCompatActivity{
      * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseDateOnClick(View v){
 
+
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        /*
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener(){
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
 
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+        if(gId != -1L){
+            String st_date = et_goal_date.getText().toString();
+            String[] dateArray = st_date.split("-");
+            st_dayOfMonth = dateArray[0];
+            st_monthOfYear = dateArray[1];
+            st_year = dateArray[2];
 
+            ps_year = Integer.parseInt(st_year);
+            ps_monthOfYear = Integer.parseInt(st_monthOfYear);
+            ps_dayOfMonth = Integer.parseInt(st_dayOfMonth);
 
-            }
-        };*/
+        }
+        else{
+
+            ps_year = c.get(Calendar.YEAR);
+            ps_monthOfYear = c.get(Calendar.MONTH);
+            ps_dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
+        }
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-
-                        mYear = year;
-                        mMonth = monthOfYear;
-                        mDay = dayOfMonth;
-                        et_goal_date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-                    }
-                }, mYear, mMonth, mDay);
+                this,
+                ps_year,
+                ps_monthOfYear,
+                ps_dayOfMonth
+        );
         datePickerDialog.show();
 
 
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        mYear = year;
+                        mMonth = month;
+                        mDay = dayOfMonth;
+                        et_goal_date.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
     }
 
     /**
@@ -190,20 +184,34 @@ public class GNewEditGoal extends AppCompatActivity{
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
 
-        // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
+        if(gId != -1L){
 
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
+            String st_time = et_goal_time.getText().toString();
+            String[] dateArray = st_time.split(":");
+            st_hour = dateArray[0];
+            st_minute = dateArray[1];
 
-                        mHour = hourOfDay;
-                        mMinute = minute;
-                        et_goal_time.setText(hourOfDay + ":" + minute);
-                    }
-                }, mHour, mMinute, true);
-        timePickerDialog.show();
+            ps_hour = Integer.parseInt(st_hour);
+            ps_minute = Integer.parseInt(st_minute);
+
+        }
+        else{
+            ps_hour = c.get(Calendar.HOUR_OF_DAY);
+            ps_minute = c.get(Calendar.MINUTE);
+        }
+
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(GNewEditGoal.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;
+                et_goal_time.setText(hourOfDay + ":" + minute);
+            }
+        }, ps_hour, ps_minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
 
     }
 

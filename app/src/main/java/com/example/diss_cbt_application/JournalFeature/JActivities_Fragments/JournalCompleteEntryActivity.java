@@ -4,17 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
@@ -24,8 +29,11 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.Jo
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -58,6 +66,15 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
     private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
+
+    int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute;
+    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
+    private EditText et_entry_goal_date, et_entry_goal_time;
+
+    /*Declaring integers needed for the Time and Date picker*/
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +83,10 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         /*Initialise Values*/
         initialiseScrollView();
         columnCounter = 0;
+
+        /*Assigning the EditTexts to their correct fields in the layout.xml file*/
+        et_entry_goal_date = (EditText) findViewById(R.id.et_entry_date);
+        et_entry_goal_time = (EditText) findViewById(R.id.et_entry_time);
 
         /*Retrieve bundle and store the Journal ID, Colour and Name and store in member variables*/
         Bundle journalBundle = getIntent().getExtras();
@@ -180,23 +201,28 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
      * A separate function is called to store all and this is done on a separate thread, as to not block the main thread*/
     public void saveEntryOnClick(View v){
 
-        //Collecting entryName from EditText
+        /*Collecting Strings from edit texts for persistance and to check the fields have the correct data in them
+        * The string for date and time is needed for correct persistence to the database, so a check is needed*/
         EditText ed_entry_name = (EditText) findViewById(R.id.et_name_of_entry);
         st_entry_name = ed_entry_name.getText().toString();
 
-        //Getting current date to save in database
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
-        date = dateFormat.format(new java.util.Date());
+        EditText ed_entry_date = findViewById(R.id.et_entry_date);
+        String st_ed_entry_date = ed_entry_date.getText().toString();
 
-        //Getting current time to save in database
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        time = timeFormat.format(new java.util.Date());
+        EditText ed_entry_time = findViewById(R.id.et_entry_time);
+        String st_ed_entry_time = ed_entry_time.getText().toString();
 
-        doThingAThenThingB();
-
-        finish();
+        /*If date and tie havent been selected dont let them save*/
+        if(st_ed_entry_date.trim().isEmpty() || st_ed_entry_time.trim().isEmpty()){
+            Toast.makeText(this, "Please enter a Date and Time for your Entry", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            doThingAThenThingB();
+            finish();
+        }
 
     }
+
 
     /**This function is very important for the persisting of data to the database
      * Room will only do database operations on a background thread as to not block the main thread
@@ -241,6 +267,84 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    /**
+     * This function utilises the DatePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the date for the goal to be completed by
+     * the integers mYear, mMonth and mDay previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
+    public void chooseDateOnClick(View v){
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog mDatePicker;
+        mDatePicker = new DatePickerDialog(JournalCompleteEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                mYear = year;
+                mMonth = month;
+                mDay = dayOfMonth;
+                SimpleDateFormat inFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+                try {
+                    Date myDate = inFormat.parse(mDay+"-"+mMonth+"-"+mYear);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
+                    date = inFormat.format(myDate);
+                    //date =simpleDateFormat.format(myDate);
+
+                    et_entry_goal_date.setText(date);
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, mYear, mMonth, mDay);//Yes 24 hour time
+        mDatePicker.setTitle("Select Date");
+        mDatePicker.show();
+
+    }
+
+    /**
+     * This function utilises the TimePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the time for the goal to be completed by
+     * the integers mHour, mMinute previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
+    public void chooseTimeOnClick(View v){
+
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(JournalCompleteEntryActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;;
+                //Getting current time to save in database
+                try {
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    Date myTime = timeFormat.parse(hourOfDay + ":" + minute);
+                    time= timeFormat.format(myTime);
+
+                    et_entry_goal_time.setText(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, mHour, mMinute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
 
     }
 

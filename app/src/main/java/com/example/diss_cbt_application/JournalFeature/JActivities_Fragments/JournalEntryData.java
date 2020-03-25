@@ -4,16 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
@@ -21,8 +26,11 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.Jo
 import com.example.diss_cbt_application.JournalFeature.JournalContract;
 import com.example.diss_cbt_application.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,7 +39,7 @@ import java.util.Locale;
  * This Activity is a skeleton to represent any entries data to the user
  * The user has the option of editing/updating their entry as well as deleting it
  * Both of these options will be sent to the database which will be updated appropriately*/
-public class JournalEntryData extends AppCompatActivity {
+public class JournalEntryData extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     /*Member Variables fo the text views in the Activity*/
     TextView tv_entry_name, tv_journal_name, tv_journal_date, tv_journal_time;
@@ -40,12 +48,14 @@ public class JournalEntryData extends AppCompatActivity {
     /*Setting strings*/
     private static final String TEXT_VIEW = "TextView";
     private static final String EDIT_VIEW = "EditView";
-    String gDataRepresentation, date, time, mEntryName, mJournalName;
+    String gDataRepresentation, date, time, mEntryName, mJournalName, mEntryTime, mEntryDate;
+    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
 
     /*Member Variables*/
     Long mainEntryID = 0L;
     Long fk_id;
-    int mJournalColour;
+    int mJournalColour, mYear, mMonth, mDay, mHour, mMinute,
+                    ps_year, ps_monthOfYear, ps_dayOfMonth, ps_hour, ps_minute;
     boolean edit = true;
     private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
     LinearLayout scroll;
@@ -69,6 +79,10 @@ public class JournalEntryData extends AppCompatActivity {
         uniqueEntryIDs.clear();
         fk_ids.clear();
 
+        time = "";
+        date = "";
+        mainEntryID = 0L;
+
         unpackingBundle();//unpack bundle and populate Text Fields
 
         createEntryData(mainEntryID, TEXT_VIEW);//initially the data just needs to be presented to the user in a TextView
@@ -83,8 +97,8 @@ public class JournalEntryData extends AppCompatActivity {
         mainEntryID = entryBundle.getLong(JournalContract._ID);
         mEntryName = entryBundle.getString(JournalContract.ENTRY_NAME);
         mJournalName = entryBundle.getString(JournalContract.JOURNAL_NAME);
-        String mEntryTime = entryBundle.getString(JournalContract.ENTRY_TIME);
-        String mEntryDate = entryBundle.getString(JournalContract.ENTRY_DATE);
+        mEntryTime = entryBundle.getString(JournalContract.ENTRY_TIME);
+        mEntryDate = entryBundle.getString(JournalContract.ENTRY_DATE);
         mJournalColour = entryBundle.getInt(JournalContract.JOURNAL_COLOUR);
         fk_id = entryBundle.getLong(JournalContract.FK_ID);
 
@@ -227,14 +241,13 @@ public class JournalEntryData extends AppCompatActivity {
             /*Save the fields the user has been edited back to the database*/
             bt_save_edit.setText("Edit");
 
+            if(time.equals("")){
+                time = mEntryTime;
+            }
 
-            //Getting current date to save in database
-            SimpleDateFormat dateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
-            date = dateFormat.format(new java.util.Date());
-
-            //Getting current time to save in database
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            time = timeFormat.format(new java.util.Date());
+            if(date.equals("")){
+                date = mEntryDate;
+            }
 
             saveEditedEntry();
             saveEditedEntryData();
@@ -291,4 +304,107 @@ public class JournalEntryData extends AppCompatActivity {
         finish();
 
     }
+
+    /**
+     * This function utilises the DatePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the date for the goal to be completed by
+     * the integers mYear, mMonth and mDay previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
+    public void chooseDateOnClick(View v){
+
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+
+        String st_date = tv_journal_date.getText().toString();
+        String[] dateArray = st_date.split("-");
+        st_dayOfMonth = dateArray[0];
+        st_monthOfYear = dateArray[1];
+        st_year = dateArray[2];
+
+        ps_year = Integer.parseInt(st_year);
+        ps_monthOfYear = Integer.parseInt(st_monthOfYear);
+        ps_dayOfMonth = Integer.parseInt(st_dayOfMonth);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(JournalEntryData.this,
+                (DatePickerDialog.OnDateSetListener) this,
+                ps_year,
+                ps_monthOfYear,
+                ps_dayOfMonth
+        );
+        datePickerDialog.show();
+
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        mYear = year;
+        mMonth = month;
+        mDay = dayOfMonth;
+        SimpleDateFormat inFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+        try {
+            Date myDate = inFormat.parse(mDay+"-"+mMonth+"-"+mYear);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
+            date = inFormat.format(myDate);
+            //date =simpleDateFormat.format(myDate);
+
+            tv_journal_date.setText(date);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This function utilises the TimePickerDialog provided by android to give the user a
+     * clean and simple way of choosing the time for the goal to be completed by
+     * the integers mHour, mMinute previously defined are set in this function
+     * as is the EditText next to the Date Picker which shows the user the date they picked*/
+    public void chooseTimeOnClick(View v){
+
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        String[] dateArray = mEntryTime.split(":");
+        st_hour = dateArray[0];
+        st_minute = dateArray[1];
+
+        ps_hour = Integer.parseInt(st_hour);
+        ps_minute = Integer.parseInt(st_minute);
+
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(JournalEntryData.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;
+
+                try {
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    Date myTime = timeFormat.parse(hourOfDay + ":" + minute);
+                    time= timeFormat.format(myTime);
+
+                    tv_journal_time.setText(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, ps_hour, ps_minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+
+    }
+
 }
