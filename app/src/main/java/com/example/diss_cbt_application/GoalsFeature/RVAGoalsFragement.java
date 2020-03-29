@@ -56,7 +56,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
         holder.gTitle.setText(currentGoal.getTitle());
         holder.time.setText(currentGoal.getTime());
         holder.date.setText(currentGoal.getDate());
-        //holder.repeat.setText(currentGoal.getRepeat());
+        holder.repeat.setText(currentGoal.getRepeat());
 
     }
 
