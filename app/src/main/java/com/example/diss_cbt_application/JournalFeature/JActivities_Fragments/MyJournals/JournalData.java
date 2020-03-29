@@ -1,11 +1,13 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.MyJournals;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.format.DateFormat;
@@ -30,6 +32,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -46,7 +49,7 @@ import java.util.concurrent.Executors;
 public class JournalData extends AppCompatActivity {
 
     Long journalID;
-    String journalName;
+    String journalName, st_numeric_1, st_numeric_2, st_numeric_3, st_numeric_4;
     int journalColour;
 
     LineChart chart;
@@ -56,9 +59,13 @@ public class JournalData extends AppCompatActivity {
     private JournalSingleEntryViewModel journalSingleEntryViewModel;
 
     ArrayList<Long> dateTimes = new ArrayList<Long>();
-    ArrayList<Integer> vals1 = new ArrayList<Integer>();
-    ArrayList<Integer> vals2 = new ArrayList<Integer>();
+    ArrayList<Integer> numericList1 = new ArrayList<Integer>();
+    ArrayList<Integer> numericList2 = new ArrayList<Integer>();
+    ArrayList<Integer> numericList3 = new ArrayList<Integer>();
+    ArrayList<Integer> numericList4 = new ArrayList<Integer>();
 
+
+    List<JournalStructureObject> structureObjects;
     List<JournalSingleEntryObject> singleEntryObjects;
     List<JournalSingleEntryDataObject> singleEntryDataObjects;
 
@@ -78,8 +85,6 @@ public class JournalData extends AppCompatActivity {
 
         doThingAThenThingB();;
 
-
-
     }
 
 
@@ -92,21 +97,19 @@ public class JournalData extends AppCompatActivity {
             public void run() {
 
 
-                /*journalStructureViewModel = ViewModelProviders.of(JournalData.this)
+                Log.d("Diss", "IN THREAD ONE");
+                journalStructureViewModel = ViewModelProviders.of(JournalData.this)
                         .get(JournalStructureViewModel.class);
-                journalStructureViewModel.getStructureWithID(journalID).observe(this, new Observer<List<JournalStructureObject>>() {
-                    @Override
-                    public void onChanged(List<JournalStructureObject> journalStructureObjects) {
+                structureObjects = journalStructureViewModel.getStructureWithIDNotLive(journalID);
 
-                        for(int i = 0 ; i < journalStructureObjects.size() ; i++){
+                for(int i = 0 ; i < structureObjects.size() ; i++){
 
-                            Log.d("Diss", "Value of column type: " + journalStructureObjects.get(i).getColumnType());
+                    Log.d("Diss", "Value of column type: " + structureObjects.get(i).getColumnType());
 
-                            Log.d("Diss", "Value of column name: " + journalStructureObjects.get(i).getColumnName());
+                    Log.d("Diss", "Value of column name: " + structureObjects.get(i).getColumnName());
 
-                        }
-                    }
-                });*/
+                }
+
 
 
                 /*IF Column Type == Percentage1 && TableID == TableID */
@@ -126,10 +129,38 @@ public class JournalData extends AppCompatActivity {
 
                 journalSingleEntryDataViewModel = ViewModelProviders.of(JournalData.this)
                         .get(JournalSingleEntryDataViewModel.class);
-                singleEntryDataObjects = journalSingleEntryDataViewModel.getEntriesWithTIDType(journalID, "percentage");
+                singleEntryDataObjects = journalSingleEntryDataViewModel.getEntriesWithIDNotLive(journalID);
+
+                Log.d("Diss", "Value of singleEntryDataObject size: " + singleEntryDataObjects.size());
+                Log.d("Diss", "Value of JournalID: " + journalID);
 
                 for(int i = 0 ; i < singleEntryDataObjects.size() ; i++) {
-                    Log.d("Diss", "Value of entryData: " + singleEntryDataObjects.get(i).getEntryData());
+
+                    Log.d("Diss", "IN SINGLE OBJECTS FOR LOOP ");
+
+                    if(singleEntryDataObjects.get(i).getColumnType().equals(JournalContract.PERCENTAGE + 1)){
+                        Log.d("Diss", "Value of entryData: " + singleEntryDataObjects.get(i).getEntryData());
+                        numericList1.add(Integer.parseInt(singleEntryDataObjects.get(i).getEntryData()));
+                        st_numeric_1 = structureObjects.get(0).getColumnName();
+                    }
+                    else if(singleEntryDataObjects.get(i).getColumnType().equals(JournalContract.PERCENTAGE + 2)){
+                        Log.d("Diss", "Value of entryData: " + singleEntryDataObjects.get(i).getEntryData());
+                        numericList2.add(Integer.parseInt(singleEntryDataObjects.get(i).getEntryData()));
+                        st_numeric_2 = structureObjects.get(1).getColumnName();
+                    }
+                    else if(singleEntryDataObjects.get(i).getColumnType().equals(JournalContract.PERCENTAGE + 3)){
+                        Log.d("Diss", "Value of entryData: " + singleEntryDataObjects.get(i).getEntryData());
+                        numericList3.add(Integer.parseInt(singleEntryDataObjects.get(i).getEntryData()));
+                        st_numeric_3 = structureObjects.get(2).getColumnName();
+                    }
+                    else if(singleEntryDataObjects.get(i).getColumnType().equals(JournalContract.PERCENTAGE + 4)){
+                        Log.d("Diss", "Value of entryData: " + singleEntryDataObjects.get(i).getEntryData());
+                        numericList4.add(Integer.parseInt(singleEntryDataObjects.get(i).getEntryData()));
+                        st_numeric_4 = structureObjects.get(3).getColumnName();
+                    }
+                    else{
+                        Log.d("Diss", "Did not go into any of the .equals PERCENTAGE");
+                    }
                 }
 
 
@@ -141,10 +172,14 @@ public class JournalData extends AppCompatActivity {
             @Override
             public void run() {
 
+                Log.d("Diss", "IN THREAD TWO");
+
                 Log.d("Diss", "In Chart Func");
                 GraphView graph = (GraphView) findViewById(R.id.graph);
 
                 DataPoint[] dp = new DataPoint[dateTimes.size()];
+                DataPoint[] dp2 = new DataPoint[dateTimes.size()];
+                DataPoint[] dp3 = new DataPoint[dateTimes.size()];
 
                 Date firstDate = new Date(System.currentTimeMillis());
                 Date lastDate = new Date(System.currentTimeMillis());
@@ -155,8 +190,9 @@ public class JournalData extends AppCompatActivity {
                     Log.d("Diss", "In Chart Func For Loop");
                     Log.d("Diss", "Value of dateTime when assigning in array: " + dateTimes.get(i));
 
-                    Log.d("Diss", "Value of y values when in assinging array " + i*2);
-                    dp[i] = new DataPoint(date, i*2);
+                    dp[i] = new DataPoint(date, numericList1.get(i));
+                    dp2[i] = new DataPoint(date, numericList2.get(i));
+                    dp3[i] = new DataPoint(date, numericList3.get(i));
 
                     if(i == 0){
                         firstDate = date;
@@ -167,10 +203,25 @@ public class JournalData extends AppCompatActivity {
                 }
 
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
+                LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(dp2);
+                LineGraphSeries<DataPoint> series3 = new LineGraphSeries<>(dp3);
+
                 series.setDrawDataPoints(true);
+                series.setColor(Color.RED);
+                series.setTitle(st_numeric_1);
                 graph.addSeries(series);
+
+                series2.setDrawDataPoints(true);
+                series2.setColor(Color.GREEN);
+                series2.setTitle(st_numeric_2);
+                graph.addSeries(series2);
+
+                series3.setDrawDataPoints(true);
+                series3.setTitle(st_numeric_3);
+                graph.addSeries(series3);
+
+
                 graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext()));
-                graph.getGridLabelRenderer().setNumHorizontalLabels(5);
                 graph.getGridLabelRenderer().setNumVerticalLabels(6);
 
                 graph.getViewport().setMinX(firstDate.getTime());
@@ -180,14 +231,13 @@ public class JournalData extends AppCompatActivity {
                 graph.getViewport().setXAxisBoundsManual(true);
                 graph.getViewport().setYAxisBoundsManual(true);
 
+                graph.getLegendRenderer().setVisible(true);
+                graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
                 graph.getGridLabelRenderer().setHumanRounding(false);
 
             }
         });
 
     }
-
-//    public void arraySplitter(int numericColumns )
-
 
 }

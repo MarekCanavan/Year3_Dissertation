@@ -43,5 +43,11 @@ public class JournalStructureViewModel extends AndroidViewModel {
 
     }
 
+    public List<JournalStructureObject> getStructureWithIDNotLive(Long id){
+        Log.d("Diss", "In JSViewModel, printing JournalStructure: " + id);
+        return repository.getStructureWithIDNotLive(id);
+
+    }
+
 
 }

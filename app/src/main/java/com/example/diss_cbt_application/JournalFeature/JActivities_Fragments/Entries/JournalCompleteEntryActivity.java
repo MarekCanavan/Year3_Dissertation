@@ -172,7 +172,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 allEds.add(newColumn);//Add the EditText to an ArrayList for later persistence to the database
                 scroll.addView(newColumn);//Add the new EditText just created to the layout
             }
-            else if(columnType.equals(JournalContract.PERCENTAGE)){
+            else if(columnType.equals(JournalContract.PERCENTAGE + 1 ) || columnType.equals(JournalContract.PERCENTAGE + 2 )
+                    || columnType.equals(JournalContract.PERCENTAGE + 3 ) || columnType.equals(JournalContract.PERCENTAGE + 4 )){
 
                 //Create EditText Field for the entry data
                 EditText newColumn = new EditText(JournalCompleteEntryActivity.this);

@@ -32,4 +32,10 @@ public interface JournalStructureDao {
 
     @Query(("SELECT * FROM journal_structure_table WHERE fk_id =:id"))
     LiveData<List<JournalStructureObject>> getStructureWithID(Long id);
+
+
+    @Query(("SELECT * FROM journal_structure_table WHERE fk_id =:id"))
+    List<JournalStructureObject> getStructureWithIDNotLive(Long id);
+
+
 }

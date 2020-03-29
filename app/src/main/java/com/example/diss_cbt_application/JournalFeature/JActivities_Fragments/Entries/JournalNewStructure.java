@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
@@ -64,6 +65,7 @@ public class JournalNewStructure extends AppCompatActivity {
         /*Initialise Variables*/
         tableID = 0L;
         Counter = 0;
+        numericColumn = 0;
         initialiseScrollView();
     }
 
@@ -83,7 +85,7 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        text.setText("Enter a name for wordy column");
+        text.setText("Enter a name for this word column");
         text.setTextSize(17);
         text.setTextColor(Color.BLACK);
 
@@ -102,31 +104,39 @@ public class JournalNewStructure extends AppCompatActivity {
     /**This function creates a new Edit Text Field where the user can assign a name to a percentage field */
     public void newPercentageOnClick(View v){
 
-        numericColumn += 1;
+        if(numericColumn < 4){
 
-        EditText newPercentage = new EditText(JournalNewStructure.this);
-        allEds.add(newPercentage);
+            numericColumn += 1;
 
-        TextView text = new TextView(JournalNewStructure.this);
+            EditText newPercentage = new EditText(JournalNewStructure.this);
+            allEds.add(newPercentage);
 
-        text.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+            TextView text = new TextView(JournalNewStructure.this);
 
-        text.setText("Enter a name for percentage column");
-        text.setTextSize(17);
-        text.setTextColor(Color.BLACK);
+            text.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        newPercentage.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+            text.setText("Enter a name for this numeric column");
+            text.setTextSize(17);
+            text.setTextColor(Color.BLACK);
 
-        newPercentage.setId(Counter);
-        columnTypes.add(JournalContract.PERCENTAGE + numericColumn);
-        Counter++;
+            newPercentage.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        scroll.addView((text));
-        scroll.addView(newPercentage);
+            newPercentage.setId(Counter);
+            columnTypes.add(JournalContract.PERCENTAGE + numericColumn);
+            Counter++;
+
+            scroll.addView((text));
+            scroll.addView(newPercentage);
+
+        }
+        else{
+            Toast.makeText(this, "You can only generate 4 numeric columns", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**Button onClick that launches the color picker*/

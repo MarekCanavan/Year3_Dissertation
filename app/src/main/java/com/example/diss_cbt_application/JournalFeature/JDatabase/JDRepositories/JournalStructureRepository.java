@@ -41,6 +41,10 @@ public class JournalStructureRepository {
         return journalStructureDao.getStructureWithID(id);
     }
 
+    public List<JournalStructureObject> getStructureWithIDNotLive(Long id){
+        return journalStructureDao.getStructureWithIDNotLive(id);
+    }
+
     /**
      * Database operations need to be conducted on a background thread
      * This Async Task inserts a journal structure off of the main thread so the main thread is not blocked
