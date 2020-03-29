@@ -23,6 +23,7 @@ import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -68,7 +69,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
     /*Thees member variables are used for the Alarm Manager implementation*/
     private int iId, markedComplete;
     private Long gId;
-    private String st_update, title, description, date, time;
+    private String st_update, title, description, date, time, radioString;
     int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute; //For the setting of the date and time picker
     String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute; //For the setting of the date and time picker
 
@@ -235,6 +236,13 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
      * They are sent back to the MainActivity so they can be persisted to the database*/
     public void saveGoalOnClick(View v){
 
+        /*This is a check to see if the user has set a time they want the goal to repeat*/
+        if(radioButton == null){
+            radioString = NEVER;
+        }
+        else{
+            radioString = radioButton.getText().toString();
+        }
 
         /*Retrieving the values set by the user from the EditTexts*/
         title = et_title_of_goal.getText().toString();
@@ -285,7 +293,12 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
             @Override
             public void run() {
 
-                GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    iId = Math.toIntExact(gId);
+                }
+
+                GoalObject goal = new GoalObject(title, description, date, time, radioString , markedComplete, iId);
 
                 if(st_update.equals(EXTRA_UPDATE)){
                     goal.setId(gId);
@@ -307,9 +320,6 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
             @Override
             public void run() {
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    iId = Math.toIntExact(gId);
-                }
                 Calendar alarmCal = Calendar.getInstance();
 
                 alarmCal.set(Calendar.YEAR, mYear);
@@ -320,14 +330,24 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
                 alarmCal.set(Calendar.SECOND, 0);
 
 
+
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(getApplicationContext(), AlertReceiver.class);
-                alarmIntent.putExtra("title", et_title_of_goal.getText().toString());
-                alarmIntent.putExtra("description", et_description_of_goal.getText().toString());
-                alarmIntent.putExtra("id", iId);
+                alarmIntent.putExtra(GContract.G_TITLE, et_title_of_goal.getText().toString());
+                alarmIntent.putExtra(GContract.G_DESCRIPTION, et_description_of_goal.getText().toString());
+                alarmIntent.putExtra(GContract._ID, gId);
+                alarmIntent.putExtra(GContract.G_REPEAT, radioString);
+                alarmIntent.putExtra(GContract.G_TIME, alarmCal.getTimeInMillis());
+                alarmIntent.putExtra(GContract.G_MARKED_COMPLETE, markedComplete);
+
+
+                /*Request code generated against time so that it is random*/
+                int requestCodeTime = (int) (System.currentTimeMillis() /1000);
+
+                Log.d("Diss", "Value of requestcode time: " + requestCodeTime);
 
                 /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
-                PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), iId, alarmIntent, 0 );
+                PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), requestCodeTime, alarmIntent, 0 );
 
                 if (alarmCal.before(Calendar.getInstance())) {
                     alarmCal.add(Calendar.DATE, 1);
@@ -335,36 +355,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-                    String radioString;
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
 
-                    /*This is a check to see if the user has set a time they want the goal to repeat*/
-                    if(radioButton == null){
-                        radioString = NEVER;
-                    }
-                    else{
-                        radioString = radioButton.getText().toString();
-                    }
-
-                    /*This chain of else/if statements handles how the AlarmManger is set depending on
-                    * when the user indicated they want the goal to repeat*/
-                    if(radioString.equals(NEVER)){
-
-                        if (alarmManager != null) {
-                            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis() , sender);
-                        }
-
-                    }
-                    else if(radioString.equals(DAILY)){
-
-                        if (alarmManager != null) {
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
-                        }
-                    }
-                    else if(radioString.equals(WEEKLY)){
-                        if (alarmManager != null) {
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, sender);
-                        }
-                    }
                 }
             }
         });

@@ -20,9 +20,9 @@ import static androidx.room.ForeignKey.CASCADE;
  * indices are for faster searching of the table */
 @Entity(tableName = "single_entry_data_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalSingleEntryObject.class,
-                parentColumns = "id", childColumns = "fk_id")},
+                parentColumns = "id", childColumns = "fk_eid")},
         indices = {
-                @Index("fk_id"),
+                @Index("fk_eid"),
         })
 public class JournalSingleEntryDataObject {
 
@@ -37,22 +37,19 @@ public class JournalSingleEntryDataObject {
 
     private String entryData;
 
-    private String entryDate;
+    private Long fk_eid;
 
-    private String entryTime;
-
-    private Long fk_id;
+    private Long fk_tid;
 
     /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
      * these fields need to be parsed for it to be valid
      * We dont want to pass id as it is auto generated*/
-    public JournalSingleEntryDataObject(String columnName, String columnType, String entryData, String entryDate, String entryTime, Long fk_id) {
+    public JournalSingleEntryDataObject(String columnName, String columnType, String entryData,  Long fk_eid, Long fk_tid) {
         this.columnName = columnName;
         this.columnType = columnType;
         this.entryData = entryData;
-        this.entryDate = entryDate;
-        this.entryTime = entryTime;
-        this.fk_id = fk_id;
+        this.fk_eid = fk_eid;
+        this.fk_tid = fk_tid;
     }
 
     /*Room uses this to set the id on the object*/
@@ -60,8 +57,12 @@ public class JournalSingleEntryDataObject {
         this.id = id;
     }
 
-    public void setFk_id(Long fk_id) {
-        this.fk_id = fk_id;
+    public void setFk_eid(Long fk_eid) {
+        this.fk_eid = fk_eid;
+    }
+
+    public void setFk_tid(Long fk_tid) {
+        this.fk_tid = fk_tid;
     }
 
     /*To persist these fields room needs getter methods for all of the fields*/
@@ -70,8 +71,12 @@ public class JournalSingleEntryDataObject {
         return id;
     }
 
-    public Long getFk_id() {
-        return fk_id;
+    public Long getFk_eid() {
+        return fk_eid;
+    }
+
+    public Long getFk_tid() {
+        return fk_tid;
     }
 
     public String getColumnName() {
@@ -84,13 +89,5 @@ public class JournalSingleEntryDataObject {
 
     public String getEntryData() {
         return entryData;
-    }
-
-    public String getEntryDate() {
-        return entryDate;
-    }
-
-    public String getEntryTime() {
-        return entryTime;
     }
 }

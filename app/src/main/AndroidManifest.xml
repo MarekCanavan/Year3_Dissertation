@@ -3,23 +3,24 @@
     package="com.example.diss_cbt_application">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="MyApplication">
-        <activity android:name=".GoalsFeature.GNewEditGoal"></activity>
-        <activity android:name=".JournalFeature.JActivities_Fragments.JournalsMyJActivity" />
-        <activity android:name=".JournalFeature.JActivities_Fragments.JournalEntryData" />
+        android:theme="@style/AppTheme">
+        <activity android:name=".JournalFeature.JActivities_Fragments.MyJournals.JournalData"></activity>
+        <activity android:name=".GoalsFeature.GNewEditGoal" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.MyJournals.MyJournalsFragment" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.Entries.JournalEntryData" />
         <activity
-            android:name=".JournalFeature.JActivities_Fragments.JournalCompleteEntryActivity"
+            android:name=".JournalFeature.JActivities_Fragments.Entries.JournalCompleteEntryActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".JournalFeature.JActivities_Fragments.JournalNewStructure"
+            android:name=".JournalFeature.JActivities_Fragments.Entries.JournalNewStructure"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".JournalFeature.JActivities_Fragments.JournalChooseActivity" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.Entries.JournalChooseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Notifications.AlertReceiver"/>
+
+        <receiver android:name=".Notifications.AlertReceiver" />
     </application>
 
 </manifest>

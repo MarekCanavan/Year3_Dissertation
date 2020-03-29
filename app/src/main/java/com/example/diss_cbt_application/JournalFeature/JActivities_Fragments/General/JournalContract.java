@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General;
 
 /**
  * Class holds the Strings used in database calls throughout the application

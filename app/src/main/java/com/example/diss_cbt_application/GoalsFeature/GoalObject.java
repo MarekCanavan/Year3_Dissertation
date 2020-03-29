@@ -30,18 +30,24 @@ public class GoalObject {
 
     private String time;
 
+    private String repeat;
+
     private int markedComplete;
+
+    private int alarmRequestCode;
 
 
      /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
       * these fields need to be parsed for it to be valid
       * We dont want to pass id as it is auto generated*/
-    public GoalObject(String title, String description, String date, String time, int markedComplete) {
+    public GoalObject(String title, String description, String date, String time, String repeat, int markedComplete, int alarmRequestCode) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.time = time;
+        this.repeat = repeat;
         this.markedComplete = markedComplete;
+        this.alarmRequestCode = alarmRequestCode;
     }
 
     /*Room uses this to set the id on the object
@@ -71,8 +77,14 @@ public class GoalObject {
         return time;
     }
 
+    public String getRepeat() {return repeat;}
+
     public int getMarkedComplete() {
         return markedComplete;
+    }
+
+    public int getAlarmRequestCode() {
+        return alarmRequestCode;
     }
 
 }

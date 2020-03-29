@@ -1,15 +1,12 @@
-package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,19 +16,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diss_cbt_application.DatabaseHelper;
-import com.example.diss_cbt_application.GoalsFeature.GoalObject;
-import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
-import com.example.diss_cbt_application.JournalFeature.JournalContract;
-import com.example.diss_cbt_application.JournalFeature.RVAJournalFragement;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +51,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("g53mdp", "In Journal Create View");
-
 
         View rootView = inflater.inflate(R.layout.fragment_journal, container, false);
 

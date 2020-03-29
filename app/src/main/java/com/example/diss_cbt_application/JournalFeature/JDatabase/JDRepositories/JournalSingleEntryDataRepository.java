@@ -45,6 +45,11 @@ public class JournalSingleEntryDataRepository {
 
     }
 
+    public LiveData<List<JournalSingleEntryDataObject>> getEntriesWithTIDType(Long id, String columnType){
+        return singleEntryDataDao.getEntriesWithTIDType(id, columnType);
+
+    }
+
     /**
      * Database operations need to be conducted on a background thread
      * This Async Task inserts single entry data off of the main thread so the main thread is not blocked

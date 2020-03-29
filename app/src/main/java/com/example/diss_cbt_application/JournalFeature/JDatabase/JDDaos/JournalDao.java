@@ -3,13 +3,10 @@ package com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
-import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.RoomWarnings;
 import androidx.room.Update;
 
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalChooseActivity;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 
 import java.util.List;

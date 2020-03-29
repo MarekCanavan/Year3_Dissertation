@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -7,22 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
-import com.example.diss_cbt_application.JournalFeature.JournalContract;
-import com.example.diss_cbt_application.JournalFeature.RVAChooseJournal;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**This Activity gives the user the option to complete a Journal Structure that has been already created

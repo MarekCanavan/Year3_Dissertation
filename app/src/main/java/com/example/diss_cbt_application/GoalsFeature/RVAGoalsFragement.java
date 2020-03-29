@@ -56,6 +56,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
         holder.gTitle.setText(currentGoal.getTitle());
         holder.time.setText(currentGoal.getTime());
         holder.date.setText(currentGoal.getDate());
+        //holder.repeat.setText(currentGoal.getRepeat());
 
     }
 
@@ -89,7 +90,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     /**This class holds the views in the single recycler view items*/
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView gTitle, time, date;
+        TextView gTitle, time, date, repeat;
         CardView parentLayout;
         ImageView mDeleteImage;
 
@@ -100,6 +101,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
             gTitle = itemView.findViewById(R.id.tv_goal_title);
             time = itemView.findViewById(R.id.tv_goal_time);
             date = itemView.findViewById(R.id.tv_goal_date);
+            repeat = itemView.findViewById(R.id.tv_goal_repeat);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
 

@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -22,7 +22,7 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
-import com.example.diss_cbt_application.JournalFeature.JournalContract;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
 
 import java.text.ParseException;
@@ -65,8 +65,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     List<String> columnTypes =new ArrayList<>();
     ArrayList<EditText> allEds = new ArrayList<>();
     List<Long> uniqueEntryIDs = new ArrayList<>();
-    List<Long> fk_ids = new ArrayList<>();
-
+    List<Long> fk_eids = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         /*Clearing the arrays as a precaution, to ensure there is no data remaining in them
         * They are very important for persisting the entries into the database, so indexing needs to be correct*/
         uniqueEntryIDs.clear();
-        fk_ids.clear();
+        fk_eids.clear();
 
 
         /*Initialising values in onCreate as they are used in checks later in the class*/
@@ -148,7 +147,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                     String columnName = journalSingleEntryDataObjects.get(i).getColumnName();
                     String columnType = journalSingleEntryDataObjects.get(i).getColumnType();
                     String entryData = journalSingleEntryDataObjects.get(i).getEntryData();
-                    Long entryID_ = journalSingleEntryDataObjects.get(i).getFk_id();
+                    Long entryID_ = journalSingleEntryDataObjects.get(i).getFk_eid();
 
                     //Name of the Entry Field
                     TextView columnText = new TextView(getApplicationContext());
@@ -174,7 +173,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                         scroll.addView(entryData_);//Add to LinearLayout on ScrollView
 
                         uniqueEntryIDs.add(_id);
-                        fk_ids.add(entryID_);
+                        fk_eids.add(entryID_);
 
                     }
                     else if(gDataRepresentation == EDIT_VIEW){
@@ -282,7 +281,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
             JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
                     columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
-                    date, time, fk_ids.get(i));
+                     fk_eids.get(i), fk_id );
 
             journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
                     .get(JournalSingleEntryDataViewModel.class);

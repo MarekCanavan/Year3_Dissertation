@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -19,14 +19,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
-import com.example.diss_cbt_application.JournalFeature.JournalContract;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
 
 import java.text.ParseException;
@@ -254,7 +253,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
                     JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
                             columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
-                            date, time, entryID);
+                             entryID, journalID);
 
                     journalSingleEntryDataViewModel = ViewModelProviders.of(JournalCompleteEntryActivity.this)
                             .get(JournalSingleEntryDataViewModel.class);

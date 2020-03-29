@@ -1,31 +1,23 @@
-package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments;
+package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.diss_cbt_application.DatabaseHelper;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
-import com.example.diss_cbt_application.JournalFeature.JournalContract;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
 
 import java.util.ArrayList;
@@ -35,7 +27,6 @@ import java.util.concurrent.Executors;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 /**This Activity is where the user can create a new journal structure for themselves

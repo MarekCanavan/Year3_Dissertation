@@ -11,9 +11,10 @@ public class GContract {
 
         /*Parameters of the table*/
         public static final String _ID = "_id";
-        public static final String G_TITLE = "gTitle";
-        public static final String G_DESCRIPTION = "gDescription";
-        public static final String G_DATE = "gDate";
-        public static final String G_TIME = "gTime";
+        public static final String G_TITLE = "Title";
+        public static final String G_DESCRIPTION = "Description";
+        public static final String G_DATE = "Date";
+        public static final String G_TIME = "Time";
         public static final String G_MARKED_COMPLETE = "markedComplete";
+        public static final String G_REPEAT = "Repeat";
 }

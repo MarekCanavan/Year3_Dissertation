@@ -21,9 +21,8 @@ import com.example.diss_cbt_application.BreathFeature.BreathFragment;
 import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.GoalsFeature.GoalsFragment;
 import com.example.diss_cbt_application.HomeFeature.HomeFragment;
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalChooseActivity;
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalFragment;
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.JournalsMyJActivity;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalChooseActivity;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalParentFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**This is the MainActivity of the Application, so is the first Activity that gets loaded
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment homeFragment = new HomeFragment();
     Fragment goalFragment = new GoalsFragment();
     Fragment breathFragment = new BreathFragment();
-    Fragment journalFragment = new JournalFragment();
+    Fragment journalParentFragment = new JournalParentFragment();
     Fragment active = homeFragment;
 
     BottomNavigationView bottomNav;
@@ -64,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
             fragmentManager.beginTransaction().add(R.id.fragment_container, goalFragment, "homeFragment")
                     .hide(goalFragment).commit();
-            fragmentManager.beginTransaction().add(R.id.fragment_container, journalFragment, "journalFragment")
-                    .hide(journalFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_container, journalParentFragment, "journalParentFragment")
+                    .hide(journalParentFragment).commit();
             fragmentManager.beginTransaction().add(R.id.fragment_container, breathFragment, "breathFragment")
                     .hide(breathFragment).commit();
             fragmentManager.beginTransaction().add(R.id.fragment_container, homeFragment, "homeFragment").commit();
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             homeFragment = fragmentManager.getFragment(savedInstanceState, "homeFragment");
             goalFragment = fragmentManager.getFragment(savedInstanceState, "goalFragment");
             breathFragment = fragmentManager.getFragment(savedInstanceState, "breathFragment");
-            journalFragment = fragmentManager.getFragment(savedInstanceState, "journalFragment");
+            journalParentFragment = fragmentManager.getFragment(savedInstanceState, "journalParentFragment");
 
         }
 
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.putFragment(savedInstanceState, "homeFragment", homeFragment);
         fragmentManager.putFragment(savedInstanceState, "goalFragment", goalFragment);
         fragmentManager.putFragment(savedInstanceState, "breathFragment", breathFragment);
-        fragmentManager.putFragment(savedInstanceState, "journalFragment", journalFragment);
+        fragmentManager.putFragment(savedInstanceState, "journalParentFragment", journalParentFragment);
 
     }
 
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.hide(homeFragment);
         fragmentTransaction.hide(goalFragment);
         fragmentTransaction.hide(breathFragment);
-        fragmentTransaction.hide(journalFragment);
+        fragmentTransaction.hide(journalParentFragment);
 
         fragmentFlag = savedInstanceState.getInt("fragmentFlag");
 
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomNav.getMenu().getItem(1).setChecked(true);
                 break;
             case 2:
-                fragmentTransaction.show(journalFragment);
+                fragmentTransaction.show(journalParentFragment);
                 bottomNav.getMenu().getItem(2).setChecked(true);
                 break;
             case 3:
@@ -160,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         case R.id.nav_journal:
                             Log.d("g53mdp", "In Journal");
-                            fragmentManager.beginTransaction().hide(active).show(journalFragment).commit();
-                            active = journalFragment;
+                            fragmentManager.beginTransaction().hide(active).show(journalParentFragment).commit();
+                            active = journalParentFragment;
                             fragmentFlag = 2;
                             return true;
                         case R.id.nav_goals:
@@ -181,13 +180,6 @@ public class MainActivity extends AppCompatActivity {
     public void newEntryOnClick(View v){
         Intent i_choose_journal = new Intent(MainActivity.this, JournalChooseActivity.class);
         startActivity(i_choose_journal);
-    }
-
-    /**Simple function that launches an Activity when the user wants to inspect their already made Journal Structures*/
-    public void journalsOnClick(View v){
-        Intent i_my_journals = new Intent(MainActivity.this, JournalsMyJActivity.class);
-        startActivity(i_my_journals);
-
     }
 
     /**When the user clicks on the '+' button on the Goals Fragment this function is called
