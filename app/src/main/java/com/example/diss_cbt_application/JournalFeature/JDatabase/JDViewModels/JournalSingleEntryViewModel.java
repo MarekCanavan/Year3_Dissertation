@@ -40,8 +40,16 @@ public class JournalSingleEntryViewModel extends AndroidViewModel {
         return repository.insertNotAsync(journalSingleEntryObject);
     }
 
+    public JournalSingleEntryObject getEntryWithId(Long id){
+        return repository.getEntryWithId(id);
+    }
+
     public void update (JournalSingleEntryObject singleEntryObject){
         repository.update(singleEntryObject);
+    }
+
+    public void delete (JournalSingleEntryObject singleEntryObject){
+        repository.delete(singleEntryObject);
     }
 
     public List<JournalSingleEntryObject> getEntriesWithId(Long id){

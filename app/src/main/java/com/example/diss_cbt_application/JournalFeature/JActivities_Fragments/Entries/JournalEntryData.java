@@ -32,6 +32,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * The user is shown this Activity are choosing to View a specific entry they have made
@@ -58,6 +60,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     boolean edit = true;
     private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
     LinearLayout scroll;
+    JournalSingleEntryViewModel journalSingleEntryViewModel;
 
     /*Defining Arraylists used throughout the class*/
     List<String> columnNames =new ArrayList<>();
@@ -285,7 +288,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     * Sends an update request to the database**/
     public void saveEditedEntryData(){
 
-
         /*Iterates through all of the objects and updates the fields with the changes the user has made
         * the 'uniqueEntryIDs array is very important as it ensures the correct fields in the database are being updated*/
         for(int i=0; i < uniqueEntryIDs.size(); i++){
@@ -310,11 +312,38 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     /*If the user want to delete their entry this function handles it*/
     public void deleteButtonOnClick(View v){
 
-        String table = "SEntry";
-        String whereClause = "_id=?";
-        String[] whereArgs = new String[] { String.valueOf(mainEntryID) };
+        doThingAThenThingB();
 
         finish();
+
+    }
+
+    /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
+    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+    JournalSingleEntryObject entryObjectForDeletion;
+    private void doThingAThenThingB(){
+
+        journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this)
+                .get(JournalSingleEntryViewModel.class);
+
+        /*To Delete First You Need the Object */
+        /*Thread 1  */
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                entryObjectForDeletion = journalSingleEntryViewModel.getEntryWithId(mainEntryID);
+
+            }
+        });
+
+        /*Thread 2 -*/
+        sharedSingleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                journalSingleEntryViewModel.delete(entryObjectForDeletion);
+            }
+        });
 
     }
 

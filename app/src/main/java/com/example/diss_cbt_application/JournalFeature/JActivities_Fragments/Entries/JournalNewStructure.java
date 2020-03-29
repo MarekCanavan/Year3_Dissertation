@@ -40,7 +40,7 @@ public class JournalNewStructure extends AppCompatActivity {
 
     /*Integer member variables*/
     Long tableID;
-    int Counter, mDefualtColour;
+    int Counter, mDefualtColour, numericColumn;
 
     /*Arraylist that are needed to store the column type and edit texts to later be persisted to the database*/
     List<String> columnTypes =new ArrayList<String>();
@@ -102,6 +102,8 @@ public class JournalNewStructure extends AppCompatActivity {
     /**This function creates a new Edit Text Field where the user can assign a name to a percentage field */
     public void newPercentageOnClick(View v){
 
+        numericColumn += 1;
+
         EditText newPercentage = new EditText(JournalNewStructure.this);
         allEds.add(newPercentage);
 
@@ -120,7 +122,7 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         newPercentage.setId(Counter);
-        columnTypes.add(JournalContract.PERCENTAGE);
+        columnTypes.add(JournalContract.PERCENTAGE + numericColumn);
         Counter++;
 
         scroll.addView((text));

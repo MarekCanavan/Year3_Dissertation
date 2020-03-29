@@ -44,12 +44,21 @@ public class JournalSingleEntryRepository {
         return id;
     }
 
+    public JournalSingleEntryObject getEntryWithId(Long id){
+        return journalSingleEntryDao.getEntryWithId(id);
+    }
+
     public List<JournalSingleEntryObject> getEntriesWithId(Long id){
         return journalSingleEntryDao.getEntriesWithId(id);
     }
 
     public void update (JournalSingleEntryObject singleEntryObject){
         new UpdateJournalAsyncTask(journalSingleEntryDao).execute(singleEntryObject);
+    }
+
+
+    public void delete (JournalSingleEntryObject singleEntryObject){
+        new DeleteJournalAsyncTask(journalSingleEntryDao).execute(singleEntryObject);
     }
 
     private static class UpdateJournalAsyncTask extends AsyncTask<JournalSingleEntryObject, Void, Void> {
@@ -63,6 +72,22 @@ public class JournalSingleEntryRepository {
         @Override
         protected Void doInBackground(JournalSingleEntryObject... journalSingleEntryObjects) {
             journalSingleEntryDao.update(journalSingleEntryObjects[0]);
+            return null;
+        }
+    }
+
+
+    private static class DeleteJournalAsyncTask extends AsyncTask<JournalSingleEntryObject, Void, Void> {
+
+        private JournalSingleEntryDao journalSingleEntryDao;
+
+        private DeleteJournalAsyncTask(JournalSingleEntryDao journalSingleEntryDao){
+            this.journalSingleEntryDao = journalSingleEntryDao;
+        }
+
+        @Override
+        protected Void doInBackground(JournalSingleEntryObject... journalSingleEntryObjects) {
+            journalSingleEntryDao.delete(journalSingleEntryObjects[0]);
             return null;
         }
     }

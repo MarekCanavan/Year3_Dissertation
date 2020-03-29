@@ -32,4 +32,7 @@ public interface JournalSingleEntryDao {
 
     @Query(("SELECT * FROM single_entry_table WHERE fk_id =:id ORDER BY dateTime ASC"))
     List<JournalSingleEntryObject> getEntriesWithId(Long id);
+
+    @Query(("SELECT * FROM single_entry_table WHERE id =:id"))
+    JournalSingleEntryObject getEntryWithId(Long id);
 }
