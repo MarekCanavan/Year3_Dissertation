@@ -33,7 +33,6 @@ public interface JournalSingleEntryDataDao {
     @Query("SELECT * FROM single_entry_data_table WHERE fk_eid =:id")
     LiveData<List<JournalSingleEntryDataObject>> getEntriesWithID(Long id);
 
-
     @Query("SELECT * FROM single_entry_data_table WHERE fk_tid =:tid AND columnType =:columnType")
-    LiveData<List<JournalSingleEntryDataObject>> getEntriesWithTIDType(Long tid, String columnType);
+    List<JournalSingleEntryDataObject> getEntriesWithTIDType(Long tid, String columnType);
 }

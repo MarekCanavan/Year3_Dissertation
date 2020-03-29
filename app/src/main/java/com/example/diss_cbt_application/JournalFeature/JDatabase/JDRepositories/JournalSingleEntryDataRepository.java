@@ -45,7 +45,7 @@ public class JournalSingleEntryDataRepository {
 
     }
 
-    public LiveData<List<JournalSingleEntryDataObject>> getEntriesWithTIDType(Long id, String columnType){
+    public List<JournalSingleEntryDataObject> getEntriesWithTIDType(Long id, String columnType){
         return singleEntryDataDao.getEntriesWithTIDType(id, columnType);
 
     }

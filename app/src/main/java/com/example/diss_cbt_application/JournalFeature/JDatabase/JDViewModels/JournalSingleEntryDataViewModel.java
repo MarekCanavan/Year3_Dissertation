@@ -44,7 +44,7 @@ public class JournalSingleEntryDataViewModel extends AndroidViewModel {
         return repository.getEntryDataWithId(id);
     }
 
-    public LiveData<List<JournalSingleEntryDataObject>> getEntriesWithTIDType(Long id, String columType){
+    public List<JournalSingleEntryDataObject> getEntriesWithTIDType(Long id, String columType){
         return repository.getEntriesWithTIDType(id, columType);
     }
 }

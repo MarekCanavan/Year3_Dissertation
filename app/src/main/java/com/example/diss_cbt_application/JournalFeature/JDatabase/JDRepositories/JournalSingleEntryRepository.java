@@ -11,6 +11,7 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalD
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDDaos.JournalSingleEntryDao;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase;
 
 import java.util.List;
@@ -41,6 +42,10 @@ public class JournalSingleEntryRepository {
     public Long insertNotAsync(JournalSingleEntryObject singleEntryObject){
         id = journalSingleEntryDao.insert(singleEntryObject);
         return id;
+    }
+
+    public List<JournalSingleEntryObject> getEntriesWithId(Long id){
+        return journalSingleEntryDao.getEntriesWithId(id);
     }
 
     public void update (JournalSingleEntryObject singleEntryObject){

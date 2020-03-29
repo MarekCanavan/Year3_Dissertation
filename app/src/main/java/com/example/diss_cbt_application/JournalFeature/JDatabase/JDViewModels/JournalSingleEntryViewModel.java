@@ -1,6 +1,7 @@
 package com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -8,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDRepositories.JournalSingleEntryRepository;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
+import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 
 import java.util.List;
 
@@ -40,6 +42,11 @@ public class JournalSingleEntryViewModel extends AndroidViewModel {
 
     public void update (JournalSingleEntryObject singleEntryObject){
         repository.update(singleEntryObject);
+    }
+
+    public List<JournalSingleEntryObject> getEntriesWithId(Long id){
+       return repository.getEntriesWithId(id);
+
     }
 
     public LiveData<List<JournalSingleEntryObject>> getAllEntries(){
