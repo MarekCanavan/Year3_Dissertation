@@ -59,6 +59,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
 
     /*Defining some strings for the repetition of the Goals*/
     public static final String NEVER = "Never";
+    public static final String HOURLY = "Hourly";
     public static final String DAILY = "Daily";
     public static final String WEEKLY = "Weekly";
 
@@ -309,8 +310,6 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
                     gId = GoalViewModel.insertNotAsync(goal);
                     Log.d("Diss", "Value of gID insert: " + gId);
                 }
-
-
             }
         });
 
@@ -320,6 +319,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
             @Override
             public void run() {
 
+                /*Set the initial tie the alarm is meant to go off in a single Calender instance
+                * which can be sent to the AlertReceiver*/
                 Calendar alarmCal = Calendar.getInstance();
 
                 alarmCal.set(Calendar.YEAR, mYear);
@@ -329,8 +330,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
                 alarmCal.set(Calendar.MINUTE, mMinute);
                 alarmCal.set(Calendar.SECOND, 0);
 
-
-
+                /*Packaging an intent with the information needed to trigger the Notification and reset the alarm
+                * at the desired interval if necessary */
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(getApplicationContext(), AlertReceiver.class);
                 alarmIntent.putExtra(GContract.G_TITLE, et_title_of_goal.getText().toString());
@@ -340,11 +341,8 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
                 alarmIntent.putExtra(GContract.G_TIME, alarmCal.getTimeInMillis());
                 alarmIntent.putExtra(GContract.G_MARKED_COMPLETE, markedComplete);
 
-
                 /*Request code generated against time so that it is random*/
                 int requestCodeTime = (int) (System.currentTimeMillis() /1000);
-
-                Log.d("Diss", "Value of requestcode time: " + requestCodeTime);
 
                 /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
                 PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), requestCodeTime, alarmIntent, 0 );

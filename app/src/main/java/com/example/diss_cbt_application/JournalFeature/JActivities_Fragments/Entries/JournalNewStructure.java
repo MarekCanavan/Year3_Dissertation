@@ -91,14 +91,12 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
-
         newColumn.setId(Counter);
         columnTypes.add(JournalContract.COLUMN);
         Counter++;
 
         scroll.addView((text));
         scroll.addView(newColumn);
-
     }
 
     /**This function creates a new Edit Text Field where the user can assign a name to a percentage field */
