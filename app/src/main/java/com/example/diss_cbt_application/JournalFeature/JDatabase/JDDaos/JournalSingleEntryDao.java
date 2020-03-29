@@ -26,6 +26,6 @@ public interface JournalSingleEntryDao {
     @Delete
     void delete(JournalSingleEntryObject delete);
 
-    @Query("SELECT * FROM single_entry_table")
+    @Query("SELECT * FROM single_entry_table ORDER BY dateTime DESC")
     LiveData<List<JournalSingleEntryObject>> getAllEntries();
 }

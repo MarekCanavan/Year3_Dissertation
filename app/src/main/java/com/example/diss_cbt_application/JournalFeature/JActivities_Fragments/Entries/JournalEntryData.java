@@ -259,8 +259,19 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
     public void saveEditedEntry(){
 
+        Calendar entryDateTime = Calendar.getInstance();
+
+        entryDateTime.set(Calendar.YEAR, mYear);
+        entryDateTime.set(Calendar.MONTH, mMonth);
+        entryDateTime.set(Calendar.DAY_OF_MONTH, mDay);
+        entryDateTime.set(Calendar.HOUR_OF_DAY, mHour);
+        entryDateTime.set(Calendar.MINUTE, mMinute);
+        entryDateTime.set(Calendar.SECOND, 0);
+
+        Long dateTime = System.currentTimeMillis();
+
         JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(et_entry_name.getText().toString(),
-                date, time, mJournalName, mJournalColour, fk_id);
+                date, time, entryDateTime.getTimeInMillis(), mJournalName, mJournalColour, fk_id);
 
         journalSingleEntryObject.setId(mainEntryID);
 
@@ -402,7 +413,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                 try {
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     Date myTime = timeFormat.parse(hourOfDay + ":" + minute);
-                    time= timeFormat.format(myTime);
+                    time = timeFormat.format(myTime);
 
                     tv_journal_time.setText(time);
                 } catch (ParseException e) {

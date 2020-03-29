@@ -232,8 +232,17 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             @Override
             public void run() {
 
+                Calendar entryDateTime = Calendar.getInstance();
+
+                entryDateTime.set(Calendar.YEAR, mYear);
+                entryDateTime.set(Calendar.MONTH, mMonth);
+                entryDateTime.set(Calendar.DAY_OF_MONTH, mDay);
+                entryDateTime.set(Calendar.HOUR_OF_DAY, mHour);
+                entryDateTime.set(Calendar.MINUTE, mMinute);
+                entryDateTime.set(Calendar.SECOND, 0);
+
                 JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(st_entry_name,
-                        date, time, journalName, journalColour, journalID);
+                        date, time, entryDateTime.getTimeInMillis(), journalName, journalColour, journalID);
 
                 JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalCompleteEntryActivity.this)
                         .get(JournalSingleEntryViewModel.class);

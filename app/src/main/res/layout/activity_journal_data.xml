@@ -6,9 +6,10 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".JournalFeature.JActivities_Fragments.MyJournals.JournalData">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+
+    <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="300dp"></com.github.mikephil.charting.charts.LineChart>
+        android:layout_height="200dip"
+        android:id="@+id/graph" />
 
 </LinearLayout>

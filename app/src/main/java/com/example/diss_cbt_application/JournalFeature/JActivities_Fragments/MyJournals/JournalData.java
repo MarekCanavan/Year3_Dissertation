@@ -24,6 +24,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +77,8 @@ public class JournalData extends AppCompatActivity {
 
                 for(int i = 0 ; i < journalSingleEntryDataObjects.size() ; i++){
                     Log.d("Diss", "Value of entryData: " + journalSingleEntryDataObjects.get(i).getEntryData());
+
+
                 }
             }
         });
@@ -85,60 +90,15 @@ public class JournalData extends AppCompatActivity {
     }
 
     private void chartFunc(){
-        chart = findViewById(R.id.chart);
-
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(2010-3-2, 4));
-        entries.add(new Entry(2012-9-2, 1));
-        entries.add(new Entry(2013-3-2, 2));
-        entries.add(new Entry(2015-3-2, 4));
-        entries.add(new Entry(2017-3-2, 4));
-        entries.add(new Entry(2019-3-2, 1));
-        entries.add(new Entry(2020-3-2, 2));
-//        entries.add(new Entry(5.2f, 1));
-//        entries.add(new Entry(5.4f, 1));
-//        entries.add(new Entry(5.6f, 1));
-//        entries.add(new Entry(5.8f, 1));
-
-        LineDataSet dataSet = new LineDataSet(entries, "Customized values");
-        dataSet.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-
-        //****
-        // Controlling X axis
-        XAxis xAxis = chart.getXAxis();
-        // Set the xAxis position to bottom. Default is top
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        /*This is what we want for when we have limiting factors on the data
-        //Customizing x axis value
-        final String[] months = new String[]{"Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"};
-
-        IAxisValueFormatter formatter = new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return months[(int) value];
-            }
-        };
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);*/
-
-        //***
-        // Controlling right side of y axis
-        YAxis yAxisRight = chart.getAxisRight();
-        yAxisRight.setEnabled(false);
-
-        //***
-        // Controlling left side of y axis
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setGranularity(1f);
-
-        // Setting Data
-        LineData data = new LineData(dataSet);
-        chart.setData(data);
-        chart.animateX(2500);
-        //refresh
-        chart.invalidate();
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
     }
 
 
