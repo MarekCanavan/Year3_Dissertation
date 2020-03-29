@@ -1,13 +1,10 @@
-package com.example.diss_cbt_application.GoalsFeature;
+package com.example.diss_cbt_application.GoalsFeature.GDatabase;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 /**
  * *This class defines the database for the Goals Feature, the entities are the tables it contain:

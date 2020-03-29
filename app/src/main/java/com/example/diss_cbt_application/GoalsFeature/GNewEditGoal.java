@@ -19,11 +19,12 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalObject;
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalViewModel;
 import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 
 import java.util.Calendar;
-import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

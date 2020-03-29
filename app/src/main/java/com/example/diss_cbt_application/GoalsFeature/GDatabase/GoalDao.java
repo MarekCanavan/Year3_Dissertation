@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.GoalsFeature;
+package com.example.diss_cbt_application.GoalsFeature.GDatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

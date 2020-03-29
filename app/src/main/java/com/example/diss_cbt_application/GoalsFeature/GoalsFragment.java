@@ -4,8 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,13 +20,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diss_cbt_application.DatabaseHelper;
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalObject;
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalViewModel;
 import com.example.diss_cbt_application.MainActivity;
 import com.example.diss_cbt_application.Notifications.AlertReceiver;
 import com.example.diss_cbt_application.R;
 import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**This Activity presents the user their predefined goals in a Recycler View on the fragment

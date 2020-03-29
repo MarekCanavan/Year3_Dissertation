@@ -7,22 +7,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.diss_cbt_application.GoalsFeature.GContract;
 import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
-import com.example.diss_cbt_application.GoalsFeature.GoalObject;
-import com.example.diss_cbt_application.GoalsFeature.GoalViewModel;
-import com.example.diss_cbt_application.GoalsFeature.GoalsService;
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalObject;
+import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalViewModel;
 import com.example.diss_cbt_application.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
 
 import static com.example.diss_cbt_application.MyApplication.GOAL_CHANNEL;
 

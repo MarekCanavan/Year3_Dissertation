@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application.GoalsFeature;
+package com.example.diss_cbt_application.GoalsFeature.GDatabase;
 
 import android.app.Application;
 import android.os.AsyncTask;
