@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
 public class JournalEntryData extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     /*Member Variables fo the text views in the Activity*/
-    TextView tv_entry_name, tv_journal_name, tv_journal_date, tv_journal_time;
+    TextView tv_entry_name, tv_journal_name;
     EditText et_entry_name;
 
     /*Setting strings*/
@@ -69,6 +69,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     ArrayList<EditText> allEds = new ArrayList<>();
     List<Long> uniqueEntryIDs = new ArrayList<>();
     List<Long> fk_eids = new ArrayList<>();
+
+    Button bt_goal_time_picker, bt_goal_date_picker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +110,15 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         /*Getting reference to the TextViews in the Activity*/
         tv_entry_name = findViewById(R.id.tv_entry_name);
         tv_journal_name = findViewById(R.id.tv_journal_name);
-        tv_journal_date = findViewById(R.id.tv_entry_data_date);
-        tv_journal_time = findViewById(R.id.tv_entry_data_time);
+        bt_goal_time_picker = findViewById(R.id.bt_goal_time_picker);
+        bt_goal_date_picker = findViewById(R.id.bt_goal_date_picker);
 
         /*Setting the TextViews with the data retrieved from the bundle*/
         tv_entry_name.setText(mEntryName);
         tv_journal_name.setText(mJournalName);
         tv_journal_name.setTextColor(mJournalColour);
-        tv_journal_date.setText(mEntryDate);
-        tv_journal_time.setText(mEntryTime);
+        bt_goal_date_picker.setText("Date : " + mEntryDate);
+        bt_goal_time_picker.setText("Time : " + mEntryTime);
 
     }
 
@@ -364,7 +366,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
         /*TODO: COMMENT*/
 
-        String st_date = tv_journal_date.getText().toString();
+        String st_date = mEntryDate;
         String[] dateArray = st_date.split("-");
         st_dayOfMonth = dateArray[0];
         st_monthOfYear = dateArray[1];
@@ -401,7 +403,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
             date = inFormat.format(myDate);
             //date =simpleDateFormat.format(myDate);
 
-            tv_journal_date.setText(date);
+            bt_goal_date_picker.setText("Date : " + date);
 
 
         } catch (ParseException e) {
@@ -444,7 +446,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                     Date myTime = timeFormat.parse(hourOfDay + ":" + minute);
                     time = timeFormat.format(myTime);
 
-                    tv_journal_time.setText(time);
+                    bt_goal_time_picker.setText("Time : " + time);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

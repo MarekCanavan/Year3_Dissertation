@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -70,6 +71,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
     private EditText et_entry_goal_date, et_entry_goal_time;
 
+    Button bt_goal_time_picker, bt_goal_date_picker;
+
+
     /*Declaring integers needed for the Time and Date picker*/
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -84,8 +88,10 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         columnCounter = 0;
 
         /*Assigning the EditTexts to their correct fields in the layout.xml file*/
-        et_entry_goal_date = (EditText) findViewById(R.id.et_entry_date);
-        et_entry_goal_time = (EditText) findViewById(R.id.et_entry_time);
+        et_entry_goal_date = findViewById(R.id.et_entry_time);
+        et_entry_goal_time = findViewById(R.id.et_entry_date);
+        bt_goal_time_picker = findViewById(R.id.bt_ce_goal_time_picker);
+        bt_goal_date_picker = findViewById(R.id.bt_ce_goal_date_picker);
 
         /*Retrieve bundle and store the Journal ID, Colour and Name and store in member variables*/
         Bundle journalBundle = getIntent().getExtras();
@@ -306,6 +312,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                     }
                     //date =simpleDateFormat.format(myDate);
 
+                    bt_goal_date_picker.setText("Date : " + date);
                     et_entry_goal_date.setText(date);
 
 
@@ -345,6 +352,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                     Date myTime = timeFormat.parse(hourOfDay + ":" + minute);
                     time= timeFormat.format(myTime);
 
+                    bt_goal_time_picker.setText("Time : " + time);
                     et_entry_goal_time.setText(time);
                 } catch (ParseException e) {
                     e.printStackTrace();
