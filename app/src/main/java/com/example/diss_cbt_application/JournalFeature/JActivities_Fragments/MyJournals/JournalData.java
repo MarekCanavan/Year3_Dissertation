@@ -109,6 +109,8 @@ public class JournalData extends AppCompatActivity {
                 });*/
 
 
+                /*IF Column Type == Percentage1 && TableID == TableID */
+
                 /*This View Model Returns The time Values of Each Journal with this ID
                 * TODO: Select a range from the given start and end times*/
                 journalSingleEntryViewModel = ViewModelProviders.of(JournalData.this)
