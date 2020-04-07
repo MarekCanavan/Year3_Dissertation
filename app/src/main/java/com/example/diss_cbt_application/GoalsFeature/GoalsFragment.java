@@ -111,8 +111,6 @@ public class GoalsFragment extends Fragment {
                 /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
                 PendingIntent sender = PendingIntent.getBroadcast(getContext(), goal.getAlarmRequestCode(), alarmIntent, 0 );
 
-
-                /*TODO: COMMENT */
                 alarmManager.cancel(sender);
 
                 goalViewModel.delete(goal);

@@ -69,7 +69,7 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
     RadioButton radioButton;
 
     /*Thees member variables are used for the Alarm Manager implementation*/
-    private int iId, markedComplete;
+    private int alarmRequestCode, markedComplete;
     private Long gId;
     private String st_update, title, description, date, time, radioString;
     int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute; //For the setting of the date and time picker
@@ -105,7 +105,6 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
         /*Retrieving the title, description, date and time from the intent
         * Then setting the previously defined EditTexts to these values*/
         Intent intent = getIntent();
-
 
         /*TODO: COMMENT */
         if(intent.hasExtra(EXTRA_ID)){
@@ -297,12 +296,22 @@ public class GNewEditGoal extends AppCompatActivity implements DatePickerDialog.
 
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    iId = Math.toIntExact(gId);
+                    alarmRequestCode = Math.toIntExact(gId);
                 }
 
-                GoalObject goal = new GoalObject(title, description, date, time, radioString , markedComplete, iId);
+                GoalObject goal = new GoalObject(title, description, date, time, radioString , markedComplete, alarmRequestCode);
 
                 if(st_update.equals(EXTRA_UPDATE)){
+
+                    /*First wee need to cancel the previous Alarm Manager*/
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(GNewEditGoal.this, AlertReceiver.class);
+
+                    /*Passing the context, the request code needs to be unique - so pass the id of the goal, the intent and any flags (which is 0)*/
+                    PendingIntent sender = PendingIntent.getBroadcast(GNewEditGoal.this, goal.getAlarmRequestCode(), alarmIntent, 0 );
+
+                    alarmManager.cancel(sender);
+
                     goal.setId(gId);
                     GoalViewModel.update(goal);
                     Log.d("Diss", "Value of gID update: " + gId);

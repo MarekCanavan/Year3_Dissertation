@@ -317,18 +317,18 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(requestCode == EDIT_GOAL_REQUEST && resultCode == RESULT_OK){
 
-            Long id = data.getLongExtra(GNewEditGoal.EXTRA_ID, -1);
+//            Long id = data.getLongExtra(GNewEditGoal.EXTRA_ID, -1);
 
-            if(id == -1){
-                Toast.makeText(this, "Goal Can't be updated", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
-            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
-            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
-            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
-            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
+//            if(id == -1){
+//                Toast.makeText(this, "Goal can't be updated", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
+//            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
+//            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
+//            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
+//            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
 //
 //            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
 //            goal.setId(id);

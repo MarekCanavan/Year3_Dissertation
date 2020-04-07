@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalEntryData;
+import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalNewStructure;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
@@ -28,7 +30,7 @@ import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
 
 import java.util.List;
 
-public class MyJournalsFragment extends Fragment {
+public class MyJournalsFragment extends Fragment implements View.OnClickListener {
 
     /*Member variable for the journalSingleEntryViewModel*/
     private JournalViewModel journalViewModel;
@@ -43,6 +45,8 @@ public class MyJournalsFragment extends Fragment {
         /*Adds the '+' image in drawable folder to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_entry);
         newEntry.setImageResource(R.mipmap.ic_addition_button_dark_blue_round);
+
+        newEntry.setOnClickListener(this);
 
         /*Initialise Recycler View*/
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view__my_journals_fragment);//get reference to the recycler view
@@ -84,4 +88,13 @@ public class MyJournalsFragment extends Fragment {
 
         return rootView;
     }
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(), "newJournalToast", Toast.LENGTH_SHORT).show();
+        Intent i_choose_journal = new Intent(getContext(), JournalNewStructure.class);
+        startActivity(i_choose_journal);
+
+    }
+
 }
