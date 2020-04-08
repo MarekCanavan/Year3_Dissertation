@@ -37,6 +37,11 @@ public class JournalStructureRepository {
         new InsertJournalStructureAsyncTask(journalStructureDao).execute(journalStructure);
     }
 
+    public void update(JournalStructureObject journalStructure){
+        new UpdateJournalStructureAsyncTask(journalStructureDao).execute(journalStructure);
+    }
+
+
     public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
         return journalStructureDao.getStructureWithID(id);
     }
@@ -60,6 +65,21 @@ public class JournalStructureRepository {
         @Override
         protected Void doInBackground(JournalStructureObject... journalStructureObjects) {
             journalStructureDao.insert(journalStructureObjects[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateJournalStructureAsyncTask extends AsyncTask<JournalStructureObject, Void, Void>{
+
+        private JournalStructureDao journalStructureDao;
+
+        public UpdateJournalStructureAsyncTask(JournalStructureDao journalStructureDao) {
+            this.journalStructureDao = journalStructureDao;
+        }
+
+        @Override
+        protected Void doInBackground(JournalStructureObject... journalStructureObjects) {
+            journalStructureDao.update(journalStructureObjects[0]);
             return null;
         }
     }

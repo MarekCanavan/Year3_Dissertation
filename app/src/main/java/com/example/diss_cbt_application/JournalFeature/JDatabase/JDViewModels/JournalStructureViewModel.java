@@ -33,18 +33,18 @@ public class JournalStructureViewModel extends AndroidViewModel {
     /*Functions that are passed a JournalStructureObject and the appropriate methods are called in the repository
      * with the JournalStructureObject passed to them*/
     public static void insert(JournalStructureObject journalStructure){
-        Log.d("Diss", "In JSViewModel, printing JournalStructure: " + journalStructure);
         repository.insert(journalStructure);
     }
 
-    public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
-        Log.d("Diss", "In JSViewModel, printing JournalStructure: " + id);
-        return repository.getStructureWithID(id);
+    public static void update(JournalStructureObject journalStructure){
+        repository.update(journalStructure);
+    }
 
+    public LiveData<List<JournalStructureObject>> getStructureWithID(Long id){
+        return repository.getStructureWithID(id);
     }
 
     public List<JournalStructureObject> getStructureWithIDNotLive(Long id){
-        Log.d("Diss", "In JSViewModel, printing JournalStructure: " + id);
         return repository.getStructureWithIDNotLive(id);
 
     }

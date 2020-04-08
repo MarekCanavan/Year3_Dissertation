@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.diss_cbt_application.DataPresentation;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
@@ -59,7 +60,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                     ps_year, ps_monthOfYear, ps_dayOfMonth, ps_hour, ps_minute;
     boolean edit = true;
     private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
-    LinearLayout scroll;
     JournalSingleEntryViewModel journalSingleEntryViewModel;
 
     /*Defining Arraylists used throughout the class*/
@@ -71,6 +71,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     List<Long> fk_eids = new ArrayList<>();
 
     Button bt_goal_time_picker, bt_goal_date_picker;
+    DataPresentation dataPresentationObj;
+    ScrollView scroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +84,18 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         uniqueEntryIDs.clear();
         fk_eids.clear();
 
-
         /*Initialising values in onCreate as they are used in checks later in the class*/
         time = "";
         date = "";
         mainEntryID = 0L;
+        scroll = findViewById(R.id.sv_field_generation_entry_data);        /*Observe the database, sending a query for data entries that have the foreign key id we pass (which is the mainID of the entry*/
+        journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
+                .get(JournalSingleEntryDataViewModel.class);
 
         unpackingBundle();//unpack bundle and populate Text Fields
 
-        createEntryData(mainEntryID, TEXT_VIEW);//initially the data just needs to be presented to the user in a TextView
+        dataPresentationObj = new DataPresentation(this, scroll, JournalContract.TEXT_VIEW, mainEntryID,
+                journalSingleEntryDataViewModel);
     }
 
     /*This function simply extracts away the unpacking of the bundle
@@ -122,103 +127,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
     }
 
-    /** This function queries the database for the rest of the data assigned to the entry with the uniqueID we parse
-     *If the user wants to Edit any of the fields they have the option to click the 'Edit' button
-     *If this is the case the data needs to be regenerated onto EditTexts
-     *
-     *@param - entryID - the ID of the entry for which we want to see the data, this is needed to query the database
-     *@param - dataRepresentation - depending on which string is parsed depends on if the data is put into a TextView or an EditText*/
-    public void createEntryData(final Long entryID, String dataRepresentation ){
-
-        /*We need a global string value for the datarepresentation so it can be accessed from the oberver onChanged function*/
-        gDataRepresentation = dataRepresentation;
-
-        /*Observe the database, sending a query for data entries that have the foreign key id we pass (which is the mainID of the entry*/
-        journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
-                .get(JournalSingleEntryDataViewModel.class);
-        journalSingleEntryDataViewModel.getEntryDataWithId(mainEntryID).observe(this, new Observer<List<JournalSingleEntryDataObject>>() {
-            @Override
-            public void onChanged(List<JournalSingleEntryDataObject> journalSingleEntryDataObjects) {
-
-                initialiseScrollView();//function called to initialise the scroll view
-
-                /*For loop iterates through all of the journalSingleEntryDataObjects and populates the activity with the data from the Objects*/
-                for(int i = 0 ; i < journalSingleEntryDataObjects.size() ; i++){
-
-                    Log.d("Diss", "In cursor move ");
-
-                    /*Take values from the Objects and store in variables for manipulation and display*/
-                    Long _id =  journalSingleEntryDataObjects.get(i).getId();
-                    String columnName = journalSingleEntryDataObjects.get(i).getColumnName();
-                    String columnType = journalSingleEntryDataObjects.get(i).getColumnType();
-                    String entryData = journalSingleEntryDataObjects.get(i).getEntryData();
-                    Long entryID_ = journalSingleEntryDataObjects.get(i).getFk_eid();
-
-                    //Name of the Entry Field
-                    TextView columnText = new TextView(getApplicationContext());
-                    columnText.setText(columnName);
-                    columnText.setTextSize(25);
-                    columnText.setTextColor(Color.parseColor("#000000"));
-
-                    scroll.addView(columnText);//Add to LinearLayout on ScrollView
-
-                    /*This if statements checks what string was parsed into the function
-                    * If TEXT_VIEW was parse display the entry data in a TextView
-                    * If EDIT_VIEW was parsed display the entry data in an EditText so the user can update their entry*/
-                    if(gDataRepresentation == TEXT_VIEW){
-                        //Text Field for the entry data
-                        TextView entryData_ = new TextView(JournalEntryData.this);
-
-                        entryData_.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                        entryData_.setText(entryData);
-
-                        scroll.addView(entryData_);//Add to LinearLayout on ScrollView
-
-                        uniqueEntryIDs.add(_id);
-                        fk_eids.add(entryID_);
-
-                    }
-                    else if(gDataRepresentation == EDIT_VIEW){
-                        //Text Field for the entry data
-                        EditText entryDataView = new EditText(JournalEntryData.this);
-
-                        entryDataView.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                        entryDataView.setText(entryData);
-
-                        allEds.add(entryDataView);//Adding variables to array for later persistence to the database
-
-                        scroll.addView(entryDataView);//Add to LinearLayout on ScrollView
-                    }
-
-                    //Adding variables to array for later persistence to the database
-                    entryDataList.add(entryData);
-                    columnNames.add(columnName);
-                    columnTypes.add(columnType);
-
-                }
-
-            }
-        });
-
-    }
-
-    /**Defines the ScrollView and removes views
-     * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
-     * Set the Orientation Vertical and add to the scrollView*/
-    private void initialiseScrollView(){
-        ScrollView fieldReGeneration = findViewById(R.id.sv_field_generation_entry_data);
-        fieldReGeneration.removeAllViews();
-        scroll = new LinearLayout(getApplicationContext());
-        scroll.setOrientation(LinearLayout.VERTICAL);
-        fieldReGeneration.addView(scroll);
-    }
-
     /**If the user wants to edit their entry this function handles it
     * Boolean Value for edit or save, once in edit mode anything they change will be saved*/
     public void editButtonOnClick(View v){
@@ -227,7 +135,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
         if(edit){//true
 
-
             tv_entry_name = findViewById(R.id.tv_entry_name);
             tv_entry_name.setVisibility(View.INVISIBLE);
 
@@ -235,8 +142,9 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
             et_entry_name.setVisibility(View.VISIBLE);
             et_entry_name.setText(mEntryName);
 
-            /*Re-Generate the EditTexts with the data so they can be edited*/
-            createEntryData(mainEntryID, EDIT_VIEW);
+            dataPresentationObj.setDataRepresentation(JournalContract.EDIT_VIEW);
+            dataPresentationObj.runEntryData(this, scroll, journalSingleEntryDataViewModel);
+
             bt_save_edit.setText("Save");
             edit = false;
 
@@ -258,8 +166,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
             saveEditedEntry();
             saveEditedEntryData();
+            finish();
         }
-
     }
 
     public void saveEditedEntry(){
@@ -290,12 +198,21 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     * Sends an update request to the database**/
     public void saveEditedEntryData(){
 
+        allEds = dataPresentationObj.getAllEds();
+        columnNames = dataPresentationObj.getColumnNames();
+        columnTypes = dataPresentationObj.getColumnTypes();
+        fk_eids = dataPresentationObj.getFk_eids();
+        uniqueEntryIDs = dataPresentationObj.getUniqueEntryIDs();
+
+
         /*Iterates through all of the objects and updates the fields with the changes the user has made
         * the 'uniqueEntryIDs array is very important as it ensures the correct fields in the database are being updated*/
         for(int i=0; i < uniqueEntryIDs.size(); i++){
 
+            EditText et_temp = allEds.get(i);
+
             JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
-                    columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
+                    columnNames.get(i), columnTypes.get(i), et_temp.getText().toString(),
                      fk_eids.get(i), fk_id );
 
             journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
@@ -303,11 +220,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
             journalSingleEntryDataObject.setId(uniqueEntryIDs.get(i));
 
-
             journalSingleEntryDataViewModel.update(journalSingleEntryDataObject);
         }
-
-        finish();
     }
 
 
@@ -315,9 +229,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     public void deleteButtonOnClick(View v){
 
         doThingAThenThingB();
-
         finish();
-
     }
 
     /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
@@ -333,9 +245,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-
                 entryObjectForDeletion = journalSingleEntryViewModel.getEntryWithId(mainEntryID);
-
             }
         });
 
@@ -356,13 +266,11 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
      * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseDateOnClick(View v){
 
-
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
-
 
         /*TODO: COMMENT*/
 
@@ -457,5 +365,4 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         mTimePicker.show();
 
     }
-
 }

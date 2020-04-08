@@ -29,6 +29,8 @@ public class JournalContract {
     public static final String GENERAL = "general"; //When inserting a column to the database
     public static final String NUMERIC = "numeric"; //When inserting a percentage to the database
 
-
+    /*Setting strings*/
+    public static final String TEXT_VIEW = "TextView";
+    public static final String EDIT_VIEW = "EditView";
 
 }

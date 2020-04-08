@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.diss_cbt_application.DataPresentation;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalEntryData;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
@@ -63,7 +64,8 @@ public class JournalData extends AppCompatActivity {
     TextView tvJournalName;
     EditText et_journal_name;
     boolean edit = true;
-    LinearLayout scroll;
+    ScrollView scroll;
+    DataPresentation dataPresentationObj;
 
     private JournalSingleEntryDataViewModel journalSingleEntryDataViewModel;
     private JournalStructureViewModel journalStructureViewModel;
@@ -75,6 +77,13 @@ public class JournalData extends AppCompatActivity {
     ArrayList<Integer> numericList2 = new ArrayList<Integer>();
     ArrayList<Integer> numericList3 = new ArrayList<Integer>();
     ArrayList<Integer> numericList4 = new ArrayList<Integer>();
+
+    /*Defining Arraylists used throughout the class*/
+    List<String> columnNames =new ArrayList<>();
+    List<String> columnTypes =new ArrayList<>();
+    ArrayList<EditText> allEds = new ArrayList<>();
+    List<Long> uniqueEntryIDs = new ArrayList<>();
+    List<Long> uniqueFKIDs = new ArrayList<>();
 
     List<JournalStructureObject> structureObjects;
     List<JournalSingleEntryObject> singleEntryObjects;
@@ -96,15 +105,23 @@ public class JournalData extends AppCompatActivity {
 
         Log.d("Diss", "Journal name: " + journalName);
 
+        journalViewModel = ViewModelProviders.of(JournalData.this)
+                .get(JournalViewModel.class);
+
         tvJournalName = findViewById(R.id.tv_jd_journal_name);
         tvJournalName.setText(journalName);
         tvJournalName.setTextColor(journalColour);
 
+        scroll = findViewById(R.id.sv_jd_field_generation_entry_data);
+        journalStructureViewModel = ViewModelProviders.of(JournalData.this)
+                .get(JournalStructureViewModel.class);
+
+        dataPresentationObj = new DataPresentation(this, scroll, JournalContract.TEXT_VIEW,
+                journalID, journalStructureViewModel);
 
         //doThingAThenThingB();;
 
     }
-
 
     private void doThingAThenThingB(){
 
@@ -113,10 +130,7 @@ public class JournalData extends AppCompatActivity {
             @Override
             public void run() {
 
-
                 Log.d("Diss", "IN THREAD ONE");
-                journalStructureViewModel = ViewModelProviders.of(JournalData.this)
-                        .get(JournalStructureViewModel.class);
                 structureObjects = journalStructureViewModel.getStructureWithIDNotLive(journalID);
 
                 for(int i = 0 ; i < structureObjects.size() ; i++){
@@ -176,8 +190,6 @@ public class JournalData extends AppCompatActivity {
                         Log.d("Diss", "Did not go into any of the .equals PERCENTAGE");
                     }
                 }
-
-
             }
         });
 
@@ -234,7 +246,6 @@ public class JournalData extends AppCompatActivity {
                 series3.setTitle(st_numeric_3);
                 graph.addSeries(series3);
 
-
                 graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext()));
                 graph.getGridLabelRenderer().setNumVerticalLabels(6);
 
@@ -251,19 +262,6 @@ public class JournalData extends AppCompatActivity {
 
             }
         });
-
-    }
-
-
-    /**Defines the ScrollView and removes views
-     * Then defines the LinearLayout 'scroll' to put the TextViews and EditTexts on
-     * Set the Orientation Vertical and add to the scrollView*/
-    private void initialiseScrollView(){
-        ScrollView fieldReGeneration = findViewById(R.id.sv_jd_field_generation_entry_data);
-        fieldReGeneration.removeAllViews();
-        scroll = new LinearLayout(getApplicationContext());
-        scroll.setOrientation(LinearLayout.VERTICAL);
-        fieldReGeneration.addView(scroll);
     }
 
     /**If the user wants to edit their entry this function handles it
@@ -274,7 +272,6 @@ public class JournalData extends AppCompatActivity {
 
         if(edit){//true
 
-
             tvJournalName.setVisibility(View.INVISIBLE);
 
             et_journal_name = findViewById(R.id.ed_jd_journal_name);
@@ -282,90 +279,58 @@ public class JournalData extends AppCompatActivity {
             et_journal_name.setText(journalName);
             et_journal_name.setTextColor(journalColour);
 
+            dataPresentationObj.setDataRepresentation(JournalContract.EDIT_VIEW);
+            dataPresentationObj.runJournalStructure(this, scroll, journalStructureViewModel);
 
-//            /*Re-Generate the EditTexts with the data so they can be edited*/
-//            createEntryData(mainEntryID, EDIT_VIEW);
             bt_save_edit.setText("Save");
             edit = false;
-
         }
         else{//false
 
-            /*Save the fields the user has been edited back to the database*/
-            bt_save_edit.setText("Edit");
-
-//
-//            /*TODO: COMMENT*/
-//            if(time.equals("")){
-//                time = mEntryTime;
-//            }
-//
-//            if(date.equals("")){
-//                date = mEntryDate;
-//            }
-
-            saveEditedEntry();
-            saveEditedEntryData();
+            saveJournalName();
+            saveJournalStructure();
+            finish();
         }
-
     }
 
-    public void saveEditedEntry(){
+    public void saveJournalName(){
 
-        Calendar entryDateTime = Calendar.getInstance();
+        JournalObject journalObject = new JournalObject(et_journal_name.getText().toString(),
+                journalColour, 0);
 
-//        entryDateTime.set(Calendar.YEAR, mYear);
-//        entryDateTime.set(Calendar.MONTH, mMonth);
-//        entryDateTime.set(Calendar.DAY_OF_MONTH, mDay);
-//        entryDateTime.set(Calendar.HOUR_OF_DAY, mHour);
-//        entryDateTime.set(Calendar.MINUTE, mMinute);
-//        entryDateTime.set(Calendar.SECOND, 0);
-//
-//        Long dateTime = System.currentTimeMillis();
-//
-//        JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(et_entry_name.getText().toString(),
-//                date, time, entryDateTime.getTimeInMillis(), mJournalName, mJournalColour, fk_id);
-//
-//        journalSingleEntryObject.setId(mainEntryID);
-//
-//        JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this).get(JournalSingleEntryViewModel.class);
-//        journalSingleEntryViewModel.update(journalSingleEntryObject);
-
+        journalObject.setId(journalID);
+        journalViewModel.update(journalObject);
     }
-
 
     /*Called when the user chooses to 'Save' the update they made to their entry
      * Sends an update request to the database**/
-    public void saveEditedEntryData(){
+    public void saveJournalStructure(){
 
-//        /*Iterates through all of the objects and updates the fields with the changes the user has made
-//         * the 'uniqueEntryIDs array is very important as it ensures the correct fields in the database are being updated*/
-//        for(int i=0; i < uniqueEntryIDs.size(); i++){
-//
-//            JournalSingleEntryDataObject journalSingleEntryDataObject = new JournalSingleEntryDataObject(
-//                    columnNames.get(i), columnTypes.get(i), allEds.get(i).getText().toString(),
-//                    fk_eids.get(i), fk_id );
-//
-//            journalSingleEntryDataViewModel = ViewModelProviders.of(JournalEntryData.this)
-//                    .get(JournalSingleEntryDataViewModel.class);
-//
-//            journalSingleEntryDataObject.setId(uniqueEntryIDs.get(i));
-//
-//
-//            journalSingleEntryDataViewModel.update(journalSingleEntryDataObject);
-//        }
-//
-//        finish();
+        uniqueFKIDs = dataPresentationObj.getFk_eids();
+        uniqueEntryIDs = dataPresentationObj.getUniqueEntryIDs();
+        columnTypes = dataPresentationObj.getColumnTypes();
+        allEds = dataPresentationObj.getAllEds();
+
+        /*Iterates through all of the objects and updates the fields with the changes the user has made
+         * the 'uniqueEntryIDs array is very important as it ensures the correct fields in the database are being updated*/
+        for(int i=0; i < uniqueEntryIDs.size(); i++){
+
+            EditText et_temp = allEds.get(i);
+
+            Log.d("JournalData", "Value of JournalNames in for loop: " + columnNames.get(i).toString());
+            JournalStructureObject journalStructureObject = new JournalStructureObject(et_temp.getText().toString(),
+                    columnTypes.get(i).toString(), uniqueFKIDs.get(i));
+
+            journalStructureObject.setId(uniqueEntryIDs.get(i));
+
+            journalStructureViewModel.update(journalStructureObject);
+        }
     }
-
 
     /*If the user want to delete their entry this function handles it*/
     public void deleteButtonOnClick(View v){
-
         doThingAThenThingB2();
-
         finish();
-
     }
 
     /**TODO: Comment and fix naming conventions*/
@@ -373,16 +338,12 @@ public class JournalData extends AppCompatActivity {
     JournalObject journalObjectForDeletion;
     private void doThingAThenThingB2(){
 
-        journalViewModel = ViewModelProviders.of(JournalData.this)
-                .get(JournalViewModel.class);
-
         /*To Delete First You Need the Object */
         /*Thread 1  */
         sharedSingleThreadExecutor2.execute(new Runnable() {
             @Override
             public void run() {
                 journalObjectForDeletion = journalViewModel.getEntryWithId(journalID);
-
             }
         });
 
@@ -393,6 +354,5 @@ public class JournalData extends AppCompatActivity {
                 journalViewModel.delete(journalObjectForDeletion);
             }
         });
-
     }
 }
