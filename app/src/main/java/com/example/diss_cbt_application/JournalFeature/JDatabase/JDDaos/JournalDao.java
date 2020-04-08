@@ -29,5 +29,7 @@ public interface JournalDao {
     @Query("SELECT * FROM journal_table")
     LiveData<List<JournalObject>> getAllJournals();
 
+    @Query(("SELECT * FROM journal_table WHERE id =:id"))
+    JournalObject getEntryWithId(Long id);
 
 }

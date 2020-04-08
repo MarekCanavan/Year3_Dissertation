@@ -159,7 +159,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             scroll.addView(columnText); //Add the new TextView just created to the layout
 
             /*If statement checks if the EditText that needs to be generated is for a Column or a Percentage*/
-            if(columnType.equals(JournalContract.COLUMN)){
+            if(columnType.equals(JournalContract.GENERAL)){
 
                 //CreateEditText Field for the entry data
                 EditText newColumn = new EditText(JournalCompleteEntryActivity.this);
@@ -172,8 +172,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                 allEds.add(newColumn);//Add the EditText to an ArrayList for later persistence to the database
                 scroll.addView(newColumn);//Add the new EditText just created to the layout
             }
-            else if(columnType.equals(JournalContract.PERCENTAGE + 1 ) || columnType.equals(JournalContract.PERCENTAGE + 2 )
-                    || columnType.equals(JournalContract.PERCENTAGE + 3 ) || columnType.equals(JournalContract.PERCENTAGE + 4 )){
+            else if(columnType.equals(JournalContract.NUMERIC + 1 ) || columnType.equals(JournalContract.NUMERIC + 2 )
+                    || columnType.equals(JournalContract.NUMERIC + 3 ) || columnType.equals(JournalContract.NUMERIC + 4 )){
 
                 //Create EditText Field for the entry data
                 EditText newColumn = new EditText(JournalCompleteEntryActivity.this);

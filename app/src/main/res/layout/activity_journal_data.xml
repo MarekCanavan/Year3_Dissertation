@@ -10,7 +10,7 @@ tools:context=".JournalFeature.JActivities_Fragments.MyJournals.JournalData">
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -18,62 +18,71 @@ tools:context=".JournalFeature.JActivities_Fragments.MyJournals.JournalData">
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+
+
     <Button
-        android:id="@+id/bt_start_date"
-        android:layout_width="75dp"
-        android:layout_height="50dp"
-        android:onClick="startDateOnClick"
-        android:text="Start Date"
-        android:textSize="10dp"
+        android:id="@+id/bt_jd_goal_date_picker"
+        android:layout_width="198dp"
+        android:layout_height="60dp"
+        android:onClick="chooseDateOnClick"
+        android:background="@drawable/button_border"
+        android:text="End Date: "
+        android:textSize="13dp"
+        android:textAlignment="viewStart"
+        android:paddingStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        tools:ignore="RtlCompat" />
+
+    <Button
+        android:id="@+id/bt_jd_goal_time_picker"
+        android:layout_width="198dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_border"
+        android:onClick="chooseTimeOnClick"
+        android:text="Start Date : "
+        android:textSize="13dp"
+        android:textAlignment="viewStart"
+        android:paddingStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/bt_goal_date_picker"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/tv_jd_journal_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Journal Name"
+        android:textColor="@color/black"
+        android:textSize="19dp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_num_entries"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47" />
+
+    <EditText
+        android:id="@+id/ed_jd_journal_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.46" />
-
-    <TextView
-        android:id="@+id/tv_journal_analysis_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Date"
-        android:textColor="@color/black"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.331"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.46" />
-
-    <Button
-        android:id="@+id/bt_end_date"
-        android:layout_width="75dp"
-        android:layout_height="50dp"
-        android:onClick="endDateOnClick"
-        android:text="End     Date"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.625"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.46" />
-
-
-    <TextView
-        android:id="@+id/tv_journal_analysis_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Date"
-        android:textColor="@color/black"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.91"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.46" />
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
         android:id="@+id/tv_num_entries"
@@ -81,13 +90,13 @@ tools:context=".JournalFeature.JActivities_Fragments.MyJournals.JournalData">
         android:layout_height="wrap_content"
         android:text="Number of Entries: "
         android:textColor="@color/black"
-        android:textSize="17dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.54" />
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
         android:id="@+id/tv_num_entrie_value"
@@ -98,9 +107,61 @@ tools:context=".JournalFeature.JActivities_Fragments.MyJournals.JournalData">
         android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.54" />
+        app:layout_constraintVertical_bias="0.47" />
+
+
+    <ScrollView
+        android:id="@+id/sv_jd_field_generation_entry_data"
+        android:layout_width="379dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.79">
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/bt_journal_data_edit"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@color/darkBlue"
+        android:onClick="editButtonOnClick"
+        android:text="EDIT"
+        android:textColor="@color/white"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.950" />
+
+    <Button
+        android:id="@+id/bt_journal_data_delete"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@color/darkBlue"
+        android:onClick="deleteButtonOnClick"
+        android:text="DELETE"
+        android:textColor="@color/white"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.775"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.950" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

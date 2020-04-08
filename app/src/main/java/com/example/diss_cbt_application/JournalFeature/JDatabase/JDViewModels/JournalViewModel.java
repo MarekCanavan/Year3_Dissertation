@@ -42,6 +42,9 @@ public class JournalViewModel extends AndroidViewModel {
     public static Long insertNotAsync(JournalObject journal){
         return repository.insertNotAsync(journal);
     }
+    public JournalObject getEntryWithId(Long id){
+        return repository.getEntryWithId(id);
+    }
 
     public void update(JournalObject journal){
          repository.update(journal);

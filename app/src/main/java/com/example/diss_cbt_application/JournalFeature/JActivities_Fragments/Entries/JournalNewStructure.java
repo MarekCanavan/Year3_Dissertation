@@ -69,9 +69,8 @@ public class JournalNewStructure extends AppCompatActivity {
         initialiseScrollView();
     }
 
-
     /**This function creates a new Edit Text Field where the user can assign a name to a column */
-    public void newColumnOnClick(View v){
+    public void newGeneralOnClick(View v){
 
         EditText newColumn = new EditText(this);
         newColumn.setGravity(0);
@@ -94,7 +93,7 @@ public class JournalNewStructure extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         newColumn.setId(Counter);
-        columnTypes.add(JournalContract.COLUMN);
+        columnTypes.add(JournalContract.GENERAL);
         Counter++;
 
         scroll.addView((text));
@@ -102,7 +101,7 @@ public class JournalNewStructure extends AppCompatActivity {
     }
 
     /**This function creates a new Edit Text Field where the user can assign a name to a percentage field */
-    public void newPercentageOnClick(View v){
+    public void newNumericOnClick(View v){
 
         if(numericColumn < 4){
 
@@ -126,7 +125,7 @@ public class JournalNewStructure extends AppCompatActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT));
 
             newPercentage.setId(Counter);
-            columnTypes.add(JournalContract.PERCENTAGE + numericColumn);
+            columnTypes.add(JournalContract.NUMERIC + numericColumn);
             Counter++;
 
             scroll.addView((text));

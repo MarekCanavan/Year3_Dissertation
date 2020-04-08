@@ -13,13 +13,14 @@
         <activity android:name=".JournalFeature.JActivities_Fragments.MyJournals.JournalData"></activity>
         <activity android:name=".GoalsFeature.GNewEditGoal" />
         <activity android:name=".JournalFeature.JActivities_Fragments.MyJournals.MyJournalsFragment" />
-        <activity android:name=".JournalFeature.JActivities_Fragments.Entries.JournalEntryData" />
+        <activity android:name=".JournalFeature.JActivities_Fragments.Entries.JournalEntryData"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".JournalFeature.JActivities_Fragments.Entries.JournalCompleteEntryActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".JournalFeature.JActivities_Fragments.Entries.JournalNewStructure"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".JournalFeature.JActivities_Fragments.Entries.JournalChooseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -80,6 +80,8 @@ public class MyJournalsFragment extends Fragment implements View.OnClickListener
                 intent.putExtra(JournalContract.JOURNAL_NAME, entry.getJournalName());
                 intent.putExtra(JournalContract.JOURNAL_COLOUR, entry.getJournalColour());
 
+                Log.d("Diss", "Journal name before: " + entry.getJournalName());
+
                 startActivity(intent);
 
             }

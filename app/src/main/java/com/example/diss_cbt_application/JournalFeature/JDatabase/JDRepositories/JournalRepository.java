@@ -37,7 +37,6 @@ public class JournalRepository {
         journalDao = database.JournalDao();
         allJournals = journalDao.getAllJournals();
     }
-
     /*Public methods for all database operations*/
 
     public Long insertNotAsync(JournalObject journal){
@@ -55,6 +54,10 @@ public class JournalRepository {
 
     public LiveData<List<JournalObject>> getAllJournals() {
         return allJournals;
+    }
+
+    public JournalObject getEntryWithId(Long id){
+        return journalDao.getEntryWithId(id);
     }
 
     /**
