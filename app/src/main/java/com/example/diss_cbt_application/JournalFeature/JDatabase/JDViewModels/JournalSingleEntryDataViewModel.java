@@ -32,23 +32,48 @@ public class JournalSingleEntryDataViewModel extends AndroidViewModel {
 
     /*Functions that are passed a journalSingleEntryDataObject and the appropriate methods are called in the repository
      * with the journalSingleEntryDataObject passed to them*/
+
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the insert method and passes the journalSingleEntryDataObject so it can be inserted
+     *
+     * @param journalSingleEntryDataObject - journal object to update*/
     public static void insert(JournalSingleEntryDataObject journalSingleEntryDataObject){
         repository.insert(journalSingleEntryDataObject);
     }
 
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the update method and passes the journalSingleEntryDataObject so it can be updated
+     *
+     * @param journalSingleEntryDataObject - journal object to update*/
     public static void update(JournalSingleEntryDataObject journalSingleEntryDataObject){
         repository.update(journalSingleEntryDataObject);
     }
 
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getEntryDataWithId method and passes the id of the object.
+     *
+     * @param id - id of the objects we want to retrieve
+     * @reutrn LiveData<List<JournalSingleEntryDataObject>> - LiveData list of all JournalSingleEntryDataObject with the given id */
     public LiveData<List<JournalSingleEntryDataObject>> getEntryDataWithId(Long id){
         return repository.getEntryDataWithId(id);
     }
 
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getEntriesWithIDNotLive method and passes the id of the object.
+     *
+     * @param id - id of the objects we want to retrieve
+     * @reutrn List<JournalSingleEntryObject> - normal list of all JournalSingleEntryDataObjects with the given id */
     public List<JournalSingleEntryDataObject> getEntriesWithIDNotLive(Long id){
         return repository.getEntriesWithIDNotLive(id);
     }
 
-    public List<JournalSingleEntryDataObject> getEntriesWithTIDType(Long id, String columType){
-        return repository.getEntriesWithTIDType(id, columType);
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getEntriesWithTIDType method and passes the id of the object and type of the column.
+     *
+     * @param id - id of the objects we want to retrieve
+     * @param columnType - column type of the entry we want to retrieve
+     * @reutrn List<JournalSingleEntryDataObject> - normal list of all JournalSingleEntryDataObjects with the given id and column type*/
+    public List<JournalSingleEntryDataObject> getEntriesWithTIDType(Long id, String columnType){
+        return repository.getEntriesWithTIDType(id, columnType);
     }
 }

@@ -14,7 +14,7 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 
 import java.util.List;
 
-/**This class hold the functions that link the Activity/Fragment to the repository
+/**This class holds the functions that link the Activity/Fragment to the repository
  * update, delete and getAllJournals can be called from the Activity and the corresponding
  * function is called in the repository to handle the request*/
 public class JournalViewModel extends AndroidViewModel {
@@ -39,23 +39,41 @@ public class JournalViewModel extends AndroidViewModel {
     /*Functions that are passed a journal and the appropriate methods are called in the repository
      * with the journal passed to them*/
 
+    /**This function utilises the repository instance set in the constructor to insert the journal synchronously
+     * and retrieve the id of this insertion
+     *
+     * @param journal - journal object for insertion
+     * @return id - id of the insertion  */
     public static Long insertNotAsync(JournalObject journal){
         return repository.insertNotAsync(journal);
     }
+
+    /**This function utilises the repository instance set in the constructor to update the journal object
+     *
+     * @param journal - journal object to update*/
+    public void update(JournalObject journal){
+        repository.update(journal);
+    }
+
+    /**This function utilises the repository instance set in the constructor to delete the journal object
+     *
+     * @param journal - journal object to delete*/
+    public void delete(JournalObject journal){
+        repository.delete(journal);
+    }
+
+    /**This function retrieves a JournalObject given an id by utilising the repository object set in the constructor.
+     *
+     * @param id - id of the JournalObject we want to retrieve
+     * @return JournalObject - Object retrieved given the id */
     public JournalObject getEntryWithId(Long id){
         return repository.getEntryWithId(id);
     }
 
-    public void update(JournalObject journal){
-         repository.update(journal);
-    }
-
-    public void delete(JournalObject journal){
-         repository.delete(journal);
-    }
-
+    /** Function returns the list of LiveData Objects set in the ViewModel constructor.
+     *
+     * @return LiveData<List<JournalObject>> - List of LiveData Objects  */
     public LiveData<List<JournalObject>> getAllJournals(){
          return allJournals;
     }
-
 }

@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 /**
- * *This class defines the database for the Goals Feature, the entities are the tables it contain:
+ * *This class defines the database for the Goals Feature, the entities are the tables it contains:
  *      - GoalObject
  * */
 @Database(entities = {GoalObject.class}, version = 1, exportSchema = false )
@@ -36,5 +36,4 @@ public abstract class GoalDatabase extends RoomDatabase {
         }
         return instance;
     }
-
 }

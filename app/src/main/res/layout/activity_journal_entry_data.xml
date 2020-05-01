@@ -19,8 +19,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65">
+        app:layout_constraintTop_toBottomOf="@+id/bt_goal_time_picker"
+        app:layout_constraintVertical_bias="0.16">
 
 
     </ScrollView>
@@ -44,15 +44,16 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Entry Name"
-        android:textSize="30dp"
-        android:visibility="invisible"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="30dp"
+        android:inputType="textMultiLine"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/tv_journal_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_journal_name"
@@ -60,30 +61,29 @@
         android:layout_height="wrap_content"
         android:text="Journal Name"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bt_goal_time_picker"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0.262"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
-
+        app:layout_constraintVertical_bias="0.875" />
 
     <Button
         android:id="@+id/bt_goal_date_picker"
         android:layout_width="198dp"
         android:layout_height="60dp"
-        android:onClick="chooseDateOnClick"
         android:background="@drawable/button_border"
-        android:text="Date: "
-        android:textSize="16dp"
-        android:textAlignment="viewStart"
+        android:onClick="chooseDateOnClick"
         android:paddingStart="8dp"
+        android:text="Date: "
+        android:textAlignment="viewStart"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16"
+        app:layout_constraintTop_toBottomOf="@+id/tv_journal_name"
+        app:layout_constraintVertical_bias="0.017"
         tools:ignore="RtlCompat" />
 
     <Button
@@ -92,13 +92,12 @@
         android:layout_height="60dp"
         android:background="@drawable/button_border"
         android:onClick="chooseTimeOnClick"
-        android:text="Time : "
-        android:textSize="16dp"
-        android:textAlignment="viewStart"
         android:paddingStart="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/bt_goal_date_picker"
+        android:text="Time : "
+        android:textAlignment="viewStart"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bt_goal_date_picker"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -107,7 +106,7 @@
 
     <Button
         android:id="@+id/bt_edit"
-        android:layout_width="100dp"
+        android:layout_width="203dp"
         android:layout_height="wrap_content"
         android:background="@color/darkBlue"
         android:onClick="editButtonOnClick"
@@ -115,15 +114,15 @@
         android:textColor="@color/white"
         android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintEnd_toStartOf="@+id/bt_delete"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.920" />
+        app:layout_constraintTop_toBottomOf="@+id/sv_field_generation_entry_data"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/bt_delete"
-        android:layout_width="100dp"
+        android:layout_width="203dp"
         android:layout_height="wrap_content"
         android:background="@color/darkBlue"
         android:onClick="deleteButtonOnClick"
@@ -132,9 +131,9 @@
         android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.775"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.920" />
+        app:layout_constraintTop_toBottomOf="@+id/sv_field_generation_entry_data"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

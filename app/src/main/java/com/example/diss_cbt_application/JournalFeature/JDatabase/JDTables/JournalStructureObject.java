@@ -16,7 +16,8 @@ import static androidx.room.ForeignKey.CASCADE;
  *      columnType - the type of data the column accepts e.g. normal, percentage
  *      fk_id - this is a foreign key to the name of the journal and id of the journal this is assigned to
  *
- * indices are for faster searching of the table */
+ * indices are for faster searching of the table. Foreign Key relationship with onDelete Cascade is also defined between this table
+ * and the JournalObject, so if an entry from JournalObject is deleted its associated structure is also deleted.*/
 @Entity(tableName = "journal_structure_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
         parentColumns = "id", childColumns = "fk_id")},

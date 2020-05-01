@@ -1,9 +1,9 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General;
 
 /**
- * Class holds the Strings used in database calls throughout the application
+ * Class holds the Strings used in database calls throughout the application.
  * This is done to make the handling of the names easier
- * If it is necessary to change the name of a table or field in it, changing a string here is all that needs to be done*/
+ * If it is necessary to change the name of a table or field in it, changing a string here is all that needs to be done.*/
 public class JournalContract {
 
     /*Strings used in more than 1 table*/

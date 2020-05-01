@@ -31,22 +31,44 @@ public class GoalViewModel extends AndroidViewModel {
 
     /*Functions that are passed a goal and the appropriate methods are called in the repository
     * with the goal passed to them*/
+
+    /**Function uses the repository instance set in the constructor to insert the goal into the database asynchronously
+     *
+     * @param - goal - the goal object for insertion*/
     public static void insert(GoalObject goal){
         repository.insert(goal);
     }
 
+
+    /**Function uses the repository instance set in the constructor to insert the goal into the database synchronously
+     * and returns the id of insertion
+     *
+     * @param - goal - the goal object for insertion
+     * @reutrn - id of goal inserted*/
     public static Long insertNotAsync(GoalObject goal){
         return repository.insertNotAsync(goal);
     }
 
+
+    /**Function uses the repository instance set in the constructor to update the goal in the database
+     * @param - goal - the goal object for update*/
     public static void update(GoalObject goal){
         repository.update(goal);
     }
 
+
+    /**Function uses the repository instance set in the constructor to delete the goal in the database
+     *
+     * @param - goal - the goal object for deletion*/
     public void delete (GoalObject goal){
         repository.delete(goal);
     }
 
+
+    /**Function uses the repository instance set in the constructor to retrieve all of the goals
+     * currently in the database. A List of LiveData Goals Objects is returned.
+     *
+     * @return - List of all GoalObjects currently in the table*/
     public LiveData<List<GoalObject>> getAllGoals(){
         return allGoals;
     }

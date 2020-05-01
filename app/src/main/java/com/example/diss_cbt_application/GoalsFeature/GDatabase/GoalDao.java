@@ -15,17 +15,31 @@ import java.util.List;
 @Dao
 public interface GoalDao {
 
+    /**Insert a goal
+     *
+     * @param goal - goal for insertion
+     * */
     @Insert
     Long insert(GoalObject goal);
 
+    /**Update a goal
+     *
+     * @param goal - goal for updating
+     * */
     @Update
     void update(GoalObject goal);
 
+    /**Delete a goal
+     *
+     * @param goal - goal for deletion
+     * */
     @Delete
-    void delete(GoalObject delete);
+    void delete(GoalObject goal);
 
-    @Query("SELECT * FROM goals_table")
+    /**Select all of the goals currently in the database and in ascending order
+     *
+     * @return   LiveData<List<GoalObject>>  - list of GoalObjects */
+    @Query("SELECT * FROM goals_table ORDER BY dateTime ASC ")
     LiveData<List<GoalObject>> getAllGoals();
-
 
 }

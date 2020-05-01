@@ -20,30 +20,34 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
-import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
+import com.example.diss_cbt_application.Utils.MainActivity;
+import com.example.diss_cbt_application.Utils.VerticalSpaceItemDecoration;
 
 import java.util.List;
 
 /**
  * Fragment for the Journal Page
- * The user is presented with a RecyclerView of their previous journal entries
+ * The user is presented with a RecyclerView of their previous journal entries which this class is responsible for populating
  * The user has the option of:
  *      - Viewing an entry
  *      - Creating a new entry
- *      - Viewing their current Journals
+ *
+ * Thi class also handles when the user clicks a journal entry, and packages the entry information into an intent for the EntryData Activity.
  * */
 public class JournalFragment extends Fragment implements View.OnClickListener{
 
     /*Member variable for the journalSingleEntryViewModel*/
     JournalSingleEntryViewModel journalSingleEntryViewModel;
 
+    /**Default Constructor*/
     public JournalFragment() {
         super();
     }
 
     /**
      * Sets up the Fragment when the user first navigates to it
-     * Populates the RecyclerView
+     * Populates the RecyclerView and handles when the user clicks on an entry. Retrieves important information from the object selected
+     * and packages it into a bundle which is sent to the EntryData Activity.
      * Draws a plus on the Button for styling
      *
      * @return RootView which is the View in which all the other views are placed*/
@@ -57,6 +61,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         /*Adds the '+' image in drawable folder to the button for a New Entry*/
         ImageButton newEntry = rootView.findViewById(R.id.bt_new_entry);
         newEntry.setImageResource(R.mipmap.ic_addition_button_dark_blue_round);
+        newEntry.setOnClickListener(this);
 
         /*Initialise Recycler View*/
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_journal_fragment);//get reference to the recycler view
@@ -104,9 +109,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
+
+    /**Simple function that launches an Activity when the user wants to create a new journal entry
+     *
+     * @param v - the function is parsed the view */
     @Override
     public void onClick(View v) {
-
+        Intent i_choose_journal = new Intent(getContext(), JournalChooseActivity.class);
+        startActivity(i_choose_journal);
     }
-
 }

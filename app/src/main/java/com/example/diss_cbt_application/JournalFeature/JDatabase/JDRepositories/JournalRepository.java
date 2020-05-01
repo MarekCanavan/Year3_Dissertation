@@ -17,9 +17,9 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JournalDatabase
 import java.util.List;
 
 /**
- * Simple Java Class that provides another abstraction layer between data source and the rest of the app
- * Clean API to the rest of the application to handle calls to the Journals Database
- * Best Practice to create a repository per Table/Dao, so this is the repository for the Journal Table
+ * Simple Java Class that provides another abstraction layer between data source and the rest of the app.
+ * Clean API to the rest of the application to handle calls to the Journals Database.
+ * Best Practice to create a repository per Table/Dao, so this is the repository for the Journal Table.
  * */
 public class JournalRepository {
 
@@ -39,23 +39,42 @@ public class JournalRepository {
     }
     /*Public methods for all database operations*/
 
+    /**This function utilises the dao instance set in the constructor to insert the journal synchronously
+     *
+     * @param journal - journal object for insertion
+     * @return id - id of the insertion  */
     public Long insertNotAsync(JournalObject journal){
         id = journalDao.insert(journal);
         return id;
     }
 
+    /**Function creates an instance of the local UpdateJournalAsyncTask, passes the Dao instance
+     * and the journal object to execute the update.
+     *
+     * @param journal - journal object to update*/
     public void update(JournalObject journal){
         new UpdateJournalAsyncTask(journalDao).execute(journal);
     }
 
+    /**Function creates an instance of the local DeleteJournalAsyncTask, passes the Dao instance
+     * and the journal object to execute the delete.
+     *
+     * @param journal - journal object to delete*/
     public void delete(JournalObject journal){
         new DeleteJournalAsyncTask(journalDao).execute(journal);
     }
 
+    /** Function returns the list of LiveData Objects set in the repository constructor.
+     *
+     * @return LiveData<List<JournalObject>> - List of LiveData Objects  */
     public LiveData<List<JournalObject>> getAllJournals() {
         return allJournals;
     }
 
+    /**This function retrieves a JournalObject given an id by utilising the dao object set in the constructor.
+     *
+     * @param id - id of the JournalObject we want to retrieve
+     * @return JournalObject - Object retrieved given the id */
     public JournalObject getEntryWithId(Long id){
         return journalDao.getEntryWithId(id);
     }
@@ -68,10 +87,12 @@ public class JournalRepository {
 
         private JournalDao journalDao;
 
+        /**Constructor sets the dao instance for background update*/
         private UpdateJournalAsyncTask(JournalDao journalDao){
             this.journalDao = journalDao;
         }
 
+        /**Updates the journal object on a background thread*/
         @Override
         protected Void doInBackground(JournalObject... journalObjects) {
             journalDao.update(journalObjects[0]);
@@ -87,10 +108,12 @@ public class JournalRepository {
 
         private JournalDao journalDao;
 
+        /**Constructor sets the dao instance for background delete*/
         private DeleteJournalAsyncTask(JournalDao journalDao){
             this.journalDao = journalDao;
         }
 
+        /**Deletes the journal object on a background thread*/
         @Override
         protected Void doInBackground(JournalObject... journalObjects) {
             journalDao.delete(journalObjects[0]);

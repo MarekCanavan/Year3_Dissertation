@@ -1,6 +1,7 @@
 package com.example.diss_cbt_application.JournalFeature.JDatabase;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -91,9 +92,8 @@ public abstract class JournalDatabase extends RoomDatabase {
         /*Function inserts the Journals and their structures into the database in the background*/
         @Override
         protected Void doInBackground(Void... voids) {
-            journalDao.insert(new JournalObject("Marek's Journal", -16777216, 0));
-            journalDao.insert(new JournalObject("Marek's Journal 3", -16777216, 0));
-            journalDao.insert(new JournalObject("Marek's Journal 4", -16777216, 0));
+            journalDao.insert(new JournalObject("System Preset 1", Color.BLACK));
+            journalDao.insert(new JournalObject("System Preset 2", Color.BLUE));
             journalStructureDao.insert(new JournalStructureObject("Test Coulmn", "Column", 1L));
             journalStructureDao.insert(new JournalStructureObject("Test Coulmn2", "Column", 1L));
             journalStructureDao.insert(new JournalStructureObject("Test Coulmn3", "Column", 1L));

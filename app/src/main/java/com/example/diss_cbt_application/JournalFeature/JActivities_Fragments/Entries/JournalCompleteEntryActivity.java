@@ -28,6 +28,7 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.Jo
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,10 +40,10 @@ import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/**This is the Activity that is loaded when the user selects a Journal to complete an entry for
+/**This is the Activity that is loaded when the user selects a Journal to complete an entry for.
  * This is a skeleton for this as all of the journal structures are different
  * A Query is sent to the database based on the Journal ID an a structure is retrieved from the database
- * This is then generated in a scrol view so they user can complete an entry
+ * This is then generated in a scroll view so they user can complete an entry
  * When the user is happy with their entry they can click the 'Save' button and their entry will be saved to the database*/
 public class JournalCompleteEntryActivity extends AppCompatActivity {
 
@@ -52,6 +53,8 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     int columnCounter, journalColour;
     private ScrollView fieldReGeneration;
     String journalName, st_entry_name, date, time;
+    private EditText et_entry_goal_date, et_entry_goal_time;
+    Button bt_goal_time_picker, bt_goal_date_picker;
 
     /*ArrayLists are used to store the data and fields for persistence into the database*/
     List<String> columnTypes = new ArrayList<>();
@@ -66,18 +69,12 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
     /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
     private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
 
-
-    int ps_dayOfMonth, ps_monthOfYear, ps_year, ps_hour, ps_minute;
-    String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
-    private EditText et_entry_goal_date, et_entry_goal_time;
-
-    Button bt_goal_time_picker, bt_goal_date_picker;
-
-
     /*Declaring integers needed for the Time and Date picker*/
     private int mYear, mMonth, mDay, mHour, mMinute;
 
 
+    /**onCreate is responsible setting the activity view. This means initialising all of the TextFields, unpacking the bundle and setting
+     * that data to the view. Accessing the journalStructureViewModel to generate the form the user is to complete. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +139,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             String columnType = journalStructureObject.getColumnType();
             Long tableID = journalStructureObject.getFk_id();
 
-
             /*Create TextView for the name of the entry field*/
             TextView columnText = new TextView(JournalCompleteEntryActivity.this);
 
@@ -158,6 +154,18 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
 
             scroll.addView(columnText); //Add the new TextView just created to the layout
 
+            TextInputLayout textInputLayout = new TextInputLayout(this, null, R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+            LinearLayout.LayoutParams textInputLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            textInputLayout.setLayoutParams(textInputLayoutParams);
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
+            textInputLayout.setBoxCornerRadii(5,5,5,5);
+            //textInputLayout.setHint(columnName);
+            textInputLayout.setPadding(10, 20, 10, 25);
+
+
             /*If statement checks if the EditText that needs to be generated is for a Column or a Percentage*/
             if(columnType.equals(JournalContract.GENERAL)){
 
@@ -169,8 +177,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         200));
 
+                textInputLayout.addView(newColumn);
                 allEds.add(newColumn);//Add the EditText to an ArrayList for later persistence to the database
-                scroll.addView(newColumn);//Add the new EditText just created to the layout
+                scroll.addView(textInputLayout);//Add the new EditText just created to the layout
             }
             else if(columnType.equals(JournalContract.NUMERIC + 1 ) || columnType.equals(JournalContract.NUMERIC + 2 )
                     || columnType.equals(JournalContract.NUMERIC + 3 ) || columnType.equals(JournalContract.NUMERIC + 4 )){
@@ -183,8 +192,9 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
                         100,
                         LinearLayout.LayoutParams.MATCH_PARENT));
 
+                textInputLayout.addView(newColumn);
                 allEds.add(newColumn);//Add the Edittext to an ArrayList for later persistence to the database
-                scroll.addView(newColumn);//Add the new EditText just created to the layout
+                scroll.addView(textInputLayout);//Add the new EditText just created to the layout
 
             }
             else{
@@ -221,7 +231,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter a Date and Time for your Entry", Toast.LENGTH_SHORT).show();
         }
         else{
-            doThingAThenThingB();
+            saveEntrySharedThreadOfExecution();
             finish();
         }
     }
@@ -233,7 +243,7 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
      * This requires retrieving the id from insertion that has just happened
      * A sharedSingleThreadExecutor needs to be setup so that the insertion can be completed, the id saved in entryID
      * and then that entryID can be used in the next thread to insert the EntryData Object */
-    private void doThingAThenThingB(){
+    private void saveEntrySharedThreadOfExecution(){
 
         sharedSingleThreadExecutor.execute(new Runnable() {
             @Override
@@ -295,7 +305,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        /*TODO: COMMENT*/
         DatePickerDialog mDatePicker;
         mDatePicker = new DatePickerDialog(JournalCompleteEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -340,7 +349,6 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
 
-        /*TODO: COMMENT*/
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(JournalCompleteEntryActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -363,7 +371,5 @@ public class JournalCompleteEntryActivity extends AppCompatActivity {
         }, mHour, mMinute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
-
     }
-
 }

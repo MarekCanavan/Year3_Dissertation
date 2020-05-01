@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey;
  *      description - description of what the goal entails
  *      date - date the goal must be completed by
  *      time - time on date set the goal must be completed by
+ *      dateTime - time the goal is to be complete in milliseconds, used for ordering
  *      marked complete - user can assign if they have successfully completed the goal*/
 @Entity(tableName = "goals_table")
 public class GoalObject {
@@ -18,7 +19,6 @@ public class GoalObject {
 
     /*Room automatically creates these fields
      *Table member variables*/
-
     @PrimaryKey(autoGenerate = true)//id is auto incremented
     private Long id;
 
@@ -30,21 +30,23 @@ public class GoalObject {
 
     private String time;
 
+    private Long dateTime;
+
     private String repeat;
 
     private int markedComplete;
 
     private int alarmRequestCode;
 
-
      /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
-      * these fields need to be parsed for it to be valid
-      * We dont want to pass id as it is auto generated*/
-    public GoalObject(String title, String description, String date, String time, String repeat, int markedComplete, int alarmRequestCode) {
+      * these fields need to be parsed for it to be valid.
+      * We don't want to pass id as it is auto generated*/
+    public GoalObject(String title, String description, String date, String time, Long dateTime, String repeat, int markedComplete, int alarmRequestCode) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.time = time;
+        this.dateTime = dateTime;
         this.repeat = repeat;
         this.markedComplete = markedComplete;
         this.alarmRequestCode = alarmRequestCode;
@@ -75,6 +77,10 @@ public class GoalObject {
 
     public String getTime() {
         return time;
+    }
+
+    public Long getDateTime() {
+        return dateTime;
     }
 
     public String getRepeat() {return repeat;}

@@ -1,24 +1,24 @@
 package com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.diss_cbt_application.DataPresentation;
+import com.example.diss_cbt_application.Utils.DataPresentation;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryDataObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
@@ -37,10 +37,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * The user is shown this Activity are choosing to View a specific entry they have made
- * This Activity is a skeleton to represent any entries data to the user
- * The user has the option of editing/updating their entry as well as deleting it
- * Both of these options will be sent to the database which will be updated appropriately*/
+ * The user is shown this Activity after choosing to View a specific entry they have made.
+ * This Activity is a skeleton to represent any entries data to the user.
+ * The user has the option of editing/updating their entry as well as deleting it.
+ * Both of these options will be sent to the database which will be updated appropriately.*/
 public class JournalEntryData extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     /*Member Variables fo the text views in the Activity*/
@@ -48,9 +48,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     EditText et_entry_name;
 
     /*Setting strings*/
-    private static final String TEXT_VIEW = "TextView";
-    private static final String EDIT_VIEW = "EditView";
-    String gDataRepresentation, date, time, mEntryName, mJournalName, mEntryTime, mEntryDate;
+    String date, time, mEntryName, mJournalName, mEntryTime, mEntryDate;
     String st_dayOfMonth, st_monthOfYear, st_year, st_hour, st_minute;
 
     /*Member Variables*/
@@ -64,7 +62,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
     /*Defining Arraylists used throughout the class*/
     List<String> columnNames =new ArrayList<>();
-    List<String> entryDataList =new ArrayList<>();
     List<String> columnTypes =new ArrayList<>();
     ArrayList<EditText> allEds = new ArrayList<>();
     List<Long> uniqueEntryIDs = new ArrayList<>();
@@ -74,6 +71,9 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
     DataPresentation dataPresentationObj;
     ScrollView scroll;
 
+    /**The onCreate function is responsible for initiaising some of the member variables
+     * and calling a function that unpacks the bundle that was sent from the user clicking the recyclerview.
+     * In addition an instance of DataPresentation is created so the entryData is set on the ScrollView*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +98,7 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
                 journalSingleEntryDataViewModel);
     }
 
-    /*This function simply extracts away the unpacking of the bundle
+    /**This function simply extracts away the unpacking of the bundle
     and the initial representation of the data for the entry*/
     public void unpackingBundle(){
 
@@ -141,6 +141,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
             et_entry_name = findViewById(R.id.et_entry_name);
             et_entry_name.setVisibility(View.VISIBLE);
             et_entry_name.setText(mEntryName);
+            et_entry_name.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            et_entry_name.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
             dataPresentationObj.setDataRepresentation(JournalContract.EDIT_VIEW);
             dataPresentationObj.runEntryData(this, scroll, journalSingleEntryDataViewModel);
@@ -154,22 +156,23 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
             /*Save the fields the user has been edited back to the database*/
             bt_save_edit.setText("Edit");
 
-
-            /*TODO: COMMENT*/
+            /*Checks if a new time and date have been set before saving the data,If not make the values which will be persisted to the database
+            * equal to the initial date and time for the entry*/
             if(time.equals("")){
                 time = mEntryTime;
             }
-
             if(date.equals("")){
                 date = mEntryDate;
             }
 
-            saveEditedEntry();
-            saveEditedEntryData();
-            finish();
+            saveEditedEntry();//Save Entry Name
+            saveEditedEntryData();//Save EntryData
+            finish();//Finish Activity
         }
     }
 
+    /**This function saves the title of the entry to the databsae by creating a new object,
+     * setting the id to the id of this entry and calling update on the SingleEntryViewModel*/
     public void saveEditedEntry(){
 
         Calendar entryDateTime = Calendar.getInstance();
@@ -181,8 +184,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         entryDateTime.set(Calendar.MINUTE, mMinute);
         entryDateTime.set(Calendar.SECOND, 0);
 
-        Long dateTime = System.currentTimeMillis();
-
         JournalSingleEntryObject journalSingleEntryObject = new JournalSingleEntryObject(et_entry_name.getText().toString(),
                 date, time, entryDateTime.getTimeInMillis(), mJournalName, mJournalColour, fk_id);
 
@@ -190,11 +191,9 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
         JournalSingleEntryViewModel journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this).get(JournalSingleEntryViewModel.class);
         journalSingleEntryViewModel.update(journalSingleEntryObject);
-
     }
 
-
-    /*Called when the user chooses to 'Save' the update they made to their entry
+    /**Called when the user chooses to 'Save' the update they made to their entry
     * Sends an update request to the database**/
     public void saveEditedEntryData(){
 
@@ -224,25 +223,28 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         }
     }
 
-
-    /*If the user want to delete their entry this function handles it*/
+    /**If the user wants to delete their entry this function handles it but first a dialog box
+    * is shown to confirm the user wants to delete their entry.*/
     public void deleteButtonOnClick(View v){
-
-        doThingAThenThingB();
-        finish();
+        AlertDialog diaBox = AskOption();
+        diaBox.show();
     }
 
-    /*Shared execution thread is needed for the database persistence (further explanation above function doThingAThenThingB*/
-    private Executor sharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
+    /*Shared execution thread is needed for the database persistence*/
+    private Executor deleteSharedSingleThreadExecutor = Executors.newSingleThreadExecutor();
     JournalSingleEntryObject entryObjectForDeletion;
-    private void doThingAThenThingB(){
+
+    /**This shared thread of execution is responsible for deleting an object. To delete an object it first
+     * needs to be retrieved, so this is done in the first thread. Then it is deleted from the database
+     * in the second thread of execution.*/
+    private void saveEntrySharedThreadOfExecution(){
 
         journalSingleEntryViewModel = ViewModelProviders.of(JournalEntryData.this)
                 .get(JournalSingleEntryViewModel.class);
 
         /*To Delete First You Need the Object */
         /*Thread 1  */
-        sharedSingleThreadExecutor.execute(new Runnable() {
+        deleteSharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 entryObjectForDeletion = journalSingleEntryViewModel.getEntryWithId(mainEntryID);
@@ -250,13 +252,41 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         });
 
         /*Thread 2 -*/
-        sharedSingleThreadExecutor.execute(new Runnable() {
+        deleteSharedSingleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 journalSingleEntryViewModel.delete(entryObjectForDeletion);
             }
         });
+    }
 
+    /**
+     * This AlertDialog box is created when the user indicates they want to delete an entry. The check is done
+     * to confirm they want to delete that entry. So 2 options are generated, if the user chooses to cancel then the
+     * dialog box is dismissed. If the user confirms they want to delete then the logic is triggered to delete the entry,
+     **/
+    private AlertDialog AskOption(){
+        AlertDialog myDeletingDialogBox = new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Are you sure you want to delete? There wil be no way to retrieve it")
+                .setIcon(R.drawable.ic_delete_black)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveEntrySharedThreadOfExecution();
+                        finish();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        return myDeletingDialogBox;
     }
 
     /**
@@ -272,8 +302,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        /*TODO: COMMENT*/
-
         String st_date = mEntryDate;
         String[] dateArray = st_date.split("-");
         st_dayOfMonth = dateArray[0];
@@ -284,7 +312,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         ps_monthOfYear = Integer.parseInt(st_monthOfYear);
         ps_dayOfMonth = Integer.parseInt(st_dayOfMonth);
 
-        /*TODO: COMMENT*/
         DatePickerDialog datePickerDialog = new DatePickerDialog(JournalEntryData.this,
                 (DatePickerDialog.OnDateSetListener) this,
                 ps_year,
@@ -296,7 +323,8 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
     }
 
-    /*TODO: COMMENT*/
+    /**This function sets the date picker dialog so that when the user goes to edit the date
+     * it is already loaded with the date they last set for the entry. */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         mYear = year;
@@ -304,15 +332,11 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         mDay = dayOfMonth;
         SimpleDateFormat inFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
-        /*TODO: COMMENT*/
         try {
             Date myDate = inFormat.parse(mDay+"-"+mMonth+"-"+mYear);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, F MMM", Locale.getDefault());
             date = inFormat.format(myDate);
-            //date =simpleDateFormat.format(myDate);
-
             bt_goal_date_picker.setText("Date : " + date);
-
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -326,8 +350,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
      * as is the EditText next to the Date Picker which shows the user the date they picked*/
     public void chooseTimeOnClick(View v){
 
-
-        /*TODO: COMMENT*/
         // Get Current Time
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -339,8 +361,6 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
 
         ps_hour = Integer.parseInt(st_hour);
         ps_minute = Integer.parseInt(st_minute);
-
-        /*TODO: COMMENT*/
 
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(JournalEntryData.this, new TimePickerDialog.OnTimeSetListener() {
@@ -363,6 +383,5 @@ public class JournalEntryData extends AppCompatActivity implements DatePickerDia
         }, ps_hour, ps_minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
-
     }
 }

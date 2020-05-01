@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diss_cbt_application.GoalsFeature.GDatabase.GoalObject;
@@ -28,6 +29,12 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     /*Member variable for the interface onItemClickListener*/
     private OnItemClickListener listener;
 
+    private Fragment context;
+
+    public void setContext(Fragment context) {
+        this.context = context;
+    }
+
     /**This class is where we create and return a view holder
      *
      * @return - viewholder */
@@ -45,7 +52,7 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
     }
 
     /**This class is where we take care of getting the data from the Goal Objects
-     * and populate the textfields with data*/
+     * and populate the text fields with data*/
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
@@ -58,13 +65,21 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
 
     }
 
+    /**Function simply supplies the the number of goals in the array
+     *
+     * @return - size of goals array*/
     @Override
     public int getItemCount() {
         return goals.size();
     }
 
-    /**This is the function that is called from the Activity
-     * A list of goals is parsed (after being retrieved as live data
+    public GoalObject getItemAtPosition(int position){
+        return goals.get(position);
+    }
+
+
+    /**This is the function that is called from the Activity.
+     * A list of goals is parsed after being retrieved as live data
      * the local goals list is set to this parsed list so that the data can be represented on the recyclerview
      * Then notifyDataSetChanged (an android function) is called*/
     public void setGoals(List<GoalObject> goals){
@@ -114,6 +129,8 @@ public class RVAGoalsFragement extends RecyclerView.Adapter<RVAGoalsFragement.Vi
                 }
             });
 
+            /*Sets the onClick for the delete icon
+             * If the user clicks this the goal will be deleted*/
             mDeleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

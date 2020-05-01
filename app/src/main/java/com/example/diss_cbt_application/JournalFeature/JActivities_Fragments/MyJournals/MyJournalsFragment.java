@@ -17,24 +17,31 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalEntryData;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalNewStructure;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalObject;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalSingleEntryObject;
-import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryViewModel;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
-import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.RVAJournalFragement;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.R;
-import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
+import com.example.diss_cbt_application.Utils.VerticalSpaceItemDecoration;
 
 import java.util.List;
 
+/**This Activity presents the user their Journals in a Recycler View on the fragment
+ * The user has the option of clicking a specific journal - to which they will be taken to a new activity - and nbe able to inspect it
+ * or setting a new journal structure by clicking the '+' button, which will launch a new activity where they can set a new structure
+ * */
 public class MyJournalsFragment extends Fragment implements View.OnClickListener {
 
     /*Member variable for the journalSingleEntryViewModel*/
     private JournalViewModel journalViewModel;
 
+    /**
+     * Sets up the Fragment when the user first navigates to it
+     * Populates the RecyclerView
+     * Draws a plus on the Button for styling
+     * Handles when the user clicks on a journal, by packaging the information in an intent and sending to the next activity.
+     *
+     * @return RootView - which is the View in which all the other views are placed*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,7 +63,6 @@ public class MyJournalsFragment extends Fragment implements View.OnClickListener
 
         final RVAMyJournals adapter = new RVAMyJournals(); //Parse RecyclerView arrays to populate with data
         recyclerView.setAdapter(adapter);
-
 
         /* Get reference to the Journal View Model
          * Then observe the changes to the database, specifically the 'getAllJournals' Query
@@ -91,12 +97,16 @@ public class MyJournalsFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
+
+    /**When the user clicks on the '+' button on the MyJournals Fragment this function is called
+     * It sends an intent to the 'JournalNewStructure' Activity where the user can create a new journal structure
+     *
+     * @param v - the function is parsed the view */
     @Override
     public void onClick(View v) {
         Toast.makeText(getContext(), "newJournalToast", Toast.LENGTH_SHORT).show();
         Intent i_choose_journal = new Intent(getContext(), JournalNewStructure.class);
         startActivity(i_choose_journal);
-
     }
 
 }

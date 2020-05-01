@@ -1,9 +1,12 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.Utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.InputType;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -17,17 +20,23 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.JournalStructureObject;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalSingleEntryDataViewModel;
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalStructureViewModel;
+import com.example.diss_cbt_application.R;
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**This class is responsible for populating journal data and entry data onto scroll views.
+ * This is a functionality is used a couple times in the codebase so the functionality was extracted out to reduce
+ * code repitition. The concept of constructor overloading is used to distinguish which ViewModel which format is needed*/
 public class DataPresentation {
 
     String dataRepresentation;
     Long id;
     LinearLayout ll_scroll;
     int counter;
-    public static final String JOURNAL_STRUCTURE = "JournalStructure";
 
     /*Defining Arraylists used throughout the class*/
     List<String> columnNames = new ArrayList<>();
@@ -37,21 +46,33 @@ public class DataPresentation {
     List<Long> uniqueEntryIDs = new ArrayList<>();
     List<Long> fk_eids = new ArrayList<>();
 
-    public static final String JOURNAL_DATA = "journalData";
     public static final String ENTRY_DATA = "entryData";
+    public static final String JOURNAL_DATA = "journalData";
+    public static final String JOURNAL_STRUCTURE = "JournalStructure";
 
-
+    /**Constructor which is called when the JournalStructure is to be populated on a View.
+     *
+     * @param context - context of the activity the data is being placed on
+     * @param scroll - the ScrollView the data is being generated on.
+     * @param dataRepresentation  - the format the data is to take, either an EditText or TextView
+     * @param id  - id is needed to retrieve data from the ViewModel i.e the id of the journal for which the structure is needed.
+     * @param journalStructureViewModel - the ViewModel we will be using to access the database and retrieve the data to present on the scroll view*/
     public DataPresentation(final Context context, final ScrollView scroll, final String dataRepresentation, Long id,
                             JournalStructureViewModel journalStructureViewModel) {
+
         this.dataRepresentation = dataRepresentation;
         this.id = id;
 
-
-
         runJournalStructure(context, scroll, journalStructureViewModel);
-
     }
 
+    /**Constructor which is called when the EntryData is to be populated on a View.
+     *
+     * @param context - context of the activity the data is being placed on
+     * @param scroll - the ScrollView the data is being generated on.
+     * @param dataRepresentation  - the format the data is to take, either an EditText or TextView
+     * @param id  - id is needed to retrieve data from the ViewModel i.e the id of the entry for which the data is needed.
+     * @param journalSingleEntryDataViewModel - the ViewModel we will be using to access the database and retrieve the data to present on the scroll view*/
     public DataPresentation(final Context context, final ScrollView scroll, final String dataRepresentation, Long id,
                             JournalSingleEntryDataViewModel journalSingleEntryDataViewModel) {
 
@@ -61,6 +82,13 @@ public class DataPresentation {
         runEntryData(context, scroll, journalSingleEntryDataViewModel);
     }
 
+    /**We need to retrieve the entry data that will be populated on to the ScrollView. This function uses the ViewModel passed in the constructor
+     * to retrieve that data and then calls a separate function to populate the data on the view.
+     *
+     * @param context - context of the activity the data is being placed on
+     * @param scroll - the ScrollView the data is being generated on.
+     * @param journalSingleEntryDataViewModel - the ViewModel we will be using to access the database and retrieve the data to populate on the view
+     * */
     public void runEntryData(final Context context, final ScrollView scroll, JournalSingleEntryDataViewModel journalSingleEntryDataViewModel){
 
         counter = 1;
@@ -91,6 +119,13 @@ public class DataPresentation {
         });
     }
 
+    /**We need to retrieve the structure that will be populated on to the ScrollView. This function uses the ViewModel passed in the constructor
+     * to retrieve that data and then calls a separate function to populate the data on the view.
+     *
+     * @param context - context of the activity the data is being placed on
+     * @param scroll - the ScrollView the data is being generated on.
+     * @param journalStructureViewModel - the ViewModel we will be using to access the database and retrieve the data to populate on the view
+     * */
     public void runJournalStructure(final Context context, final ScrollView scroll, JournalStructureViewModel journalStructureViewModel ){
 
         counter = 1;
@@ -119,6 +154,18 @@ public class DataPresentation {
         });
     }
 
+    /**This function is responsible for generating the TextFields onto the view.
+     *
+     * @param context - context of the activity the data is being placed on
+     * @param scroll - the ScrollView the data is being generated on.
+     * @param id - id of the object being placed on the view
+     * @param dataRepresentation - differntiates which field we want generated on the View i.e. TextView or EditText
+     * @param columnName - name of the column being generated
+     * @param columnType - type of the column being generated i.e. numeric or generic
+     * @param entryData - user data that is being generated on to the view
+     * @param entryID_ - id of the entry data
+     * @param dataType - type the data is in
+     * */
     public void createFields(Context context, ScrollView scroll, Long id, String dataRepresentation,
                                String columnName, String columnType, String entryData, Long entryID_, String dataType){
 
@@ -155,7 +202,7 @@ public class DataPresentation {
 
             entryData_.setTextColor(Color.BLACK);
             entryData_.setTextSize(25);
-            entryData_.setPadding(10, 25, 10, 25);
+            entryData_.setPadding(10, 25, 10, 55);
 
             ll_scroll.addView(entryData_);//Add to LinearLayout on ScrollView
 
@@ -171,13 +218,28 @@ public class DataPresentation {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
 
+            TextInputLayout textInputLayout = new TextInputLayout(context, null, R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+            LinearLayout.LayoutParams textInputLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            textInputLayout.setLayoutParams(textInputLayoutParams);
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
+            textInputLayout.setBoxCornerRadii(5,5,5,5);
+            //textInputLayout.setHint(columnName);
+            textInputLayout.setPadding(10, 20, 10, 25);
+
             entryDataView.setText(entryData);
             entryDataView.setTextSize(25);
             entryDataView.setPadding(10, 25, 10, 25);
+            entryDataView.setSingleLine(false);
+            entryDataView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            entryDataView.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
             allEds.add(entryDataView);//Adding variables to array for later persistence to the database
 
-            ll_scroll.addView(entryDataView);//Add to LinearLayout on ScrollView
+            textInputLayout.addView(entryDataView);
+            ll_scroll.addView(textInputLayout);//Add to LinearLayout on ScrollView
         }
 
         //Adding variables to array for later persistence to the database
@@ -185,9 +247,12 @@ public class DataPresentation {
         columnNames.add(columnName);
         columnTypes.add(columnType);
         counter++;
-
     }
 
+    /**Function initialises the scroll view we will be generating the data on
+     *
+     * @param scroll - ScrollView the data will be generated on
+     * @param context - the context of the activity the ScrollView is being set on */
     public void initialiseScrollView(ScrollView scroll, Context context){
         scroll.removeAllViews();
         ll_scroll = new LinearLayout(context);
@@ -210,6 +275,7 @@ public class DataPresentation {
     public List<String> getColumnNames(){
         return columnNames;
     }
+
     public List<String> getColumnTypes(){
         return columnTypes;
     }
@@ -217,7 +283,5 @@ public class DataPresentation {
     public ArrayList<EditText> getAllEds(){
         return allEds;
     }
-
-
 
 }

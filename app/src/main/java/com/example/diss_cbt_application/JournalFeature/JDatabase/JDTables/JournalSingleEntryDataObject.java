@@ -17,7 +17,8 @@ import static androidx.room.ForeignKey.CASCADE;
  *      entryTime - time the user made the entry
  *      fk_id - the foreign assigned to the specific entry created
  *
- * indices are for faster searching of the table */
+ * indices are for faster searching of the table. The ForeignKey relationship between this table and singleEntry.
+ * On Delete Cascade is also defined, to handle deletion of entries in this table if an entry from singleEntry is deleted*/
 @Entity(tableName = "single_entry_data_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalSingleEntryObject.class,
                 parentColumns = "id", childColumns = "fk_eid")},

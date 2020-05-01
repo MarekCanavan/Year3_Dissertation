@@ -17,8 +17,8 @@ import com.example.diss_cbt_application.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**This class handles the recycler view for when the user is choosing which entry they want to view
- * It is parsed the View Holder we created inside it*/
+/**This class handles the recyclerViewAdapter for when the user is choosing which jorunal they want to view
+ * It is parsed the View Holder we created inside it.  Handles the inflating of the view, setting the text and data onto the cards/lists.*/
 public class RVAMyJournals extends RecyclerView.Adapter<RVAMyJournals.ViewHolder>{
 
 
@@ -44,6 +44,8 @@ public class RVAMyJournals extends RecyclerView.Adapter<RVAMyJournals.ViewHolder
         return holder;
     }
 
+    /**This class is where we take care of getting the data from the Journal Objects
+     * and populate the text fields with data*/
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -52,8 +54,6 @@ public class RVAMyJournals extends RecyclerView.Adapter<RVAMyJournals.ViewHolder
 
         holder.journalName.setText(currentJournal.getJournalName());
         holder.journalName.setTextColor(currentJournal.getJournalColour());
-
-
     }
 
     /**Parse the onItemClick Listener we created in this class above
@@ -79,6 +79,12 @@ public class RVAMyJournals extends RecyclerView.Adapter<RVAMyJournals.ViewHolder
     public int getItemCount(){
         return journals.size();
     }
+    /**This class holds the views in the single recycler view items*/
+
+    public JournalObject getItemAtPosition(int position){
+        return journals.get(position);
+    }
+
     /**This class holds the views in the single recycler view items*/
     public class ViewHolder extends RecyclerView.ViewHolder{
 

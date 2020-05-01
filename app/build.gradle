@@ -30,15 +30,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
 
+    //Database Viewing
     implementation 'com.facebook.stetho:stetho:1.5.1'
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-
+    //GraphView
     implementation 'com.jjoe64:graphview:4.2.2'
 
     // ViewModel
@@ -49,8 +46,30 @@ dependencies {
     // Annotation processor
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
+    //Room Database
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    // For Kotlin use kapt instead of annotationProcessor
+
+    // Required -- JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+
+    //Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    // Optional -- Mockito framework
+    testImplementation 'org.mockito:mockito-core:1.9.5'
+
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation 'org.assertj:assertj-core:1.7.1'
+
+    //Material
+    implementation 'com.google.android.material:material:<version>'
+
 
 }

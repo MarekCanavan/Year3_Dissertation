@@ -14,7 +14,7 @@ import com.example.diss_cbt_application.JournalFeature.JDatabase.JDTables.Journa
 import com.example.diss_cbt_application.JournalFeature.JDatabase.JDViewModels.JournalViewModel;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalContract;
 import com.example.diss_cbt_application.R;
-import com.example.diss_cbt_application.VerticalSpaceItemDecoration;
+import com.example.diss_cbt_application.Utils.VerticalSpaceItemDecoration;
 
 import java.util.List;
 
@@ -24,16 +24,13 @@ import java.util.List;
  * */
 public class JournalChooseActivity extends AppCompatActivity {
 
+    /*Instance of the JournalView Model*/
     private JournalViewModel journalViewModel;
 
-    int LAUNCH_Journal_Choose_Activity = 1;
-    int NEW_JOURNAL_MADE = 2;
-    int NEW_ENTRY_MADE = 3;
-
     /**
-     * Sets up the Fragment when the user first navigates to it
-     * Populates the RecyclerView
-     * Draws a plus on the Button for styling
+     * Sets up the Fragment when the user first navigates to it.
+     * Populates the RecyclerView with the journals the user can choose from
+     * or they can create a new journal structure.
      *
      * @return RootView which is the View in which all the other views are placed*/
     @Override
@@ -45,7 +42,7 @@ public class JournalChooseActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);//get reference to recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//every recycler view needs a layout manager
         recyclerView.setHasFixedSize(true);//Makes recycler view more efficient, we know card size wont change
-        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(3));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
+        //recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(3));//Call to VerticalSpaceItemDecoration adds barrier between entries in RV for styling
 
         final RVAChooseJournal adapter = new RVAChooseJournal();//new adapter
         recyclerView.setAdapter(adapter);//by default this is empty, it gets set in the observer below
@@ -76,22 +73,9 @@ public class JournalChooseActivity extends AppCompatActivity {
         });
     }
 
-
-    /**Simple function that opens the JournalNewStructure activity when the '+' button is pressed*/
+    /**Simple function that opens the JournalNewStructure activity when the user presses the button to create a new journal*/
     public void newJournalOnClick(View v){
-
         Intent i_choose_journal = new Intent(JournalChooseActivity.this, JournalNewStructure.class);
-        startActivityForResult(i_choose_journal, LAUNCH_Journal_Choose_Activity);
+        startActivity(i_choose_journal);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == LAUNCH_Journal_Choose_Activity) {
-            if(resultCode == NEW_JOURNAL_MADE){
-                //recyclerViewFunc();
-            }
-        }
-    }//onActivityResult
-
 }

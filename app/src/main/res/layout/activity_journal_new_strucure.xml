@@ -21,74 +21,81 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.048" />
 
+
     <Button
         android:id="@+id/bt_new_percentage"
         android:layout_width="175dp"
         android:layout_height="50dp"
+        android:layout_marginTop="34dp"
         android:onClick="newNumericOnClick"
         android:text="+    Numeric"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.932"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
-
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toEndOf="@+id/bt_new_column"
+        app:layout_constraintTop_toBottomOf="@+id/et_name_of_journal"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/bt_new_column"
         android:layout_width="175dp"
         android:layout_height="50dp"
+        android:layout_marginTop="34dp"
         android:onClick="newGeneralOnClick"
-        android:text="+    Column"
+        android:text="+    Generic"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
+        app:layout_constraintTop_toBottomOf="@+id/et_name_of_journal"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/bt_choose_colour"
         android:layout_width="80dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:onClick="changeColourOnClick"
         android:text="Colour"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        android:background="@color/darkBlue"
+        app:layout_constraintBottom_toTopOf="@+id/bt_new_percentage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.951"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toEndOf="@+id/et_name_of_journal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.485" />
 
     <ScrollView
         android:id="@+id/sv_field_generation"
-        android:layout_width="350dp"
-        android:layout_height="460dp"
+        android:layout_width="375dp"
+        android:layout_height="490dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/lightlightGray"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.671"></ScrollView>
+        app:layout_constraintTop_toBottomOf="@+id/bt_new_column"
+        app:layout_constraintVertical_bias="0.033"></ScrollView>
 
     <Button
         android:id="@+id/bt_save_structure"
-        android:layout_width="195dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/darkBlue"
         android:onClick="saveStructureOnClick"
         android:text="Save Structure "
-        android:background="@color/darkBlue"
         android:textColor="@color/white"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.935" />
+        app:layout_constraintTop_toBottomOf="@+id/sv_field_generation"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

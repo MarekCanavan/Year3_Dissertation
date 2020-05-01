@@ -1,4 +1,4 @@
-package com.example.diss_cbt_application;
+package com.example.diss_cbt_application.Utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -7,23 +7,28 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diss_cbt_application.BreathFeature.BreathFragment;
+import com.example.diss_cbt_application.GoalsFeature.GContract;
 import com.example.diss_cbt_application.GoalsFeature.GNewEditGoal;
 import com.example.diss_cbt_application.GoalsFeature.GoalsFragment;
 import com.example.diss_cbt_application.HomeFeature.HomeFragment;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.Entries.JournalChooseActivity;
 import com.example.diss_cbt_application.JournalFeature.JActivities_Fragments.General.JournalParentFragment;
+import com.example.diss_cbt_application.Notifications.DailyNotificationReceiver;
+import com.example.diss_cbt_application.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Calendar;
 
 /**This is the MainActivity of the Application, so is the first Activity that gets loaded
  * The Main Activity holds 4 fragments which represent the 4 features of the application
@@ -31,16 +36,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  *      - Journal Fragment
  *      - Goals Fragment
  *      - Breath Fragment
- *This activity hols the bottom navigation bar to switch between these fragments/features*/
+ *This activity holds the bottom navigation bar to switch between these fragments/features*/
 public class MainActivity extends AppCompatActivity {
 
-    public static final int ADD_GOAL_REQUEST = 1;
-    public static final int EDIT_GOAL_REQUEST = 2;
-
-    int count, breathBoolean, fragmentFlag;
-    long startTime;
-    TextView breathTextView, instruction;
-    Button breathButton;
+    int fragmentFlag;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     Fragment homeFragment = new HomeFragment();
@@ -51,12 +50,23 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
 
-
+    /**this onCreate method is the first that is run when the application is first loaded. So it is responsible
+     * for handling and generating the bottom nav and all of the feature fragments.
+     *
+     * @param savedInstanceState - parameter that is passed to the onCreate of every Android Activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Morning Notification
+        setDailyNotification(9, 0, "Good Morning", "Start the day by setting some goals to complete");
+
+        //Evening Notification
+        setDailyNotification(17, 0, "Good Afternoon", "How has your day been? Why not reflect on it in a journal entry...");
+
+        String menuFragment = getIntent().getStringExtra("notificationLaunch");
 
 
         if(savedInstanceState == null ){//First time, create fragments
@@ -69,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
                     .hide(breathFragment).commit();
             fragmentManager.beginTransaction().add(R.id.fragment_container, homeFragment, "homeFragment").commit();
 
+            if(menuFragment != null){
+                if(menuFragment.equals("goalsFragment")){
+                    fragmentManager.beginTransaction().hide(active).show(goalFragment).commit();
+                    active = goalFragment;
+                }
+            }
         }
         else{
 
@@ -81,15 +97,40 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-        breathBoolean = 0;
-
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         bottomNav.getMenu().getItem(1).setChecked(true);//Sets Navigation bar to Highlight Home initially
     }
 
+    /**The Daily Notifications need to be set when the application is run, so this function is run when onCreate is ran
+     * and is responsible for setting the alarmManager for the notifications.
+     *
+     * @param hour - hour the notification is to trigger
+     * @param minute - minute the notification is to trigger
+     * @param title - title of the notification
+     * @param description - description of the notification */
+    public void setDailyNotification(int hour, int minute, String title, String description){
 
+        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        Intent dailyIntent = new Intent (MainActivity.this, DailyNotificationReceiver.class);
+        dailyIntent.putExtra(GContract.G_TITLE, title);
+        dailyIntent.putExtra(GContract.G_DESCRIPTION, description);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, hour, dailyIntent, 0);
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+    }
+
+    /**onSavedInstanceState is called before the activity is destroyed. This activity handles fragments
+     * and bottom navigation, so we want to save the state of the fragments before the activity is destroyed.
+     *
+     * @param savedInstanceState - parameter that is passed to the onCreate of every Android Activity
+     * */
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -103,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**onRestoreInstance state restores the activity and child fragments to their original state before the
+     * activity was destroyed. This will help to keep continuity in the user experience.
+     * @param savedInstanceState - parameter that is passed to the onCreate of every Android Activity
+     * */
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -136,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*This is where the bottom navigation is handled
+    /**This is where the bottom navigation is handled
     * When the user selects an option of the navigation bar their selection is checked in the switch statement
     * The corresponding Fragment is then launched*/
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -175,174 +220,4 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-
-    /**Simple function that launches an Activity when the user wants to create a new journal entry*/
-    public void newEntryOnClick(View v){
-        Intent i_choose_journal = new Intent(MainActivity.this, JournalChooseActivity.class);
-        startActivity(i_choose_journal);
-    }
-
-    /**When the user clicks on the '+' button on the Goals Fragment this function is called
-     * It sends an intent to the 'GNewGoals' Activity where the user can define a new goal
-     *
-     * @param v - the function is parsed the view */
-    public void newGoalOnClick(View v){
-
-        /*Define the intent that will be sent from the MainActivity to the New Goal Page*/
-        Intent i_new_goal = new Intent(MainActivity.this, GNewEditGoal.class);
-        startActivityForResult(i_new_goal, ADD_GOAL_REQUEST);
-    }
-
-    //runs without a timer by reposting this handler at the end of the runnable
-    Handler timerHandler = new Handler();
-    Runnable timerRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            long millis = System.currentTimeMillis() - startTime;
-            int seconds = (int) (millis / 1000);
-            int minutes = seconds / 60;
-            seconds = seconds % 60;
-
-            breathTextView.setText("" + seconds);
-            breathCases(seconds);
-
-            timerHandler.postDelayed(this, 1000);
-        }
-    };
-
-    private void breathCases(int seconds){
-
-        instruction = findViewById(R.id.tv_breath_instruction);
-        int value = seconds % 13;
-
-        switch(value){
-            case 0:
-                breathTextView.setText("4");
-                instruction.setText("Breath in");
-                break;
-            case 1:
-                breathTextView.setText("3");
-                break;
-            case 2:
-                breathTextView.setText("2");
-                break;
-            case 3:
-                breathTextView.setText("1");
-                break;
-            case 4:
-                breathTextView.setText("2");
-                instruction.setText("Hold");
-            case 5:
-                breathTextView.setText("1");
-                break;
-            case 6:
-                breathTextView.setText("5");
-                instruction.setText("Breath Out");
-            case 7:
-                breathTextView.setText("4");
-                break;
-            case 8:
-                breathTextView.setText("3");
-                break;
-            case 9:
-                breathTextView.setText("2");
-                break;
-            case 10:
-                breathTextView.setText("1");
-                break;
-            case 11:
-                breathTextView.setText("2");
-                instruction.setText("Hold");
-                break;
-            case 12:
-                breathTextView.setText("1");
-                break;
-        }
-
-
-    }
-
-
-    public void startBreathOnClick(View v){
-
-        //startTime = (Date) Calendar.getInstance().getTime();
-        breathTextView = findViewById(R.id.tv_breath_number);
-        startTime = System.currentTimeMillis();;
-
-        breathButton = (Button) findViewById(R.id.bt_breath_start_stop);
-
-        if(breathBoolean == 0){
-            startTime = System.currentTimeMillis();;
-            timerHandler.postDelayed(timerRunnable, 0);
-
-            breathBoolean = 1;
-            breathButton.setText("Stop");
-
-        }
-        else{
-
-            count = 0;
-            timerHandler.removeCallbacks(timerRunnable);
-            breathButton.setText("Start");
-            breathBoolean = 0;
-
-        }
-
-    }
-
-    /**This function handles request and result codes back from the MainActivity
-     * Due to the Fragment structure there are a few different results that can be returned
-     * so these are handled by this function*/
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == ADD_GOAL_REQUEST && resultCode == RESULT_OK){
-            Log.d("Diss", "Value of request code: " + requestCode);
-            Log.d("Diss", "Value of result code: " + resultCode);
-
-
-            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
-            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
-            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
-            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
-            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
-
-//            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
-//            GoalViewModel.insert(goal);
-
-
-            Toast.makeText(this, "Goal Saved", Toast.LENGTH_SHORT).show();
-        }
-        else if(requestCode == EDIT_GOAL_REQUEST && resultCode == RESULT_OK){
-
-//            Long id = data.getLongExtra(GNewEditGoal.EXTRA_ID, -1);
-
-//            if(id == -1){
-//                Toast.makeText(this, "Goal can't be updated", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            String title = data.getStringExtra(GNewEditGoal.EXTRA_TITLE);
-//            String description = data.getStringExtra(GNewEditGoal.EXTRA_DESCRIPTION);
-//            String date = data.getStringExtra(GNewEditGoal.EXTRA_DATE);
-//            String time = data.getStringExtra(GNewEditGoal.EXTRA_TIME);
-//            int markedComplete = data.getIntExtra(GNewEditGoal.EXTRA_MC, 0);
-//
-//            GoalObject goal = new GoalObject(title, description, date, time, markedComplete);
-//            goal.setId(id);
-//            GoalViewModel.update(goal);
-
-            Toast.makeText(this, "Goal Updated", Toast.LENGTH_SHORT).show();
-
-
-        }
-        else{
-            Log.d("Diss", "Value of request code: " + requestCode);
-            Log.d("Diss", "Value of result code: " + resultCode);
-
-            Toast.makeText(this, "Goal Not Saved", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

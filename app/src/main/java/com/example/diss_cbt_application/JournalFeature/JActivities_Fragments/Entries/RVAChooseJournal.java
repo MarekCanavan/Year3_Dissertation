@@ -45,7 +45,7 @@ public class RVAChooseJournal extends RecyclerView.Adapter<RVAChooseJournal.View
     }
 
     /**This class is where we take care of getting the data from the Journal Structure Objects
-    * and populate the textfields with data*/
+    * and populate the TextFields with data*/
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 

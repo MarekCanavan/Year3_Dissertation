@@ -36,27 +36,53 @@ public class JournalSingleEntryViewModel extends AndroidViewModel {
 
     /*Functions that are passed a JournalSingleEntryObject and the appropriate methods are called in the repository
      * with the JournalSingleEntryObject passed to them*/
+
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the insertNotAsync method and passes the journalSingleEntryObject so it can be inserted synchronously
+     *
+     * @param journalSingleEntryObject - journal object to insert*/
     public static Long InsertNotAsync(JournalSingleEntryObject journalSingleEntryObject){
         return repository.insertNotAsync(journalSingleEntryObject);
     }
 
-    public JournalSingleEntryObject getEntryWithId(Long id){
-        return repository.getEntryWithId(id);
-    }
-
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the update method and passes the singleEntryObject so it can be updated
+     *
+     * @param singleEntryObject - journal object to update*/
     public void update (JournalSingleEntryObject singleEntryObject){
         repository.update(singleEntryObject);
     }
 
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the delete method and passes the singleEntryObject so it can be deleted
+     *
+     * @param singleEntryObject - journal object to delete*/
     public void delete (JournalSingleEntryObject singleEntryObject){
         repository.delete(singleEntryObject);
     }
 
-    public List<JournalSingleEntryObject> getEntriesWithId(Long id){
-       return repository.getEntriesWithId(id);
-
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getEntryWithId method and passes the id of the object we want to retrieve.
+     *
+     * @param id - id of the object we want to retrieve
+     * @reutrn JournalSingleEntryObject - return the object associated to this id*/
+    public JournalSingleEntryObject getEntryWithId(Long id){
+        return repository.getEntryWithId(id);
     }
 
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getEntriesWithId method and passes the id of the object.
+     *
+     * @param id - id of the objects we want to retrieve
+     * @reutrn List<JournalSingleEntryObject> - normal list of all JournalStructure Objects with the given id */
+    public List<JournalSingleEntryObject> getEntriesWithId(Long id){
+       return repository.getEntriesWithId(id);
+    }
+
+    /**Function creates an instance of the repository instance set in the constructor
+     * calls the getAllEntries to retrieve all of the entries in the table.
+     *
+     * @reutrn LiveData<List<JournalSingleEntryObject>> - LiveData list of all of all of the entries in the table*/
     public LiveData<List<JournalSingleEntryObject>> getAllEntries(){
         return allEntries;
     }

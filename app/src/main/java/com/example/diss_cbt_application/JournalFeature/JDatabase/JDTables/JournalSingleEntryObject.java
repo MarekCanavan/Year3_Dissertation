@@ -19,7 +19,8 @@ import static androidx.room.ForeignKey.CASCADE;
  *      journalColour - colour of the journal this entry is assigned to
  *      fk_id - references the table the entry object is assigned to *
  *
- * indices are for faster searching of the table */
+ * indices are for faster searching of the table. The Foreign Key and On Delete Cascade relationship is also defined between this tables an
+ * Journal Object, so when a journal is deleted all of its associated entries are also deleted.*/
 @Entity(tableName = "single_entry_table", foreignKeys = {
         @ForeignKey(onDelete = CASCADE, entity = JournalObject.class,
                 parentColumns = "id", childColumns = "fk_id")},
@@ -48,8 +49,7 @@ public class JournalSingleEntryObject {
     private Long fk_id;
 
     /**Constructor where we define the values we want set in the table, when a new Object is called elsewhere in the program
-     * these fields need to be parsed for it to be valid
-     * We dont want to pass id as it is auto generated*/
+     * these fields need to be parsed for it to be valid. We don't want to pass id as it is auto generated*/
     public JournalSingleEntryObject(String entryName, String entryDate, String entryTime, Long dateTime, String journalType, int journalColour, Long fk_id) {
         this.entryName = entryName;
         this.entryDate = entryDate;
